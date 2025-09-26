@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block title %}Assessment Result - Social Engineering Awareness{% endblock %}
+
+{% block content %}
+<style>
+.result-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.result-header {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.result-passed {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+}
+
+.result-failed {
+    background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+    color: white;
+}
+
+.result-card {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.score-display {
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.score-passed {
+    color: #28a745;
+}
+
+.score-failed {
+    color: #dc3545;
+}
+
+.attempt-info {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.next-steps {
+    background: #e3f2fd;
+    border: 1px solid #bbdefb;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.certificate-section {
+    background: #fff3e0;
+    border: 1px solid #ffcc02;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.action-buttons {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    margin: 0.5rem;
+}
+
+.retry-info {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+</style>
+
+<div class="result-container">
+    <div class="result-header {% if passed %}result-passed{% else %}result-failed{% endif %}">
+        <h1>
+            {% if passed %}
+                <i class="fas fa-check-circle"></i> Congratulations!
+            {% else %}
+                <i class="fas fa-times-circle"></i> Assessment Result
+            {% endif %}
+        </h1>
+        <p class="lead mb-0">{{ result_message }}</p>
+    </div>
+
+    <div class="result-card">
+        <div class="score-display {% if passed %}score-passed{% else %}score-failed{% endif %}">
+            {{ "%.1f"|format(score) }}%
+        </div>
+        
+        <div class="attempt-info">
+            <h5><i class="fas fa-info-circle"></i> Attempt Details</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Attempt Number:</strong> {{ attempt.attempt_number }}/3
+                </div>
+                <div class="col-md-6">
+                    <strong>Completed:</strong> {{ attempt.completed_at.strftime('%Y-%m-%d %H:%M') }}
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <strong>Questions:</strong> 25
+                </div>
+                <div class="col-md-6">
+                    <strong>Passing Rate:</strong> 80%
+                </div>
+            </div>
+        </div>
+
+        {% if passed %}
+        <div class="certificate-section">
+            <h5><i class="fas fa-certificate"></i> Certificate of Completion</h5>
+            <p>Congratulations! You have successfully completed the Social Engineering Awareness Program.</p>
+            <p><strong>Next Steps:</strong></p>
+            <ol class="text-start">
+                <li>Complete the satisfaction survey</li>
+                <li>Generate your certificate of completion</li>
+                <li>Share your achievement!</li>
+            </ol>
+        </div>
+        {% else %}
+        <div class="retry-info">
+            <h5><i class="fas fa-clock"></i> Retry Information</h5>
+            <p><strong>You can retry the assessment in 24 hours.</strong></p>
+            <p>Use this time to review the learning modules and improve your knowledge.</p>
+        </div>
+        {% endif %}
+
+        {% if not passed and attempt.attempt_number < 3 %}
+        <div class="next-steps">
+            <h5><i class="fas fa-lightbulb"></i> How to Improve</h5>
+            <ul class="text-start">
+                <li>Review all learning modules thoroughly</li>
+                <li>Pay special attention to areas where you struggled</li>
+                <li>Take notes on key concepts and best practices</li>
+                <li>Practice identifying social engineering red flags</li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="action-buttons">
+        {% if passed %}
+        <a href="{{ url_for('final_assessment') }}" class="btn btn-success btn-large">
+            <i class="fas fa-poll"></i> Take Survey
+        </a>
+        <a href="{{ url_for('final_assessment') }}" class="btn btn-warning btn-large">
+            <i class="fas fa-certificate"></i> Generate Certificate
+        </a>
+        {% else %}
+        <a href="{{ url_for('final_assessment') }}" class="btn btn-primary btn-large">
+            <i class="fas fa-book"></i> Review Modules
+        </a>
+        {% if attempt.attempt_number < 3 %}
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-large">
+            <i class="fas fa-home"></i> Return to Dashboard
+        </a>
+        {% endif %}
+        {% endif %}
+        
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary btn-large">
+            <i class="fas fa-home"></i> Dashboard
+        </a>
+    </div>
+
+    {% if attempt.attempt_number >= 3 and not passed %}
+    <div class="result-card">
+        <div class="alert alert-warning">
+            <h5><i class="fas fa-exclamation-triangle"></i> Maximum Attempts Reached</h5>
+            <p>You have reached the maximum number of attempts (3). Please contact your administrator for further assistance.</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add some visual feedback
+    const scoreElement = document.querySelector('.score-display');
+    if (scoreElement) {
+        scoreElement.style.animation = 'pulse 2s infinite';
+    }
+});
+
+// Add CSS animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+`;
+document.head.appendChild(style);
+</script>
+{% endblock %}
+

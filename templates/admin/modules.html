@@ -31,6 +31,7 @@
 .module-card.module-3 { border-left-color: #ffc107; }
 .module-card.module-4 { border-left-color: #dc3545; }
 .module-card.module-5 { border-left-color: #6f42c1; }
+.module-card.final-assessment { border-left-color: #6f42c1; }
 
 .module-icon {
     width: 60px;
@@ -49,6 +50,7 @@
 .module-3 .module-icon { background: #ffc107; }
 .module-4 .module-icon { background: #dc3545; }
 .module-5 .module-icon { background: #6f42c1; }
+.final-assessment .module-icon { background: #6f42c1; }
 
 .admin-nav {
     background: white;
@@ -149,7 +151,7 @@
             <div class="col-md-3">
                 <div class="stat-item">
                     <div class="stat-number">5</div>
-                    <div class="stat-label">Active Modules</div>
+                    <div class="stat-label">Learning Modules</div>
                 </div>
             </div>
             <div class="col-md-3">
@@ -171,10 +173,10 @@
     <div class="row">
         {% for module in modules %}
         <div class="col-md-6 col-lg-4 mb-4">
-            <div class="module-card module-{{ module.id }}">
+            <div class="module-card {% if module.id == 6 %}final-assessment{% else %}module-{{ module.id }}{% endif %}">
                 <div class="d-flex align-items-start">
                     <div class="module-icon">
-                        <i class="fas fa-{{ 'shield-alt' if module.id == 1 else 'user-shield' if module.id == 2 else 'envelope' if module.id == 3 else 'phone' if module.id == 4 else 'handshake' if module.id == 5 else 'graduation-cap' }}"></i>
+                        <i class="fas fa-{{ 'shield-alt' if module.id == 1 else 'user-shield' if module.id == 2 else 'envelope' if module.id == 3 else 'phone' if module.id == 4 else 'handshake' if module.id == 5 else 'graduation-cap' if module.id == 6 else 'bullseye' }}"></i>
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <h5 class="mb-2">{{ module.title }}</h5>
@@ -190,15 +192,19 @@
                             </div>
                             <div class="col-6">
                                 <div class="fw-bold text-success">
-                                    {% if module.id in [2, 3, 4, 5] %}
+                                    {% if module.id in [2, 3, 4] %}
                                         <i class="fas fa-gamepad"></i>
+                                    {% elif module.id == 6 %}
+                                        <i class="fas fa-clipboard-check"></i>
                                     {% else %}
                                         <i class="fas fa-book"></i>
                                     {% endif %}
                                 </div>
                                 <div class="small text-muted">
-                                    {% if module.id in [2, 3, 4, 5] %}
+                                    {% if module.id in [2, 3, 4] %}
                                         Simulation
+                                    {% elif module.id == 6 %}
+                                        Assessment
                                     {% else %}
                                         Content Only
                                     {% endif %}
@@ -288,7 +294,11 @@
                             {% for module in modules %}
                             <tr>
                                 <td>
-                                    <span class="badge bg-primary">Module {{ module.id }}</span>
+                                    {% if module.id == 6 %}
+                                        <span class="badge bg-warning">Final Assessment</span>
+                                    {% else %}
+                                        <span class="badge bg-primary">Module {{ module.id }}</span>
+                                    {% endif %}
                                 </td>
                                 <td>{{ module.title }}</td>
                                 <td>
@@ -299,8 +309,10 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {% if module.id in [2, 3, 4, 5] %}
+                                    {% if module.id in [2, 3, 4] %}
                                         <span class="badge bg-success">Yes</span>
+                                    {% elif module.id == 6 %}
+                                        <span class="badge bg-warning">Assessment</span>
                                     {% else %}
                                         <span class="badge bg-secondary">No</span>
                                     {% endif %}

@@ -206,7 +206,7 @@ CapstoneProject/
 - **Assessment**: 5 knowledge check questions
 - **Simulation**: Baiting scenario
 
-### **Module 6: Physical Security and Social Engineering**
+### **Final Assessment: Comprehensive Evaluation**
 - **Content**: Physical access control and environmental security
 - **Topics**: Physical access control, in-person social engineering
 - **Assessment**: 5 knowledge check questions
@@ -327,14 +327,50 @@ RENDER=true  # Automatically set by Render platform
 ### **Render Deployment (Recommended)**
 1. **Connect GitHub Repository** to Render
 2. **Create Web Service** with Python environment
-3. **Set Environment Variables**:
+3. **Set Environment Variables** (Render → Settings → Environment):
    ```bash
+   # Required
    SECRET_KEY=your-secure-secret-key
    FLASK_ENV=production
-   ADMIN_EMAIL=your-admin-email
-   ADMIN_PASSWORD=your-secure-password
+   DATABASE_URL=postgresql://<user>:<password>@<host>/<db>?sslmode=require
+   
+   # Admin bootstrap
+   ADMIN_EMAIL=admin@mmdc.edu.ph
+   ADMIN_PASSWORD=Admin123!@#2025
+   
+   # Optional (mail for password reset)
+   MAIL_SERVER=smtp.gmail.com
+   MAIL_PORT=587
+   MAIL_USE_TLS=true
+   MAIL_USERNAME=
+   MAIL_PASSWORD=
    ```
+   Example DATABASE_URL (Render external connection):
+   `postgresql://social_engineering_db_user:gVHDKj1MeHwDTSiaJOwBWE2GJcaSTwhS@dpg-d39mfmd6ubrc73e8ed2g-a.singapore-postgres.render.com/social_engineering_db?sslmode=require`
+
 4. **Deploy**: Automatic deployment from GitHub
+
+### **.env example (for local usage)**
+```bash
+# Flask
+FLASK_ENV=development
+SECRET_KEY=change-me-in-development
+LOG_LEVEL=DEBUG
+
+# Database (optional for local if using Postgres)
+# DATABASE_URL=postgresql://user:pass@localhost:5432/social_engineering_db
+
+# Admin bootstrap
+ADMIN_EMAIL=admin@mmdc.edu.ph
+ADMIN_PASSWORD=Admin123!@#2025
+
+# Mail (optional)
+MAIL_SERVER=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USE_TLS=true
+MAIL_USERNAME=
+MAIL_PASSWORD=
+```
 
 ### **Local Development**
 ```bash
@@ -356,6 +392,17 @@ RUN pip install -r requirements.txt
 COPY . .
 EXPOSE 5000
 CMD ["gunicorn", "app:app"]
+```
+
+### **Push code to GitHub**
+If your GitHub repository is currently empty, initialize and push:
+```bash
+git init
+git add .
+git commit -m "Initial commit: MMDC Social Engineering Awareness"
+git branch -M main
+git remote add origin https://github.com/clarkorcullo/SEA_ProtoType.git
+git push -u origin main
 ```
 
 ---

@@ -42,53 +42,7 @@ body {
     50% { opacity: 0.6; }
 }
 
-/* Module Layout Styles */
-.modules-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.modules-row {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin-bottom: 1rem;
-}
-
-.modules-row.first-row {
-    justify-content: space-around;
-}
-
-.modules-row.second-row {
-    justify-content: center;
-    max-width: 66.666%;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .modules-row.first-row {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .modules-row.second-row {
-        flex-direction: column;
-        align-items: center;
-        max-width: 100%;
-    }
-}
-
-@media (min-width: 769px) and (max-width: 992px) {
-    .modules-row.first-row {
-        justify-content: space-between;
-    }
-    
-    .modules-row.second-row {
-        justify-content: center;
-        max-width: 80%;
-    }
-}
+/* Learning Modules now use the same styling as Program Features */
 
 /* Matrix Rain Effect */
 .matrix-rain {
@@ -188,8 +142,8 @@ body {
     font-weight: 400;
 }
 
-/* Cyber Cards */
-.cyber-card {
+/* General Cyber Cards (for other sections) */
+.cyber-card:not(.modules-container .cyber-card) {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.9) 100%);
     border: 2px solid var(--neon-blue);
     border-radius: 15px;
@@ -199,7 +153,7 @@ body {
     overflow: hidden;
 }
 
-.cyber-card::before {
+.cyber-card:not(.modules-container .cyber-card)::before {
     content: '';
     position: absolute;
     top: 0;
@@ -210,11 +164,11 @@ body {
     transition: left 0.5s ease;
 }
 
-.cyber-card:hover::before {
+.cyber-card:not(.modules-container .cyber-card):hover::before {
     left: 100%;
 }
 
-.cyber-card:hover {
+.cyber-card:not(.modules-container .cyber-card):hover {
     transform: translateY(-5px);
     box-shadow: 
         0 10px 30px rgba(0, 212, 255, 0.3),
@@ -400,7 +354,7 @@ body {
                         <div class="feature-icon">
                             <i class="fas fa-graduation-cap"></i>
                         </div>
-                        <h5 class="neon-green">5 Learning Modules</h5>
+                        <h5 class="neon-green">6 Learning Modules</h5>
                         <small class="text-light">Comprehensive Training</small>
                     </div>
                     <div class="col-6 mb-3">
@@ -512,61 +466,94 @@ body {
             </h2>
         </div>
         
-        <div class="col-12">
-            <div class="modules-container">
-                <!-- First Row: 3 Modules -->
-                <div class="row modules-row first-row">
-                    <div class="col-md-4 col-lg-4 mb-3">
-                        <div class="cyber-card p-2 text-center">
-                            <div class="feature-icon" style="font-size: 2.5rem; color: #00d4ff; text-shadow: 0 0 2px #00d4ff; animation: neonPulse 4s ease-in-out infinite;">
-                                👤
-                            </div>
-                            <h5 class="neon-green">Module 1</h5>
-                            <p class="text-dark small" style="background: rgba(255, 255, 255, 0.9); padding: 8px; border-radius: 6px; margin: 0;">Introduction to Social Engineering</p>
-                        </div>
+        <div class="col-md-4 mb-3">
+            <div class="cyber-card p-3 h-100">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-shield"></i>
                     </div>
-                    
-                    <div class="col-md-4 col-lg-4 mb-3">
-                        <div class="cyber-card p-2 text-center">
-                            <div class="feature-icon" style="font-size: 2.5rem; color: #17a2b8; text-shadow: 0 0 2px #17a2b8; animation: neonPulse 4s ease-in-out infinite;">
-                                👥
-                            </div>
-                            <h5 class="neon-green">Module 2</h5>
-                            <p class="text-dark small" style="background: rgba(255, 255, 255, 0.9); padding: 8px; border-radius: 6px; margin: 0;">Types of Social Engineering Attacks</p>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-4 col-lg-4 mb-3">
-                        <div class="cyber-card p-2 text-center">
-                            <div class="feature-icon" style="font-size: 2.5rem; color: #28a745; text-shadow: 0 0 2px #28a745; animation: neonPulse 4s ease-in-out infinite;">
-                                📧
-                            </div>
-                            <h5 class="neon-green">Module 3</h5>
-                            <p class="text-dark small" style="background: rgba(255, 255, 255, 0.9); padding: 8px; border-radius: 6px; margin: 0;">Phishing Attacks</p>
-                        </div>
+                    <h4 class="neon-green mb-2">Module 1</h4>
+                    <p class="text-dark text-center" style="background: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 8px; font-weight: bold; font-size: 1.1rem;">What is Social Engineering</p>
+                    <div class="cyber-progress mt-2">
+                        <div class="cyber-progress-bar" style="width: 0%;"></div>
                     </div>
                 </div>
-                
-                <!-- Second Row: 2 Modules (centered) -->
-                <div class="row modules-row second-row">
-                    <div class="col-md-6 col-lg-6 mb-3">
-                        <div class="cyber-card p-2 text-center">
-                            <div class="feature-icon" style="font-size: 2.5rem; color: #ffc107; text-shadow: 0 0 2px #ffc107; animation: neonPulse 4s ease-in-out infinite;">
-                                🎭
-                            </div>
-                            <h5 class="neon-green">Module 4</h5>
-                            <p class="text-dark small" style="background: rgba(255, 255, 255, 0.9); padding: 8px; border-radius: 6px; margin: 0;">Pretexting & Baiting</p>
-                        </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="cyber-card p-3 h-100">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-fish"></i>
                     </div>
-                    
-                    <div class="col-md-6 col-lg-6 mb-3">
-                        <div class="cyber-card p-2 text-center">
-                            <div class="feature-icon" style="font-size: 2.5rem; color: #dc3545; text-shadow: 0 0 2px #dc3545; animation: neonPulse 4s ease-in-out infinite;">
-                                🛡️
-                            </div>
-                            <h5 class="neon-green">Module 5</h5>
-                            <p class="text-dark small" style="background: rgba(255, 255, 255, 0.9); padding: 8px; border-radius: 6px; margin: 0;">Defense Strategies</p>
-                        </div>
+                    <h4 class="neon-green mb-2">Module 2</h4>
+                    <p class="text-dark text-center" style="background: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 8px; font-weight: bold; font-size: 1.1rem;">Phishing: The Digital Net</p>
+                    <small class="text-success"><i class="fas fa-gamepad"></i> Simulation</small>
+                    <div class="cyber-progress mt-2">
+                        <div class="cyber-progress-bar" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="cyber-card p-3 h-100">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h4 class="neon-green mb-2">Module 3</h4>
+                    <p class="text-dark text-center" style="background: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 8px; font-weight: bold; font-size: 1.1rem;">Fortifying Your Accounts</p>
+                    <small class="text-success"><i class="fas fa-gamepad"></i> Simulation</small>
+                    <div class="cyber-progress mt-2">
+                        <div class="cyber-progress-bar" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="cyber-card p-3 h-100">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h4 class="neon-green mb-2">Module 4</h4>
+                    <p class="text-dark text-center" style="background: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 8px; font-weight: bold; font-size: 1.1rem;">Immediate Action After a Suspected Attack</p>
+                    <small class="text-success"><i class="fas fa-gamepad"></i> Simulation</small>
+                    <div class="cyber-progress mt-2">
+                        <div class="cyber-progress-bar" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="cyber-card p-3 h-100">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4 class="neon-green mb-2">Module 5</h4>
+                    <p class="text-dark text-center" style="background: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 8px; font-weight: bold; font-size: 1.1rem;">The Evolving Threat Landscape</p>
+                    <div class="cyber-progress mt-2">
+                        <div class="cyber-progress-bar" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="cyber-card p-3 h-100">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h4 class="neon-green mb-2">Final Assessment</h4>
+                    <p class="text-dark text-center" style="background: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 8px; font-weight: bold; font-size: 1.1rem;">Comprehensive Evaluation</p>
+                    <div class="cyber-progress mt-2">
+                        <div class="cyber-progress-bar" style="width: 0%;"></div>
                     </div>
                 </div>
             </div>

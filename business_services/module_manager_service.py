@@ -93,7 +93,7 @@ class ModuleManagerService:
     @staticmethod
     def can_retake_knowledge_check(module_number: int, user_id: int, current_attempts: int, last_attempt_time: str = None) -> Dict[str, Any]:
         """Check if user can retake knowledge check"""
-        if module_number == 6:  # Final Assessment (now module 6)
+        if module_number == 6:  # Final Assessment
             return ModuleManagerService._can_retake_final_assessment(current_attempts, last_attempt_time)
         else:
             # Regular modules: unlimited retakes with limit to prevent abuse
@@ -265,7 +265,7 @@ class ModuleManagerService:
     @staticmethod
     def get_question_randomization_info(module_number: int, attempt_number: int) -> Dict[str, Any]:
         """Get information about question randomization for retakes"""
-        if module_number == 6:  # Final Assessment (now module 6)
+        if module_number == 6:  # Final Assessment
             return {
                 'module_type': 'final_assessment',
                 'question_count': ModuleManagerService.FINAL_ASSESSMENT_QUESTION_COUNT,

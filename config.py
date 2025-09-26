@@ -16,15 +16,31 @@ class Config:
     # Database Configuration
     if os.environ.get('RENDER'):
         # Use PostgreSQL on Render for persistence
-        if os.environ.get('DATABASE_URL'):
-            SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+        db_url = os.environ.get('DATABASE_URL')
+        if db_url:
+            # Normalize scheme (Render sometimes provides postgres://)
+            if db_url.startswith('postgres://'):
+                db_url = db_url.replace('postgres://', 'postgresql://', 1)
+
+            # Ensure sslmode=require for managed Postgres
+            if 'sslmode=' not in db_url:
+                separator = '&' if '?' in db_url else '?'
+                db_url = f"{db_url}{separator}sslmode=require"
+
+            SQLALCHEMY_DATABASE_URI = db_url
         else:
             # Temporary fallback for testing - use SQLite in /tmp
             # WARNING: Data will be lost on restart without PostgreSQL
             SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/social_engineering_awareness.db'
     else:
-        # Local development - use SQLite
-        SQLALCHEMY_DATABASE_URI = 'sqlite:///social_engineering_awareness.db'
+        # Local development - use SQLite by default unless DATABASE_URL is set
+        db_url = os.environ.get('DATABASE_URL')
+        if db_url:
+            if db_url.startswith('postgres://'):
+                db_url = db_url.replace('postgres://', 'postgresql://', 1)
+            SQLALCHEMY_DATABASE_URI = db_url
+        else:
+            SQLALCHEMY_DATABASE_URI = 'sqlite:///social_engineering_awareness.db'
     
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {

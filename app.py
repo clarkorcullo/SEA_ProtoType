@@ -43,7 +43,7 @@ import json
 import secrets
 
 # Third-party imports
-from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, send_from_directory
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.middleware.proxy_fix import ProxyFix
 from sqlalchemy import text
@@ -55,9 +55,11 @@ from data_models import (
     FinalAssessmentQuestion, UserProgress, AssessmentResult, 
     SimulationResult, FeedbackSurvey
 )
+# Assessment models imported only when needed to avoid circular imports
 from business_services import (
     UserService, AssessmentService, SimulationService
 )
+# Assessment routes will be added directly to app.py
 from config import config
 
 # =============================================================================
@@ -344,14 +346,14 @@ def create_fallback_modules():
     """
     modules_data = [
         {
-            'name': 'Introduction to Social Engineering',
-            'description': 'Understanding the basics of social engineering attacks',
+            'name': 'What is Social Engineering',
+            'description': 'Understanding the basics of social engineering attacks and human psychology',
             'content': 'Social engineering is a manipulation technique that exploits human error to gain private information...',
             'order': 1,
             'has_simulation': False
         },
         {
-            'name': 'Phishing',
+            'name': 'Phishing: The Digital Net',
             'description': 'Recognize, detect, and defend against phishing across email, SMS, and calls',
             'content': 'Phishing is a type of social engineering that impersonates trusted entities to steal information...',
             'order': 2,
@@ -359,31 +361,30 @@ def create_fallback_modules():
             'simulation_type': 'phishing'
         },
         {
-            'name': 'Pretexting and Identity Manipulation',
-            'description': 'Understand pretexting and how attackers craft believable stories',
-            'content': 'Pretexting relies on fabricated scenarios to coerce information disclosure...',
+            'name': 'Fortifying Your Accounts',
+            'description': 'Understanding password security and authentication methods',
+            'content': 'Password security involves creating strong passwords and using multi-factor authentication...',
             'order': 3,
             'has_simulation': True,
             'simulation_type': 'pretexting'
         },
         {
-            'name': 'Password Security and Authentication',
-            'description': 'Understanding password security and authentication methods',
-            'content': 'Password security involves creating strong passwords and using multi-factor authentication...',
+            'name': 'Immediate Action After a Suspected Attack',
+            'description': 'Learn immediate response steps when you suspect a social engineering attack',
+            'content': 'When you suspect a social engineering attack, immediate action is crucial to minimize damage...',
             'order': 4,
-            'has_simulation': True,
-            'simulation_type': 'pretexting'
-        },
-        {
-            'name': 'Social Media Security',
-            'description': 'Protecting yourself from social engineering attacks on social media',
-            'content': 'Social media platforms are common targets for social engineering attacks...',
-            'order': 5,
             'has_simulation': True,
             'simulation_type': 'baiting'
         },
         {
-            'name': 'Final Assessment - Comprehensive Social Engineering Awareness',
+            'name': 'The Evolving Threat Landscape',
+            'description': 'Understanding emerging social engineering threats and future trends',
+            'content': 'Social engineering threats continue to evolve with technology and social changes...',
+            'order': 5,
+            'has_simulation': False
+        },
+        {
+            'name': 'Final Assessment',
             'description': 'Comprehensive assessment covering all aspects of social engineering awareness and prevention',
             'content': 'This final assessment will test your comprehensive understanding of social engineering awareness...',
             'order': 6,
@@ -477,6 +478,84 @@ def create_fallback_questions():
             logger.info(f"[SUCCESS] Created fallback question: {title[:50]}...")
         else:
             logger.warning(f"[ERROR] Failed to create fallback question")
+
+def seed_module1_kc_default() -> int:
+    """Seed Module 1 Knowledge Check with a curated default set if none exist.
+
+    Returns number of questions inserted.
+    """
+    try:
+        from data_models.content_models import KnowledgeCheckQuestion
+        questions = [
+            {
+                'question_text': 'According to Lesson 1.1, which of the following is the most accurate definition of social engineering?',
+                'option_a': 'The use of complex code to bypass a digital firewall.',
+                'option_b': 'The practice of analyzing social media to improve network security.',
+                'option_c': 'The art of manipulating people into giving up confidential information by exploiting psychological tricks.',
+                'option_d': 'The process of building better, more secure computer hardware.',
+                'correct_answer': 'c',
+                'explanation': "Social engineering is 'human hacking' — manipulating people using psychological tricks."
+            },
+            {
+                'question_text': 'What is the primary way social engineering differs from a traditional technical hack?',
+                'option_a': 'Social engineering is only used for pranks, while technical hacking is for serious crimes.',
+                'option_b': 'Social engineering targets the human user to bypass security, while technical hacking targets vulnerabilities in software or systems.',
+                'option_c': 'Social engineering requires advanced programming skills, while technical hacking does not.',
+                'option_d': 'Social engineering can only be done over the phone, not through email.',
+                'correct_answer': 'b',
+                'explanation': 'Key difference: people vs. systems. Social engineering targets human behavior to bypass controls.'
+            },
+            {
+                'question_text': "You receive an email 'URGENT: Your Student Portal Password Will Expire in 24 Hours!' from the 'Registrar's Office' with a link. This attack primarily uses which two principles?",
+                'option_a': 'Liking and Social Proof',
+                'option_b': 'Scarcity and Liking',
+                'option_c': 'Authority and Urgency',
+                'option_d': 'Scarcity and Authority',
+                'correct_answer': 'c',
+                'explanation': 'Impersonating a trusted department (Authority) and forcing quick action (Urgency).'
+            },
+            {
+                'question_text': 'Based on the examples in the lessons (Bitcoin scam, GCash requests), what is a common motivation for social engineers?',
+                'option_a': "To test a company's firewall for weaknesses.",
+                'option_b': 'To make new friends and connections online.',
+                'option_c': 'To gain access to information or resources for personal or financial benefit.',
+                'option_d': 'To help users become more skeptical and informed.',
+                'correct_answer': 'c',
+                'explanation': 'Attackers aim for valuable gain: money, access, or sensitive data.'
+            },
+            {
+                'question_text': 'A pop-up says: "FREE 1000 GEMS! Limited to the first 500 players!" This tactic relies on the principle of:',
+                'option_a': 'Authority',
+                'option_b': 'Liking',
+                'option_c': 'Scarcity',
+                'option_d': 'Social Proof',
+                'correct_answer': 'c',
+                'explanation': 'Creating fear of missing out (limited slots) is classic Scarcity.'
+            }
+        ]
+        # Ensure clean slate
+        KnowledgeCheckQuestion.query.filter_by(module_id=1).delete()
+        db.session.commit()
+        # Insert to set 1 by default
+        for q in questions:
+            row = KnowledgeCheckQuestion(
+                question_text=q['question_text'],
+                option_a=q['option_a'],
+                option_b=q['option_b'],
+                option_c=q['option_c'],
+                option_d=q['option_d'],
+                correct_answer=q['correct_answer'],
+                explanation=q['explanation'],
+                module_id=1,
+                question_set=1
+            )
+            db.session.add(row)
+        db.session.commit()
+        return len(questions)
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Default Module 1 KC seeding failed: {e}")
+        return 0
 
 # =============================================================================
 # 10. ROUTE DEFINITIONS
@@ -1124,6 +1203,11 @@ def assessment(module_id):
                         db.session.commit()
                         # Re-query
                         questions = KnowledgeCheckQuestion.get_by_module_and_set(module_id, question_set)
+                        if not questions:
+                            # As a final fallback, seed a default curated set for Module 1
+                            inserted = seed_module1_kc_default()
+                            if inserted > 0:
+                                questions = KnowledgeCheckQuestion.get_by_module_and_set(module_id, question_set)
                 except Exception as seed_err:
                     logger.error(f"Auto-seed questions failed for module {module_id}: {seed_err}")
             if not questions:
@@ -1752,6 +1836,20 @@ def health_check():
             'error': str(e)
         }), 500
 
+@app.route('/learning_assets/<path:filename>')
+def learning_assets(filename):
+    """
+    Serve learning assets (e.g., images, PDFs) from learning_modules/Documents
+    to ensure module content can display media without altering layout.
+    """
+    try:
+        import os
+        directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'learning_modules', 'Documents')
+        return send_from_directory(directory, filename)
+    except Exception as e:
+        logger.error(f"Error serving learning asset {filename}: {e}")
+        return ('', 404)
+
 @app.route('/init-db')
 def init_database_route():
     """
@@ -1845,7 +1943,7 @@ def admin_dashboard():
     try:
         # Get system statistics
         total_users = User.count()
-        total_modules = Module.query.filter(Module.id <= 5).count()  # Only count active modules (1-5)
+        total_modules = Module.query.filter(Module.id <= 6).count()  # Count all modules including Final Assessment
         total_assessments = AssessmentResult.count()
         total_simulations = SimulationResult.count()
         
@@ -1991,8 +2089,8 @@ def admin_delete_user(user_id):
 def admin_modules():
     """Module management page"""
     try:
-        # Get only the first 5 modules (our active modules)
-        modules = Module.query.filter(Module.id <= 5).order_by(Module.id).all()
+        # Get all modules including Final Assessment
+        modules = Module.query.filter(Module.id <= 6).order_by(Module.id).all()
         return render_template('admin/modules.html', modules=modules)
         
     except Exception as e:
@@ -2144,6 +2242,237 @@ def admin_force_seed_module1():
         db.session.rollback()
         logger.error(f"Force seed Module 1 failed: {e}")
         flash(f"Error force-seeding Module 1: {e}", 'error')
+        return redirect(url_for('admin_modules'))
+
+@app.route('/admin/seed-module1-kc')
+@login_required
+@admin_required
+def admin_seed_module1_kc():
+    """Seed Module 1 Knowledge Check questions from PDF in learning_modules/Documents/module1_KnowledgeCheck.pdf
+
+    Parsing rules (best-effort):
+    - Questions formatted with options A-D (e.g., 'A.', 'B.', 'C.', 'D.')
+    - Correct answer indicated by a line starting with 'Answer:' or 'Correct:' followed by a letter a-d/A-D
+    - Each question is saved as KnowledgeCheckQuestion; question_set alternates 1,2,1,2,... to support retakes
+    """
+    try:
+        import os
+        import re
+        from data_models.content_models import KnowledgeCheckQuestion
+
+        pdf_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'learning_modules', 'Documents', 'module1_KnowledgeCheck.pdf')
+        if not os.path.exists(pdf_path):
+            flash('module1_KnowledgeCheck.pdf not found in learning_modules/Documents', 'error')
+            return redirect(url_for('admin_modules'))
+
+        # Extract text from PDF using pdfplumber if available, else PyPDF2
+        full_text = ''
+        try:
+            import pdfplumber  # type: ignore
+            with pdfplumber.open(pdf_path) as pdf:
+                for page in pdf.pages:
+                    full_text += '\n' + (page.extract_text() or '')
+        except Exception:
+            try:
+                from PyPDF2 import PdfReader  # type: ignore
+                reader = PdfReader(pdf_path)
+                for page in reader.pages:
+                    full_text += '\n' + (page.extract_text() or '')
+            except Exception as pdf_e:
+                logger.error(f"Failed to read PDF: {pdf_e}")
+                flash('Failed to read PDF. Install pdfplumber or ensure PDF text is selectable.', 'error')
+                return redirect(url_for('admin_modules'))
+
+        # Normalize whitespace
+        text = re.sub(r"\r", "\n", full_text)
+        text = re.sub(r"\n+", "\n", text)
+
+        # Split into question blocks heuristically
+        # Accept patterns like '1.' or '1)' at the start of a line
+        blocks = re.split(r"\n(?=\s*\d+\s*[\.)]\s)", text)
+        parsed = []
+        for block in blocks:
+            b = block.strip()
+            if not b:
+                continue
+            # Capture question line
+            # Remove leading number prefix
+            question_line = re.sub(r"^\d+\s*[\.)]\s*", "", b).strip()
+            # Extract options
+            opt_a = re.search(r"\n\s*A[\.)]\s*(.*)", b)
+            opt_b = re.search(r"\n\s*B[\.)]\s*(.*)", b)
+            opt_c = re.search(r"\n\s*C[\.)]\s*(.*)", b)
+            opt_d = re.search(r"\n\s*D[\.)]\s*(.*)", b)
+            # Extract answer and optional explanation
+            ans = re.search(r"\n\s*(Answer|Correct)\s*[:\-]\s*([ABCDabcd])", b)
+            expl = None
+            expl_match = re.search(r"\n\s*(Explanation|Why)\s*[:\-]\s*(.*)", b)
+            if expl_match:
+                expl = expl_match.group(2).strip()
+
+            if opt_a and opt_b and opt_c and opt_d and ans:
+                parsed.append({
+                    'question_text': question_line,
+                    'option_a': opt_a.group(1).strip(),
+                    'option_b': opt_b.group(1).strip(),
+                    'option_c': opt_c.group(1).strip(),
+                    'option_d': opt_d.group(1).strip(),
+                    'correct_answer': ans.group(2).lower(),
+                    'explanation': expl or ''
+                })
+
+        if not parsed:
+            flash('No questions parsed from PDF. Please verify formatting (A-D options and Answer: X).', 'error')
+            return redirect(url_for('admin_modules'))
+
+        # Replace existing Module 1 questions
+        removed = KnowledgeCheckQuestion.query.filter_by(module_id=1).delete()
+        db.session.commit()
+
+        # Insert, alternating question_set 1/2
+        inserted = 0
+        for idx, q in enumerate(parsed):
+            row = KnowledgeCheckQuestion(
+                question_text=q['question_text'],
+                option_a=q['option_a'],
+                option_b=q['option_b'],
+                option_c=q['option_c'],
+                option_d=q['option_d'],
+                correct_answer=q['correct_answer'],
+                explanation=q['explanation'],
+                module_id=1,
+                question_set=1 if (idx % 2 == 0) else 2
+            )
+            db.session.add(row)
+            inserted += 1
+        db.session.commit()
+
+        flash(f"Module 1 Knowledge Check seeded from PDF. Removed: {removed}, Inserted: {inserted}", 'success')
+        return redirect(url_for('admin_modules'))
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Seed Module 1 KC failed: {e}")
+        flash(f"Error seeding Module 1 Knowledge Check: {e}", 'error')
+        return redirect(url_for('admin_modules'))
+
+@app.route('/admin/seed-module1-kc-manual')
+@login_required
+@admin_required
+def admin_seed_module1_kc_manual():
+    """Seed Module 1 Knowledge Check with the provided curated questions (Lesson 1.1 and 1.2)."""
+    try:
+        from data_models.content_models import KnowledgeCheckQuestion
+
+        questions = [
+            {
+                'question_text': 'According to Lesson 1.1, which of the following is the most accurate definition of social engineering?',
+                'option_a': 'The use of complex code to bypass a digital firewall.',
+                'option_b': 'The practice of analyzing social media to improve network security.',
+                'option_c': 'The art of manipulating people into giving up confidential information by exploiting psychological tricks.',
+                'option_d': 'The process of building better, more secure computer hardware.',
+                'correct_answer': 'c',
+                'explanation': "Social engineering is 'human hacking' — manipulating people using psychological tricks."
+            },
+            {
+                'question_text': 'What is the primary way social engineering differs from a traditional technical hack?',
+                'option_a': 'Social engineering is only used for pranks, while technical hacking is for serious crimes.',
+                'option_b': 'Social engineering targets the human user to bypass security, while technical hacking targets vulnerabilities in software or systems.',
+                'option_c': 'Social engineering requires advanced programming skills, while technical hacking does not.',
+                'option_d': 'Social engineering can only be done over the phone, not through email.',
+                'correct_answer': 'b',
+                'explanation': 'Key difference: people vs. systems. Social engineering targets human behavior to bypass controls.'
+            },
+            {
+                'question_text': "You receive an email 'URGENT: Your Student Portal Password Will Expire in 24 Hours!' from the 'Registrar's Office' with a link. This attack primarily uses which two principles?",
+                'option_a': 'Liking and Social Proof',
+                'option_b': 'Scarcity and Liking',
+                'option_c': 'Authority and Urgency',
+                'option_d': 'Scarcity and Authority',
+                'correct_answer': 'c',
+                'explanation': 'Impersonating a trusted department (Authority) and forcing quick action (Urgency).'
+            },
+            {
+                'question_text': 'Based on the examples in the lessons (Bitcoin scam, GCash requests), what is a common motivation for social engineers?',
+                'option_a': "To test a company's firewall for weaknesses.",
+                'option_b': 'To make new friends and connections online.',
+                'option_c': 'To gain access to information or resources for personal or financial benefit.',
+                'option_d': 'To help users become more skeptical and informed.',
+                'correct_answer': 'c',
+                'explanation': 'Attackers aim for valuable gain: money, access, or sensitive data.'
+            },
+            {
+                'question_text': 'A pop-up says: "FREE 1000 GEMS! Limited to the first 500 players!" This tactic relies on the principle of:',
+                'option_a': 'Authority',
+                'option_b': 'Liking',
+                'option_c': 'Scarcity',
+                'option_d': 'Social Proof',
+                'correct_answer': 'c',
+                'explanation': 'Creating fear of missing out (limited slots) is classic Scarcity.'
+            },
+            {
+                'question_text': "You get a Messenger from a classmate: 'Urgent! My GCash is down, please send ₱500 to this number.' This primarily exploits:",
+                'option_a': 'Authority',
+                'option_b': 'Scarcity',
+                'option_c': 'Liking',
+                'option_d': 'Social Proof',
+                'correct_answer': 'c',
+                'explanation': 'It leverages a trusted relationship — the Liking principle.'
+            },
+            {
+                'question_text': 'The lessons refer to social engineering as "human hacking" because it:',
+                'option_a': 'Requires the hacker to be physically present.',
+                'option_b': 'Can only be done by very friendly and popular people.',
+                'option_c': "Targets people's natural tendencies and psychology instead of computer code.",
+                'option_d': 'Is a legal method for testing security.',
+                'correct_answer': 'c',
+                'explanation': 'It exploits human psychology rather than code-level flaws.'
+            },
+            {
+                'question_text': 'Which scenario describes a social engineering attack, as explained in the module?',
+                'option_a': "A hacker exploits a website's code to access a database.",
+                'option_b': 'A scammer pretends to be IT and convinces an employee to reveal a password.',
+                'option_c': 'A script tries thousands of passwords on a login page.',
+                'option_d': 'An admin installs a new firewall.',
+                'correct_answer': 'b',
+                'explanation': 'Only B manipulates a person into compromising security.'
+            },
+            {
+                'question_text': 'A fake giveaway uses bots to add thousands of likes and comments saying "It works!" to convince users. This is an example of:',
+                'option_a': 'Authority',
+                'option_b': 'Social Proof',
+                'option_c': 'Urgency',
+                'option_d': 'Liking',
+                'correct_answer': 'b',
+                'explanation': 'Relying on the crowd’s behavior to influence decisions is Social Proof.'
+            }
+        ]
+
+        # Replace existing Module 1 KC questions
+        removed = KnowledgeCheckQuestion.query.filter_by(module_id=1).delete()
+        db.session.commit()
+
+        # Insert alternating sets 1/2
+        for idx, q in enumerate(questions):
+            row = KnowledgeCheckQuestion(
+                question_text=q['question_text'],
+                option_a=q['option_a'],
+                option_b=q['option_b'],
+                option_c=q['option_c'],
+                option_d=q['option_d'],
+                correct_answer=q['correct_answer'],
+                explanation=q['explanation'],
+                module_id=1,
+                question_set=1 if (idx % 2 == 0) else 2
+            )
+            db.session.add(row)
+        db.session.commit()
+
+        flash(f"Module 1 KC seeded manually. Removed: {removed}, Inserted: {len(questions)}", 'success')
+        return redirect(url_for('admin_modules'))
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Manual seed Module 1 KC failed: {e}")
+        flash(f"Error manual seeding Module 1 KC: {e}", 'error')
         return redirect(url_for('admin_modules'))
 
 @app.route('/create-admin')
@@ -2301,6 +2630,183 @@ def admin_update_module(module_id):
         logger.error(f"Error updating module: {e}")
         return redirect(url_for('admin_modules'))
 
+
+# =============================================================================
+# 12. ASSESSMENT ROUTES
+# =============================================================================
+
+@app.route('/assessment/start')
+@login_required
+def start_new_assessment():
+    """Start a new assessment attempt"""
+    try:
+        # Import here to avoid circular imports
+        from data_models.assessment_models import AssessmentAttempt, AssessmentSession
+        
+        # Check if user can start a new attempt (exempt admin from limits)
+        if not current_user.is_admin and not AssessmentAttempt.can_start_new_attempt(current_user.id):
+            attempts = AssessmentAttempt.get_user_attempts(current_user.id)
+            if len(attempts) >= 3:
+                flash('You have reached the maximum number of attempts (3).', 'error')
+                return redirect(url_for('final_assessment'))
+            
+            latest_attempt = attempts[0] if attempts else None
+            if latest_attempt and not latest_attempt.is_eligible_for_retake():
+                time_remaining = latest_attempt.completed_at + timedelta(hours=24) - datetime.utcnow()
+                hours = int(time_remaining.total_seconds() // 3600)
+                minutes = int((time_remaining.total_seconds() % 3600) // 60)
+                flash(f'You must wait {hours}h {minutes}m before your next attempt.', 'error')
+                return redirect(url_for('final_assessment'))
+        
+        # Create new attempt
+        attempt_number = AssessmentAttempt.get_next_attempt_number(current_user.id)
+        attempt = AssessmentAttempt(
+            user_id=current_user.id,
+            attempt_number=attempt_number
+        )
+        
+        if not attempt.save():
+            flash('Failed to create assessment attempt.', 'error')
+            return redirect(url_for('final_assessment'))
+        
+        # Get random 25 questions from the pool
+        all_questions = FinalAssessmentQuestion.query.all()
+        if len(all_questions) < 25:
+            flash('Not enough questions available for assessment.', 'error')
+            return redirect(url_for('final_assessment'))
+        
+        # Shuffle and select 25 questions
+        random_questions = random.sample(all_questions, 25)
+        question_ids = [q.id for q in random_questions]
+        
+        # Set questions for this attempt
+        attempt.set_questions_used(question_ids)
+        attempt.save()
+        
+        # Create assessment session
+        assessment_session = AssessmentSession.create_session(
+            user_id=current_user.id,
+            attempt_id=attempt.id,
+            hours=2  # 2-hour time limit
+        )
+        
+        if not assessment_session:
+            flash('Failed to create assessment session.', 'error')
+            return redirect(url_for('final_assessment'))
+        
+        # Store session token
+        session['assessment_token'] = assessment_session.session_token
+        
+        return render_template('assessment/assessment.html', 
+                             attempt=attempt, 
+                             questions=random_questions,
+                             session_token=assessment_session.session_token)
+        
+    except Exception as e:
+        logger.error(f"Error starting assessment: {e}")
+        flash('An error occurred while starting the assessment.', 'error')
+        return redirect(url_for('final_assessment'))
+
+@app.route('/assessment/submit', methods=['POST'])
+@login_required
+def submit_new_assessment():
+    """Submit assessment answers"""
+    try:
+        # Import here to avoid circular imports
+        from data_models.assessment_models import AssessmentAttempt, AssessmentSession
+        
+        session_token = request.form.get('session_token')
+        if not session_token:
+            flash('Invalid session.', 'error')
+            return redirect(url_for('final_assessment'))
+        
+        # Get active session
+        assessment_session = AssessmentSession.get_active_session(session_token)
+        if not assessment_session:
+            flash('Session expired or invalid.', 'error')
+            return redirect(url_for('final_assessment'))
+        
+        # Get attempt
+        attempt = AssessmentAttempt.get_by_id(assessment_session.attempt_id)
+        if not attempt:
+            flash('Assessment attempt not found.', 'error')
+            return redirect(url_for('final_assessment'))
+        
+        # Collect answers
+        answers = {}
+        question_ids = attempt.get_questions_used()
+        
+        for question_id in question_ids:
+            answer = request.form.get(f'question_{question_id}')
+            if answer:
+                answers[question_id] = answer
+        
+        # Set answers and calculate score
+        attempt.set_answers(answers)
+        score = attempt.calculate_score()
+        attempt.completed_at = datetime.utcnow()
+        attempt.save()
+        
+        # Invalidate session
+        AssessmentSession.invalidate_session(session_token)
+        session.pop('assessment_token', None)
+        
+        # Determine result message
+        if attempt.passed:
+            result_message = "Congratulations! You passed the assessment."
+            result_type = "success"
+        else:
+            result_message = f"You scored {score:.1f}%. You need 80% to pass. You can retry in 24 hours."
+            result_type = "warning"
+        
+        return render_template('assessment/result.html',
+                             attempt=attempt,
+                             score=score,
+                             passed=attempt.passed,
+                             result_message=result_message,
+                             result_type=result_type)
+        
+    except Exception as e:
+        logger.error(f"Error submitting assessment: {e}")
+        flash('An error occurred while submitting the assessment.', 'error')
+        return redirect(url_for('final_assessment'))
+
+@app.route('/assessment/status')
+@login_required
+def new_assessment_status():
+    """Get user's assessment status"""
+    try:
+        # Import here to avoid circular imports
+        from data_models.assessment_models import AssessmentAttempt
+        
+        attempts = AssessmentAttempt.get_user_attempts(current_user.id)
+        latest_attempt = attempts[0] if attempts else None
+        
+        can_retake = AssessmentAttempt.can_start_new_attempt(current_user.id)
+        
+        status = {
+            'total_attempts': len(attempts),
+            'max_attempts': 3,
+            'can_retake': can_retake,
+            'latest_score': latest_attempt.score if latest_attempt else None,
+            'latest_passed': latest_attempt.passed if latest_attempt else False,
+            'next_attempt_available': True
+        }
+        
+        if latest_attempt and not can_retake:
+            if len(attempts) >= 3:
+                status['next_attempt_available'] = False
+                status['reason'] = 'Maximum attempts reached'
+            else:
+                time_remaining = latest_attempt.completed_at + timedelta(hours=24) - datetime.utcnow()
+                status['next_attempt_available'] = False
+                status['reason'] = f'Wait {int(time_remaining.total_seconds() // 3600)}h {int((time_remaining.total_seconds() % 3600) // 60)}m'
+        
+        return jsonify(status)
+        
+    except Exception as e:
+        logger.error(f"Error getting assessment status: {e}")
+        return jsonify({'error': 'Failed to get assessment status'}), 500
 
 # =============================================================================
 # 13. APPLICATION ENTRY POINT

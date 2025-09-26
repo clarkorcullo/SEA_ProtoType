@@ -131,7 +131,7 @@ Each module file contains:
 3. **Module 3**: Phishing Detection and Prevention
 4. **Module 4**: Password Security and Authentication
 5. **Module 5**: Social Media Security
-6. **Module 6**: Physical Security and Social Engineering
+6. **Final Assessment**: Comprehensive Evaluation
 7. **Module 7**: Incident Response and Reporting
 8. **Final Assessment**: Comprehensive evaluation
 

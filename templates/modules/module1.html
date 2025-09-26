@@ -1,0 +1,187 @@
+<script>
+// Inject real content into the existing placeholder in the module layout
+document.addEventListener('DOMContentLoaded', function() {
+  var placeholder = document.getElementById('content-sub1-1');
+  if (!placeholder) return;
+  var wrapper = placeholder.querySelector('#placeholder-sub1-1') || placeholder.querySelector('.content-wrapper') || placeholder;
+  wrapper.innerHTML = '' +
+    '<h3>What is Social Engineering?</h3>' +
+    '<p>Welcome to our first lesson! We\'re starting with a simple but crucial concept: social engineering. It\'s the most common and dangerous cyber threat you\'ll face today. It doesn\'t rely on complex code or sophisticated technology; it relies on human psychology.</p>' +
+    '<p>This short video will give you a quick overview of what social engineering is and why it\'s so effective. After watching, you\'ll have a clear understanding of what "human hacking" is all about.</p>' +
+    '<div class="video-container"><div class="video-wrapper">' +
+    '<iframe src="https://www.youtube.com/embed/G6GBRIRmsAg" title="Module 1 Lesson 1.1 Part A - What is Social Engineering" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>' +
+    '</div><div class="video-caption">Module 1 Lesson 1.1 Part A — What is Social Engineering?</div></div>';
+
+  // Insert Lesson 1.1 -> 2. Core Lesson Content
+  var coreContent = document.getElementById('content-sub1-2');
+  if (coreContent) {
+    var coreWrapper = coreContent.querySelector('.content-wrapper') || coreContent;
+    coreWrapper.innerHTML = '' +
+      '<h3>Core Lesson Content: The Anatomy of a Human-Based Attack</h3>' +
+      '<p>Social engineering attacks manipulate people into sharing information, downloading software, or making other mistakes that compromise their security. It’s sometimes called “human hacking,” because it uses psychological manipulation instead of technical skills. According to reports, social engineering is a leading cause of network compromise today.</p>' +
+      '<p>This is one of the biggest challenges in cybersecurity. Even with strong firewalls and up-to-date antivirus software, a crafty social engineer can get right through by targeting you, the user. It’s like having a strong lock on your door, but a scammer just convinces you to hand them the key.</p>' +
+      '<p><strong>So, how does it work?</strong> Social engineering is a game of psychology. Attackers use one or more of these principles to trick you into acting against your own best interest:</p>' +
+      '<ul>' +
+        '<li><strong>Urgency:</strong> Scammers create a sense of panic to make you act rashly. They might say, “Your account will be suspended in 5 minutes!” to make you feel like you have to click immediately.</li>' +
+        '<li><strong>Authority:</strong> Attackers impersonate a person in power. They might pretend to be from the MMDC IT department or a government agency to make their requests seem legitimate and non-negotiable.</li>' +
+        '<li><strong>Liking/Trust:</strong> They appeal to your better nature or a personal connection. A scammer might pretend to be a friend or a coworker who needs help to get you to open a suspicious file or give them information.</li>' +
+      '</ul>' +
+      '<p>Understanding these tricks is your best defense. By recognizing the psychology behind the deception, you can stay safe online.</p>' +
+      '<div class="infographic-container">' +
+        '<img src="' + (window.location.origin + '/learning_assets/social_engineering_in_a_nutshell.png') + '" alt="Social Engineering in a Nutshell" />' +
+        '<div class="video-caption">Social Engineering in a Nutshell — quick reference to common tactics</div>' +
+      '</div>';
+  }
+
+  // Insert Lesson 1.1 -> 3. Lesson Conclusion
+  var conclusion = document.getElementById('content-sub1-3');
+  if (conclusion) {
+    var conclWrapper = conclusion.querySelector('.content-wrapper') || conclusion;
+    conclWrapper.innerHTML = '' +
+      '<h3>Lesson Conclusion: What is Social Engineering?</h3>' +
+      '<p>Great job! You’ve just learned that social engineering isn’t about hacking computers—it’s about human hacking. The best security in the world can’t stop a scammer if they can just trick you into giving them access. That’s why your mindset is your strongest defense.</p>' +
+      '<p>Now that you know what social engineering is, let\'s explore why it works so well.</p>' +
+      '<div class="resources-section">' +
+        '<h4>Resources & For More Info</h4>' +
+        '<ul class="resource-list">' +
+          '<li>' +
+            '<strong>Read More:</strong> For a real-world example of a social engineering attack on a large scale, read the BBC article on the "Major US Twitter accounts hacked in Bitcoin scam." This shows how hackers tricked employees to gain access. ' +
+            '<a class="resource-link" href="https://www.bbc.com/news/technology-53425822" target="_blank" rel="noopener">Open BBC article</a>' +
+          '</li>' +
+          '<li>' +
+            '<strong>Learn More:</strong> For a comprehensive guide on the definition of social engineering and why it bypasses technical defenses, check out the article "What is Social Engineering?" from IBM. ' +
+            '<a class="resource-link" href="https://www.ibm.com/topics/social-engineering" target="_blank" rel="noopener">Open IBM article</a>' +
+          '</li>' +
+        '</ul>' +
+      '</div>' +
+      '<div class="next-steps">' +
+        '<h4>Next Lesson</h4>' +
+        '<p>You will now move on to <strong>Lesson 1.2: The Psychology Behind the Deception</strong>.</p>' +
+      '</div>';
+  }
+
+  // Insert Lesson 1.2 -> 1. What is Social Engineering? (Psychology Behind the Deception)
+  var l12_1 = document.getElementById('content-lesson1-2');
+  if (l12_1) {
+    var sub21 = document.getElementById('content-sub2-1');
+    if (sub21) {
+      var sub21Wrapper = sub21.querySelector('.content-wrapper') || sub21;
+      sub21Wrapper.innerHTML = '' +
+        '<h3>The Psychology Behind the Deception</h3>' +
+        '<p>Welcome to this lesson! You\'ve already learned what social engineering is. Now, let’s go deeper. This video will show you why these attacks work so well by revealing the psychological triggers scammers use. Get ready to learn how to spot and resist the manipulators\' tricks.</p>' +
+        '<div class="video-container"><div class="video-wrapper">' +
+        '<iframe src="https://www.youtube.com/embed/QGGkMDP69jM" title="Module 1 Lesson 1.2 Part A - The Psychology Behind the Deception" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>' +
+        '</div><div class="video-caption">Module 1 Lesson 1.2 Part A — The Psychology Behind the Deception</div></div>';
+    }
+    var sub22 = document.getElementById('content-sub2-2');
+    if (sub22) {
+      var sub22Wrapper = sub22.querySelector('.content-wrapper') || sub22;
+      sub22Wrapper.innerHTML = '' +
+        '<h3>Lesson 1.2: The Manipulator\'s Toolkit</h3>' +
+        '<p>Now, we\'re going to dive deeper into the mind of a social engineer and uncover the psychological principles they use to manipulate us. Understanding these tricks is your best defense!</p>' +
+        '<div class="video-container"><div class="video-wrapper">' +
+        '<iframe src="https://www.youtube.com/embed/weeRmfND82E" title="Module 1 Lesson 1.2 Part B - The Psychology Behind the Deception" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>' +
+        '</div><div class="video-caption">Module 1 Lesson 1.2 Part B — The Psychology Behind the Deception</div></div>';
+    }
+    var sub23 = document.getElementById('content-sub2-3');
+    if (sub23) {
+      var sub23Wrapper = sub23.querySelector('.content-wrapper') || sub23;
+      sub23Wrapper.innerHTML = '' +
+        '<h3>Module 1 Conclusion: The Power of an Informed Mindset</h3>' +
+        '<p>Congratulations on completing Module 1! You’ve taken a huge step in your journey to become digitally smarter.</p>' +
+        '<p>Over the last two lessons, you’ve discovered that social engineering isn’t about hacking computers; it’s about “human hacking.” You learned how attackers use psychological tactics like Authority, Urgency, and Trust to bypass even the strongest technical defenses.</p>' +
+        '<p>This knowledge is your most powerful tool. By understanding how these tricks work, you\'re now better equipped to pause, think, and protect yourself from potential attacks.</p>' +
+        '<p>Now, let\'s put your new knowledge to the test.</p>' +
+        '<div class="resources-section">' +
+          '<h4>Resources & For More Info</h4>' +
+          '<ul class="resource-list">' +
+            '<li><strong>Read More:</strong> For a deeper dive into the science behind the tricks, check out this article on "Cialdini’s 6 Principles of Persuasion". ' +
+            '<a class="resource-link" href="https://people-shift.com/articles/cialdinis-6-principles-of-persuasion/" target="_blank" rel="noopener">Open article</a></li>' +
+            '<li><strong>Watch Again:</strong> A short, animated refresher on the psychology of social engineering. ' +
+            '<a class="resource-link" href="https://www.youtube.com/watch?v=P3rbadeF9AI" target="_blank" rel="noopener">Watch video</a></li>' +
+          '</ul>' +
+        '</div>' +
+        '<div class="next-steps">' +
+          '<h4>Your Next Steps</h4>' +
+          '<ul>' +
+            '<li>Take the <strong>Module 1 Quiz</strong> to check your understanding.</li>' +
+            '<li>Complete the <strong>Reflection Activity</strong> to connect learning to your experiences.</li>' +
+          '</ul>' +
+          '<p>Your awareness journey has just begun—up next, we’ll dive deeper into real-world attack vectors used by social engineers.</p>' +
+        '</div>';
+    }
+  }
+
+  // Insert Module 1 -> Reflection content
+  var reflection = document.getElementById('content-reflection');
+  if (reflection) {
+    var reflWrapper = reflection.querySelector('.content-wrapper') || reflection;
+    reflWrapper.innerHTML = '' +
+      '<h3>Module 1 Reflection: "Could This Happen to Me?"</h3>' +
+      '<p>Welcome to your first reflection! Now that you’ve completed Module 1, it’s time to think about how social engineering shows up in your own life. This isn\'t just theory; it’s about making sure you’re ready to protect yourself. Take a few minutes to think about the questions below and share your thoughts.</p>' +
+      '<h4>Reflection Prompts</h4>' +
+      '<ol>' +
+        '<li>Think about a time when someone tried to get you to act quickly, trust them blindly, or give out personal information—online or offline. What happened?</li>' +
+        '<li>Now that you’ve completed this module, do you think it might have been a social engineering attempt?</li>' +
+        '<li>How did you respond then, and how would you act differently now?</li>' +
+      '</ol>' +
+      '<div class="alert alert-info"><strong>BONUS:</strong> Share one "aha moment" from this module. What surprised you the most about social engineering, and what habit or mindset will you change starting today?</div>';
+  }
+
+  // Insert Module 1 -> Knowledge Check rules and launcher
+  var kc = document.getElementById('content-knowledge-check');
+  if (kc) {
+    var kcWrapper = kc.querySelector('.content-wrapper') || kc;
+    kcWrapper.innerHTML = '' +
+      '<h3>Knowledge Check — Module 1 Rules</h3>' +
+      '<ol>' +
+        '<li><strong>Unlimited attempts</strong>: You can take this knowledge check as many times as you need.</li>' +
+        '<li><strong>5 questions</strong> per attempt. <strong>Passing score: 80%</strong>.</li>' +
+        '<li><strong>Fresh questions on retake</strong>: Questions are shuffled and may switch sets so you won\'t receive the exact same items if you retry.</li>' +
+        '<li><strong>Review with feedback</strong>: After submission, you can review your answers with explanations.</li>' +
+        '<li><strong>Pass message</strong>: A clear success message appears when you pass.</li>' +
+      '</ol>' +
+      '<div class="next-steps" style="margin-top:1rem;">' +
+        '<a href="/assessment/1" class="btn btn-primary">Start Knowledge Check</a>' +
+      '</div>';
+  }
+
+  // Insert Module 1 -> References (authoritative sources)
+  var refs = document.getElementById('content-references');
+  if (refs) {
+    var refsWrapper = refs.querySelector('.content-wrapper') || refs;
+    refsWrapper.innerHTML = '' +
+      '<h3>References & Further Reading</h3>' +
+      '<p>The following reputable resources expand on social engineering concepts and defenses:</p>' +
+      '<ul class="resource-list">' +
+        '<li><a class="resource-link" href="https://www.cisa.gov/resources-tools/resources/social-engineering" target="_blank" rel="noopener">CISA — Social Engineering</a> (US Cybersecurity & Infrastructure Security Agency)<br/>' +
+          '<em>APA:</em> Cybersecurity and Infrastructure Security Agency. (n.d.). Social engineering. https://www.cisa.gov/resources-tools/resources/social-engineering<br/>' +
+          '<em>IEEE:</em> CISA, “Social engineering,” Accessed: [Online]. Available: https://www.cisa.gov/resources-tools/resources/social-engineering</li>' +
+        '<li><a class="resource-link" href="https://owasp.org/www-community/Social_Engineering" target="_blank" rel="noopener">OWASP — Social Engineering (Community Guide)</a><br/>' +
+          '<em>APA:</em> OWASP. (n.d.). Social engineering. https://owasp.org/www-community/Social_Engineering<br/>' +
+          '<em>IEEE:</em> OWASP, “Social engineering,” [Online]. Available: https://owasp.org/www-community/Social_Engineering</li>' +
+        '<li><a class="resource-link" href="https://www.enisa.europa.eu/topics/threat-risk-management/threats-and-trends/social-engineering" target="_blank" rel="noopener">ENISA — Social Engineering Overview</a> (EU Agency for Cybersecurity)<br/>' +
+          '<em>APA:</em> ENISA. (n.d.). Social engineering. https://www.enisa.europa.eu/topics/threat-risk-management/threats-and-trends/social-engineering<br/>' +
+          '<em>IEEE:</em> ENISA, “Social engineering,” [Online]. Available: https://www.enisa.europa.eu/topics/threat-risk-management/threats-and-trends/social-engineering</li>' +
+        '<li><a class="resource-link" href="https://csrc.nist.gov/glossary/term/social_engineering" target="_blank" rel="noopener">NIST CSRC Glossary — Social Engineering</a><br/>' +
+          '<em>APA:</em> National Institute of Standards and Technology. (n.d.). Social engineering (CSRC glossary). https://csrc.nist.gov/glossary/term/social_engineering<br/>' +
+          '<em>IEEE:</em> NIST, “Social engineering (CSRC glossary),” [Online]. Available: https://csrc.nist.gov/glossary/term/social_engineering</li>' +
+        '<li><a class="resource-link" href="https://www.nist.gov/itl/applied-cybersecurity/phish-scale" target="_blank" rel="noopener">NIST — Phish Scale (User Susceptibility Research)</a><br/>' +
+          '<em>APA:</em> National Institute of Standards and Technology. (n.d.). Phish Scale. https://www.nist.gov/itl/applied-cybersecurity/phish-scale<br/>' +
+          '<em>IEEE:</em> NIST, “Phish Scale,” [Online]. Available: https://www.nist.gov/itl/applied-cybersecurity/phish-scale</li>' +
+        '<li><a class="resource-link" href="https://www.ibm.com/topics/social-engineering" target="_blank" rel="noopener">IBM — What is Social Engineering?</a><br/>' +
+          '<em>APA:</em> IBM. (n.d.). What is social engineering? https://www.ibm.com/topics/social-engineering<br/>' +
+          '<em>IEEE:</em> IBM, “What is social engineering?,” [Online]. Available: https://www.ibm.com/topics/social-engineering</li>' +
+        '<li><a class="resource-link" href="https://learn.microsoft.com/security/compass/overview-social-engineering" target="_blank" rel="noopener">Microsoft — Overview of Social Engineering</a><br/>' +
+          '<em>APA:</em> Microsoft. (n.d.). Overview of social engineering. https://learn.microsoft.com/security/compass/overview-social-engineering<br/>' +
+          '<em>IEEE:</em> Microsoft, “Overview of social engineering,” [Online]. Available: https://learn.microsoft.com/security/compass/overview-social-engineering</li>' +
+        '<li><a class="resource-link" href="https://www.sans.org/blog/what-is-social-engineering/" target="_blank" rel="noopener">SANS — What is Social Engineering?</a><br/>' +
+          '<em>APA:</em> SANS Institute. (n.d.). What is social engineering? https://www.sans.org/blog/what-is-social-engineering/<br/>' +
+          '<em>IEEE:</em> SANS Institute, “What is social engineering?,” [Online]. Available: https://www.sans.org/blog/what-is-social-engineering/</li>' +
+      '</ul>' +
+      '<div class="alert alert-info">Tip: Bookmark these to build a personal reference library as you progress through later modules.</div>';
+  }
+});
+</script>
+
+
