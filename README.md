@@ -4,7 +4,7 @@ A **production-ready, enterprise-grade Flask application** that delivers compreh
 
 **🌐 Live Demo**: [social-engineering-awareness.onrender.com](https://mmdcsea.onrender.com)
 
-**📚 Repository**: [clarkorcullo/SocialEngineeringAwareness](https://github.com/clarkorcullo/SocialEngineeringAwareness)
+**📚 Repository**: [Your-Username/SocialEngineeringAwareness-Fresh](https://github.com/Your-Username/SocialEngineeringAwareness-Fresh)
 
 ---
 
@@ -259,7 +259,7 @@ A module is considered **fully completed** when:
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/clarkorcullo/SocialEngineeringAwareness.git
+   git clone https://github.com/Your-Username/SocialEngineeringAwareness-Fresh.git
    cd SocialEngineeringAwareness
    ```
 
@@ -553,10 +553,10 @@ echo $FLASK_ENV
 
 ## 📞 Contact Information
 
-- **Repository**: [GitHub](https://github.com/clarkorcullo/SocialEngineeringAwareness)
-- **Live Demo**: [Render Deployment](https://social-engineering-awareness.onrender.com/)
-- **Issues**: [GitHub Issues](https://github.com/clarkorcullo/SocialEngineeringAwareness/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/clarkorcullo/SocialEngineeringAwareness/discussions)
+- **Repository**: [GitHub](https://github.com/Your-Username/SocialEngineeringAwareness-Fresh)
+- **Live Demo**: [Render Deployment](https://your-app-name.onrender.com/)
+- **Issues**: [GitHub Issues](https://github.com/Your-Username/SocialEngineeringAwareness-Fresh/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/Your-Username/SocialEngineeringAwareness-Fresh/discussions)
 
 ---
 
