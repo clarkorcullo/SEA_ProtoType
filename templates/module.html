@@ -60,12 +60,7 @@
                 
                 <!-- Professional Drawer-Style Content -->
                 <div class="content-drawers">
-                    {% if module.id == 1 %}
-                        {# Use file-based canonical drawer layout for Module 1 to ensure consistency across environments #}
-                        {% include 'modules/module1_drawer.html' %}
-                    {% else %}
-                        {{ module.content | safe }}
-                    {% endif %}
+                    {{ module.content | safe }}
                 </div>
 
                 {# Module-specific runtime content injectors #}
