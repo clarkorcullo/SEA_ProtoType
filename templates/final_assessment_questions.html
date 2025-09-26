@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}Final Assessment - Social Engineering Awareness{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-lg">
+                <div class="card-header bg-success text-white">
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <img src="{{ url_for('static', filename='MMDCLogo.png') }}" alt="MMDC Logo" style="height: 40px; width: auto; border-radius: 6px;">
+                        <img src="{{ url_for('static', filename='SEALogo.png') }}" alt="SEA Logo" style="height: 40px; width: auto; border-radius: 6px;">
+                    </div>
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-graduation-cap"></i> Final Assessment
+                    </h3>
+                    <p class="mb-0">Comprehensive evaluation covering all modules</p>
+                </div>
+                
+                <div class="card-body p-4">
+                    <!-- Assessment Instructions -->
+                    <div class="alert alert-info mb-4">
+                        <h5><i class="fas fa-info-circle"></i> Final Assessment Instructions</h5>
+                        <ul class="mb-0">
+                            <li><strong>Questions:</strong> 25 comprehensive questions from all 5 modules</li>
+                            <li><strong>Time:</strong> 60 minutes (recommended) - no strict time limit</li>
+                            <li><strong>Passing Score:</strong> 80% (20 out of 25 correct)</li>
+                            <li><strong>Retakes:</strong> 3 attempts every 48 hours if failed</li>
+                            <li><strong>Format:</strong> Multiple choice questions (A, B, C, D)</li>
+                            <li><strong>Topics:</strong> All aspects of social engineering awareness</li>
+                        </ul>
+                    </div>
+
+                    <!-- Assessment Form -->
+                    <form id="final-assessment-form" method="POST" action="{{ url_for('submit_final_assessment') }}">
+                        {% if questions %}
+                            {% for question in questions %}
+                            <div class="question-container mb-4 p-3 border rounded">
+                                <h5 class="question-number mb-3">
+                                    <span class="badge bg-success me-2">{{ loop.index }}</span>
+                                    {{ question.question_text }}
+                                </h5>
+                                
+                                <div class="options-container">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" 
+                                               name="question_{{ question.id }}" 
+                                               id="q{{ question.id }}_a" 
+                                               value="a" required>
+                                        <label class="form-check-label" for="q{{ question.id }}_a">
+                                            <strong>A.</strong> {{ question.option_a }}
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" 
+                                               name="question_{{ question.id }}" 
+                                               id="q{{ question.id }}_b" 
+                                               value="b" required>
+                                        <label class="form-check-label" for="q{{ question.id }}_b">
+                                            <strong>B.</strong> {{ question.option_b }}
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" 
+                                               name="question_{{ question.id }}" 
+                                               id="q{{ question.id }}_c" 
+                                               value="c" required>
+                                        <label class="form-check-label" for="q{{ question.id }}_c">
+                                            <strong>C.</strong> {{ question.option_c }}
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" 
+                                               name="question_{{ question.id }}" 
+                                               id="q{{ question.id }}_d" 
+                                               value="d" required>
+                                        <label class="form-check-label" for="q{{ question.id }}_d">
+                                            <strong>D.</strong> {{ question.option_d }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            
+                            <!-- Submit Button -->
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-success btn-lg">
+                                    <i class="fas fa-paper-plane"></i> Submit Final Assessment
+                                </button>
+                                <a href="{{ url_for('final_assessment') }}" class="btn btn-secondary btn-lg ms-2">
+                                    <i class="fas fa-arrow-left"></i> Back to Assessment Info
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning text-center">
+                                <h5><i class="fas fa-exclamation-triangle"></i> No Questions Available</h5>
+                                <p>There are no final assessment questions available at the moment.</p>
+                                <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
+                                    <i class="fas fa-home"></i> Back to Dashboard
+                                </a>
+                            </div>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Form validation
+document.getElementById('final-assessment-form').addEventListener('submit', function(e) {
+    const questions = document.querySelectorAll('.question-container');
+    let allAnswered = true;
+    
+    questions.forEach(function(question, index) {
+        const radioButtons = question.querySelectorAll('input[type="radio"]');
+        const answered = Array.from(radioButtons).some(radio => radio.checked);
+        
+        if (!answered) {
+            allAnswered = false;
+            question.style.borderColor = '#dc3545';
+        } else {
+            question.style.borderColor = '#dee2e6';
+        }
+    });
+    
+    if (!allAnswered) {
+        e.preventDefault();
+        alert('Please answer all 25 questions before submitting the final assessment.');
+    } else {
+        // Confirm submission
+        if (!confirm('Are you sure you want to submit your final assessment? You cannot change your answers after submission.')) {
+            e.preventDefault();
+        }
+    }
+});
+
+// Visual feedback for selected answers
+document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+        const questionContainer = this.closest('.question-container');
+        questionContainer.style.borderColor = '#28a745';
+        questionContainer.style.backgroundColor = '#f8f9fa';
+    });
+});
+
+// Progress tracking
+let answeredCount = 0;
+const totalQuestions = {{ questions|length if questions else 0 }};
+
+function updateProgress() {
+    const answered = document.querySelectorAll('input[type="radio"]:checked').length;
+    const progress = Math.round((answered / totalQuestions) * 100);
+    
+    // Update progress display if it exists
+    const progressElement = document.getElementById('progress-display');
+    if (progressElement) {
+        progressElement.textContent = `${answered}/${totalQuestions} questions answered (${progress}%)`;
+    }
+}
+
+document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+    radio.addEventListener('change', updateProgress);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,345 @@
+{% extends "base.html" %}
+
+{% block title %}Module Management - Admin Dashboard{% endblock %}
+
+{% block content %}
+<style>
+.admin-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: 10px;
+}
+
+.module-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid;
+}
+
+.module-card:hover {
+    transform: translateY(-2px);
+}
+
+.module-card.module-1 { border-left-color: #007bff; }
+.module-card.module-2 { border-left-color: #28a745; }
+.module-card.module-3 { border-left-color: #ffc107; }
+.module-card.module-4 { border-left-color: #dc3545; }
+.module-card.module-5 { border-left-color: #6f42c1; }
+
+.module-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.module-1 .module-icon { background: #007bff; }
+.module-2 .module-icon { background: #28a745; }
+.module-3 .module-icon { background: #ffc107; }
+.module-4 .module-icon { background: #dc3545; }
+.module-5 .module-icon { background: #6f42c1; }
+
+.admin-nav {
+    background: white;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.admin-nav .nav-link {
+    color: #495057;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.admin-nav .nav-link:hover {
+    background: #f8f9fa;
+    color: #007bff;
+}
+
+.admin-nav .nav-link.active {
+    background: #007bff;
+    color: white;
+}
+
+.stats-section {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.stat-label {
+    color: #6c757d;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+</style>
+
+<div class="admin-header text-center">
+    <div class="container">
+        <h1 class="mb-3">
+            <i class="fas fa-book"></i> Module Management
+        </h1>
+        <p class="lead mb-0">Manage learning modules and content</p>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Admin Navigation -->
+    <div class="admin-nav">
+        <nav class="nav nav-pills nav-fill">
+            <a class="nav-link" href="{{ url_for('admin_dashboard') }}">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a class="nav-link" href="{{ url_for('admin_users') }}">
+                <i class="fas fa-users"></i> Users
+            </a>
+            <a class="nav-link active" href="{{ url_for('admin_modules') }}">
+                <i class="fas fa-book"></i> Modules
+            </a>
+            <a class="nav-link" href="{{ url_for('admin_analytics') }}">
+                <i class="fas fa-chart-bar"></i> Analytics
+            </a>
+            <a class="nav-link" href="{{ url_for('admin_settings') }}">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </nav>
+    </div>
+
+    <!-- Module Statistics -->
+    <div class="stats-section">
+        <h5 class="mb-3">
+            <i class="fas fa-chart-bar text-primary"></i> Module Statistics
+        </h5>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number">{{ modules|length }}</div>
+                    <div class="stat-label">Total Modules</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Active Modules</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number">1</div>
+                    <div class="stat-label">Final Assessment</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">With Simulations</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modules List -->
+    <div class="row">
+        {% for module in modules %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="module-card module-{{ module.id }}">
+                <div class="d-flex align-items-start">
+                    <div class="module-icon">
+                        <i class="fas fa-{{ 'shield-alt' if module.id == 1 else 'user-shield' if module.id == 2 else 'envelope' if module.id == 3 else 'phone' if module.id == 4 else 'handshake' if module.id == 5 else 'graduation-cap' }}"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h5 class="mb-2">{{ module.title }}</h5>
+                        <p class="text-muted small mb-3">{{ module.description[:100] }}{% if module.description|length > 100 %}...{% endif %}</p>
+                        
+                        <!-- Module Info -->
+                        <div class="row text-center mb-3">
+                            <div class="col-6">
+                                <div class="border-end">
+                                    <div class="fw-bold text-primary">{{ module.order }}</div>
+                                    <div class="small text-muted">Order</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="fw-bold text-success">
+                                    {% if module.id in [2, 3, 4, 5] %}
+                                        <i class="fas fa-gamepad"></i>
+                                    {% else %}
+                                        <i class="fas fa-book"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="small text-muted">
+                                    {% if module.id in [2, 3, 4, 5] %}
+                                        Simulation
+                                    {% else %}
+                                        Content Only
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Module Status -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Active</span>
+                            <small class="text-muted">
+                                Created: {{ module.created_at.strftime('%m/%d/%Y') }}
+                            </small>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('module', module_id=module.id) }}" 
+                               class="btn btn-outline-primary btn-sm" target="_blank">
+                                <i class="fas fa-eye"></i> View Module
+                            </a>
+                            <a href="{{ url_for('admin_edit_module', module_id=module.id) }}" 
+                               class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-edit"></i> Edit Content
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Module Management Actions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="module-card">
+                <h5 class="mb-3">
+                    <i class="fas fa-tools text-warning"></i> Module Management Actions
+                </h5>
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <button class="btn btn-outline-primary w-100" onclick="refreshModules()">
+                            <i class="fas fa-sync-alt"></i> Refresh Modules
+                        </button>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <button class="btn btn-outline-success w-100" onclick="exportModules()">
+                            <i class="fas fa-download"></i> Export Data
+                        </button>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <button class="btn btn-outline-info w-100" onclick="viewAnalytics()">
+                            <i class="fas fa-chart-bar"></i> Module Analytics
+                        </button>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <button class="btn btn-outline-warning w-100" onclick="systemSettings()">
+                            <i class="fas fa-cog"></i> System Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Module Content Overview -->
+    <div class="row">
+        <div class="col-12">
+            <div class="module-card">
+                <h5 class="mb-3">
+                    <i class="fas fa-info-circle text-info"></i> Module Content Overview
+                </h5>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Title</th>
+                                <th>Type</th>
+                                <th>Simulation</th>
+                                <th>Questions</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for module in modules %}
+                            <tr>
+                                <td>
+                                    <span class="badge bg-primary">Module {{ module.id }}</span>
+                                </td>
+                                <td>{{ module.title }}</td>
+                                <td>
+                                    {% if module.id == 6 %}
+                                        <span class="badge bg-warning">Final Assessment</span>
+                                    {% else %}
+                                        <span class="badge bg-info">Learning Module</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if module.id in [2, 3, 4, 5] %}
+                                        <span class="badge bg-success">Yes</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">No</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if module.id == 6 %}
+                                        <span class="badge bg-warning">25 Questions</span>
+                                    {% else %}
+                                        <span class="badge bg-info">5 Questions</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">Active</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function refreshModules() {
+    location.reload();
+}
+
+function exportModules() {
+    alert('Module export functionality will be implemented in the next version.');
+}
+
+function viewAnalytics() {
+    window.location.href = "{{ url_for('admin_analytics') }}";
+}
+
+function systemSettings() {
+    window.location.href = "{{ url_for('admin_settings') }}";
+}
+</script>
+{% endblock %}

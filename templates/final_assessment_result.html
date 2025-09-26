@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Final Assessment Result - Social Engineering Awareness{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-lg">
+                <div class="card-header bg-success text-white">
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <img src="{{ url_for('static', filename='MMDCLogo.png') }}" alt="MMDC Logo" style="height: 40px; width: auto; border-radius: 6px;">
+                        <img src="{{ url_for('static', filename='SEALogo.png') }}" alt="SEA Logo" style="height: 40px; width: auto; border-radius: 6px;">
+                    </div>
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-graduation-cap"></i> Final Assessment Results
+                    </h3>
+                    <p class="mb-0">Your comprehensive evaluation results</p>
+                </div>
+                
+                <div class="card-body p-4">
+                    <!-- Score Summary -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <h4 class="card-title">Your Score</h4>
+                                    <div class="display-4 fw-bold {% if percentage >= 80 %}text-success{% else %}text-danger{% endif %}">
+                                        {{ score }}/{{ total_questions }}
+                                    </div>
+                                    <p class="card-text">
+                                        <strong>{{ "%.1f"|format(percentage) }}%</strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <h4 class="card-title">Result</h4>
+                                    {% if passed %}
+                                        <div class="text-success">
+                                            <i class="fas fa-trophy fa-3x mb-2"></i>
+                                            <h5>PASSED!</h5>
+                                            <p>Congratulations! You've successfully completed the final assessment.</p>
+                                        </div>
+                                    {% else %}
+                                        <div class="text-danger">
+                                            <i class="fas fa-times-circle fa-3x mb-2"></i>
+                                            <h5>NOT PASSED</h5>
+                                            <p>You need 80% to pass. You can retake in 48 hours.</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Results -->
+                    {% if detailed_results %}
+                    <div class="mb-4">
+                        <h5><i class="fas fa-list"></i> Question Review</h5>
+                        <div class="accordion" id="resultsAccordion">
+                            {% for result in detailed_results %}
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="heading{{ loop.index }}">
+                                    <button class="accordion-button {% if not result.is_correct %}collapsed{% endif %}" 
+                                            type="button" 
+                                            data-bs-toggle="collapse" 
+                                            data-bs-target="#collapse{{ loop.index }}" 
+                                            aria-expanded="{% if result.is_correct %}true{% else %}false{% endif %}" 
+                                            aria-controls="collapse{{ loop.index }}">
+                                        <span class="me-3">
+                                            {% if result.is_correct %}
+                                                <i class="fas fa-check-circle text-success"></i>
+                                            {% else %}
+                                                <i class="fas fa-times-circle text-danger"></i>
+                                            {% endif %}
+                                        </span>
+                                        <strong>Question {{ loop.index }}:</strong> {{ result.question_text[:50] }}...
+                                    </button>
+                                </h2>
+                                <div id="collapse{{ loop.index }}" 
+                                     class="accordion-collapse collapse {% if result.is_correct %}show{% endif %}" 
+                                     aria-labelledby="heading{{ loop.index }}" 
+                                     data-bs-parent="#resultsAccordion">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h6>Your Answer:</h6>
+                                                <p class="{% if result.is_correct %}text-success{% else %}text-danger{% endif %}">
+                                                    <strong>{{ result.user_answer.upper() }}</strong>
+                                                </p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h6>Correct Answer:</h6>
+                                                <p class="text-success">
+                                                    <strong>{{ result.correct_answer.upper() }}</strong>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <h6>Explanation:</h6>
+                                            <p class="text-muted">{{ result.explanation }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Next Steps -->
+                    {% if passed %}
+                        <div class="alert alert-success">
+                            <h6><i class="fas fa-trophy"></i> Congratulations!</h6>
+                            <p>You have successfully passed the final assessment with a score of {{ "%.1f"|format(percentage) }}%.</p>
+                            <p><strong>Next Steps:</strong></p>
+                            <ol>
+                                <li>Complete the satisfaction survey (required for certification)</li>
+                                <li>Generate your completion certificate</li>
+                                <li>Share your achievement on social media</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="text-center">
+                            <a href="{{ url_for('survey') }}" class="btn btn-success btn-lg">
+                                <i class="fas fa-clipboard-list"></i> Take Satisfaction Survey
+                            </a>
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-lg ms-2">
+                                <i class="fas fa-home"></i> Back to Dashboard
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <h6><i class="fas fa-exclamation-triangle"></i> Assessment Not Passed</h6>
+                            <p>You scored {{ "%.1f"|format(percentage) }}% but need 80% to pass the final assessment.</p>
+                            <p><strong>Retake Policy:</strong></p>
+                            <ul>
+                                <li>You can retake the assessment up to 3 times</li>
+                                <li>There is a 48-hour cooldown period between retake cycles</li>
+                                <li>Each retake will have different questions</li>
+                                <li>Review the modules and try again</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="text-center">
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-home"></i> Back to Dashboard
+                            </a>
+                            <a href="{{ url_for('final_assessment') }}" class="btn btn-warning btn-lg ms-2">
+                                <i class="fas fa-redo"></i> Retake Assessment
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

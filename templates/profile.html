@@ -1,0 +1,348 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - Social Engineering Awareness{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <h2 class="card-title text-center mb-4">
+                        <i class="fas fa-user-circle me-2"></i> User Profile
+                    </h2>
+
+                    <!-- Profile Information Section -->
+                    <h5 class="mb-3">Your Information</h5>
+                    
+                    <!-- Success Message -->
+                    {% if success_message %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>{{ success_message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+                    
+                    <form method="POST" action="{{ url_for('profile') }}" enctype="multipart/form-data">
+                        <input type="hidden" name="update_profile" value="1">
+                        
+                        <!-- Profile Picture Section -->
+                        <div class="text-center mb-4">
+                            <div class="position-relative d-inline-block">
+                                {% if user.profile_picture %}
+                                    <img src="{{ url_for('static', filename='profile_pictures/' + user.profile_picture) }}" 
+                                         alt="Profile Picture" 
+                                         class="rounded-circle border border-3 border-primary" 
+                                         style="width: 150px; height: 150px; object-fit: cover;">
+                                {% else %}
+                                    <div class="rounded-circle border border-3 border-secondary d-flex align-items-center justify-content-center bg-light" 
+                                         style="width: 150px; height: 150px;">
+                                        <i class="fas fa-user fa-4x text-secondary"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="position-absolute bottom-0 end-0">
+                                    <label for="profile_picture" class="btn btn-sm btn-primary rounded-circle" 
+                                           style="width: 40px; height: 40px; padding: 0;" title="Change Profile Picture">
+                                        <i class="fas fa-camera"></i>
+                                    </label>
+                                    <input type="file" id="profile_picture" name="profile_picture" 
+                                           accept="image/*" style="display: none;" onchange="previewImage(this)">
+                                </div>
+                            </div>
+                            {% if errors and errors.get('profile_picture') %}
+                                <div class="text-danger mt-2">
+                                    <i class="fas fa-exclamation-circle me-1"></i>{{ errors.profile_picture }}
+                                </div>
+                            {% endif %}
+                            <p class="text-muted mt-2 mb-0">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Click the camera icon to upload a new profile picture (PNG, JPG, JPEG, GIF, WEBP)
+                            </p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" value="{{ user.username }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" value="{{ user.email }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="full_name" class="form-label">Full Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control {% if errors and errors.get('full_name') %}is-invalid{% elif form_data and form_data.full_name and not errors %}is-valid{% endif %}" 
+                                id="full_name" name="full_name" value="{{ form_data.full_name if form_data else user.full_name }}" 
+                                required placeholder="Enter your full name" title="Your complete name (required)">
+                            {% if errors and errors.get('full_name') %}
+                                <div class="invalid-feedback">
+                                    <i class="fas fa-exclamation-circle me-1"></i>{{ errors.full_name }}
+                                </div>
+                            {% elif form_data and form_data.full_name and not errors %}
+                                <div class="valid-feedback">
+                                    <i class="fas fa-check-circle me-1"></i>Name looks good!
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label for="birthday" class="form-label">Birthday</label>
+                            <input type="date" class="form-control" id="birthday" name="birthday" 
+                                value="{{ form_data.birthday if form_data else (user.birthday.isoformat() if user.birthday else '') }}" 
+                                placeholder="Select your birthday" title="Your date of birth (optional)">
+                        </div>
+                        <div class="mb-4">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" name="address" 
+                                value="{{ form_data.address if form_data else user.address }}" 
+                                placeholder="Enter your address" title="Your current address (optional)">
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save me-2"></i> Update Profile
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="my-5">
+
+                    <!-- Change Password Section -->
+                    <h5 class="mb-3">Change Password</h5>
+                    <form method="POST" action="{{ url_for('profile') }}">
+                        <input type="hidden" name="change_password" value="1">
+                        <div class="mb-3">
+                            <label for="old_password" class="form-label">Old Password <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="password" class="form-control {% if errors and errors.get('old_password') %}is-invalid{% endif %}" 
+                                    id="old_password" name="old_password" required 
+                                    placeholder="Enter your old password" title="Your current password (required)">
+                                <button class="btn btn-outline-secondary" type="button" id="toggleOldPassword" title="Show/Hide Password">
+                                    <i class="fas fa-eye" id="eyeIconOld"></i>
+                                </button>
+                            </div>
+                            {% if errors and errors.get('old_password') %}
+                                <div class="invalid-feedback">
+                                    <i class="fas fa-exclamation-circle me-1"></i>{{ errors.old_password }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label for="new_password" class="form-label">New Password <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="password" class="form-control {% if errors and errors.get('new_password') %}is-invalid{% elif form_data and form_data.new_password and not errors %}is-valid{% endif %}" 
+                                    id="new_password" name="new_password" required 
+                                    minlength="12" 
+                                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]).{12,}"
+                                    title="Password must be at least 12 characters with: at least 1 capital letter, 1 special character, and 1 number"
+                                    placeholder="Enter new password">
+                                <button class="btn btn-outline-secondary" type="button" id="toggleNewPassword" title="Show/Hide Password">
+                                    <i class="fas fa-eye" id="eyeIconNew"></i>
+                                </button>
+                            </div>
+                            {% if errors and errors.get('new_password') %}
+                                <div class="invalid-feedback">
+                                    <i class="fas fa-exclamation-circle me-1"></i>{{ errors.new_password }}
+                                </div>
+                            {% elif form_data and form_data.new_password and not errors %}
+                                <div class="valid-feedback">
+                                    <i class="fas fa-check-circle me-1"></i>Password meets requirements!
+                                </div>
+                            {% else %}
+                                <div class="form-text mt-1">
+                                    <i class="fas fa-info-circle text-muted"></i> At least 12 characters with: 1 capital letter, 1 special character, 1 number
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-4">
+                            <label for="confirm_new_password" class="form-label">Confirm New Password <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="password" class="form-control {% if errors and errors.get('confirm_new_password') %}is-invalid{% elif form_data and form_data.confirm_new_password and form_data.new_password == form_data.confirm_new_password and not errors %}is-valid{% endif %}" 
+                                    id="confirm_new_password" name="confirm_new_password" required 
+                                    placeholder="Confirm new password" title="Re-enter your new password"
+                                    onpaste="return false;" oncopy="return false;" oncut="return false;">
+                                <button class="btn btn-outline-secondary" type="button" id="toggleConfirmNewPassword" title="Show/Hide Password">
+                                    <i class="fas fa-eye" id="eyeIconConfirm"></i>
+                                </button>
+                            </div>
+                            {% if errors and errors.get('confirm_new_password') %}
+                                <div class="invalid-feedback">
+                                    <i class="fas fa-exclamation-circle me-1"></i>{{ errors.confirm_new_password }}
+                                </div>
+                            {% elif form_data and form_data.confirm_new_password and form_data.new_password == form_data.confirm_new_password and not errors %}
+                                <div class="valid-feedback">
+                                    <i class="fas fa-check-circle me-1"></i>Passwords match!
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-warning btn-lg">
+                                <i class="fas fa-key me-2"></i> Change Password
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control.is-valid {
+        border-color: #198754;
+        box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+    }
+    
+    .valid-feedback {
+        display: block;
+        color: #198754;
+        font-size: 0.875em;
+        margin-top: 0.25rem;
+    }
+    
+    .form-control.is-invalid {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Image preview functionality
+    window.previewImage = function(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const profileContainer = input.closest('.position-relative');
+                const existingImg = profileContainer.querySelector('img');
+                const existingDiv = profileContainer.querySelector('.rounded-circle.border');
+                
+                if (existingImg) {
+                    existingImg.src = e.target.result;
+                } else if (existingDiv) {
+                    // Replace the placeholder div with an image
+                    const newImg = document.createElement('img');
+                    newImg.src = e.target.result;
+                    newImg.alt = 'Profile Picture';
+                    newImg.className = 'rounded-circle border border-3 border-primary';
+                    newImg.style.cssText = 'width: 150px; height: 150px; object-fit: cover;';
+                    existingDiv.parentNode.replaceChild(newImg, existingDiv);
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    };
+
+    // Password toggle functionality
+    const toggleOldPassword = document.getElementById('toggleOldPassword');
+    const oldPassword = document.getElementById('old_password');
+    const eyeIconOld = document.getElementById('eyeIconOld');
+
+    const toggleNewPassword = document.getElementById('toggleNewPassword');
+    const newPassword = document.getElementById('new_password');
+    const eyeIconNew = document.getElementById('eyeIconNew');
+
+    const toggleConfirmNewPassword = document.getElementById('toggleConfirmNewPassword');
+    const confirmNewPassword = document.getElementById('confirm_new_password');
+    const eyeIconConfirm = document.getElementById('eyeIconConfirm');
+
+    // Toggle old password
+    toggleOldPassword.addEventListener('click', function() {
+        const type = oldPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        oldPassword.setAttribute('type', type);
+        
+        if (type === 'text') {
+            eyeIconOld.classList.remove('fa-eye');
+            eyeIconOld.classList.add('fa-eye-slash');
+        } else {
+            eyeIconOld.classList.remove('fa-eye-slash');
+            eyeIconOld.classList.add('fa-eye');
+        }
+    });
+
+    // Toggle new password
+    toggleNewPassword.addEventListener('click', function() {
+        const type = newPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        newPassword.setAttribute('type', type);
+        
+        if (type === 'text') {
+            eyeIconNew.classList.remove('fa-eye');
+            eyeIconNew.classList.add('fa-eye-slash');
+        } else {
+            eyeIconNew.classList.remove('fa-eye-slash');
+            eyeIconNew.classList.add('fa-eye');
+        }
+    });
+
+    // Toggle confirm new password
+    toggleConfirmNewPassword.addEventListener('click', function() {
+        const type = confirmNewPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        confirmNewPassword.setAttribute('type', type);
+        
+        if (type === 'text') {
+            eyeIconConfirm.classList.remove('fa-eye');
+            eyeIconConfirm.classList.add('fa-eye-slash');
+        } else {
+            eyeIconConfirm.classList.remove('fa-eye-slash');
+            eyeIconConfirm.classList.add('fa-eye');
+        }
+    });
+
+    // Real-time validation for full name
+    const fullName = document.getElementById('full_name');
+    fullName.addEventListener('input', function() {
+        const value = this.value.trim();
+        
+        if (value.length > 0) {
+            if (value.length >= 2) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+            }
+        } else {
+            this.classList.remove('is-valid', 'is-invalid');
+        }
+    });
+
+    // Real-time validation for new password
+    newPassword.addEventListener('input', function() {
+        const value = this.value;
+        const hasCapital = /[A-Z]/.test(value);
+        const hasSpecial = /[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(value);
+        const hasNumber = /[0-9]/.test(value);
+        const hasMinLength = value.length >= 12;
+        
+        const isValid = hasCapital && hasSpecial && hasNumber && hasMinLength;
+        
+        if (value.length > 0) {
+            if (isValid) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+            }
+        } else {
+            this.classList.remove('is-valid', 'is-invalid');
+        }
+    });
+
+    // Real-time validation for confirm new password
+    confirmNewPassword.addEventListener('input', function() {
+        const newPasswordValue = newPassword.value;
+        const confirmValue = this.value;
+        
+        if (confirmValue.length > 0) {
+            if (newPasswordValue === confirmValue && newPasswordValue.length > 0) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+            }
+        } else {
+            this.classList.remove('is-valid', 'is-invalid');
+        }
+    });
+});
+</script>
+{% endblock %}

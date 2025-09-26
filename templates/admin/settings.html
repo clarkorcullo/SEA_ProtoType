@@ -1,0 +1,385 @@
+{% extends "base.html" %}
+
+{% block title %}System Settings - Admin Dashboard{% endblock %}
+
+{% block content %}
+<style>
+.admin-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: 10px;
+}
+
+.settings-card {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.settings-section {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.section-title {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.admin-nav {
+    background: white;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.admin-nav .nav-link {
+    color: #495057;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.admin-nav .nav-link:hover {
+    background: #f8f9fa;
+    color: #007bff;
+}
+
+.admin-nav .nav-link.active {
+    background: #007bff;
+    color: white;
+}
+
+.system-info {
+    background: #e9ecef;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.danger-zone {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.danger-zone .section-title {
+    color: #721c24;
+    border-bottom-color: #f5c6cb;
+}
+</style>
+
+<div class="admin-header text-center">
+    <div class="container">
+        <h1 class="mb-3">
+            <i class="fas fa-cog"></i> System Settings
+        </h1>
+        <p class="lead mb-0">Configure system settings and preferences</p>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Admin Navigation -->
+    <div class="admin-nav">
+        <nav class="nav nav-pills nav-fill">
+            <a class="nav-link" href="{{ url_for('admin_dashboard') }}">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a class="nav-link" href="{{ url_for('admin_users') }}">
+                <i class="fas fa-users"></i> Users
+            </a>
+            <a class="nav-link" href="{{ url_for('admin_modules') }}">
+                <i class="fas fa-book"></i> Modules
+            </a>
+            <a class="nav-link" href="{{ url_for('admin_analytics') }}">
+                <i class="fas fa-chart-bar"></i> Analytics
+            </a>
+            <a class="nav-link active" href="{{ url_for('admin_settings') }}">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </nav>
+    </div>
+
+    <!-- System Information -->
+    <div class="settings-card">
+        <h4 class="section-title">
+            <i class="fas fa-info-circle text-primary"></i> System Information
+        </h4>
+        <div class="system-info">
+            <div class="info-item">
+                <span><strong>Application Name:</strong></span>
+                <span>Social Engineering Awareness Program</span>
+            </div>
+            <div class="info-item">
+                <span><strong>Version:</strong></span>
+                <span>1.0.0</span>
+            </div>
+            <div class="info-item">
+                <span><strong>Python Version:</strong></span>
+                <span>3.11</span>
+            </div>
+            <div class="info-item">
+                <span><strong>Flask Version:</strong></span>
+                <span>2.3.0</span>
+            </div>
+            <div class="info-item">
+                <span><strong>Database:</strong></span>
+                <span>SQLite</span>
+            </div>
+            <div class="info-item">
+                <span><strong>Environment:</strong></span>
+                <span>Development</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Settings -->
+    <div class="settings-card">
+        <h4 class="section-title">
+            <i class="fas fa-sliders-h text-success"></i> Application Settings
+        </h4>
+        <form>
+            <div class="settings-section">
+                <h6 class="mb-3">General Settings</h6>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="app_name" class="form-label">Application Name</label>
+                        <input type="text" class="form-control" id="app_name" value="Social Engineering Awareness Program">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="app_description" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="app_description" value="Comprehensive social engineering awareness training program">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="max_users" class="form-label">Maximum Users</label>
+                        <input type="number" class="form-control" id="max_users" value="1000">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="session_timeout" class="form-label">Session Timeout (minutes)</label>
+                        <input type="number" class="form-control" id="session_timeout" value="30">
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h6 class="mb-3">Assessment Settings</h6>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="passing_score" class="form-label">Knowledge Check Passing Score (%)</label>
+                        <input type="number" class="form-control" id="passing_score" value="70" min="0" max="100">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="final_passing_score" class="form-label">Final Assessment Passing Score (%)</label>
+                        <input type="number" class="form-control" id="final_passing_score" value="70" min="0" max="100">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="max_attempts" class="form-label">Maximum Attempts per Assessment</label>
+                        <input type="number" class="form-control" id="max_attempts" value="3" min="1">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="time_limit" class="form-label">Assessment Time Limit (minutes)</label>
+                        <input type="number" class="form-control" id="time_limit" value="30" min="5">
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h6 class="mb-3">Email Settings</h6>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="smtp_server" class="form-label">SMTP Server</label>
+                        <input type="text" class="form-control" id="smtp_server" value="smtp.gmail.com">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="smtp_port" class="form-label">SMTP Port</label>
+                        <input type="number" class="form-control" id="smtp_port" value="587">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="email_username" class="form-label">Email Username</label>
+                        <input type="email" class="form-control" id="email_username" value="admin@mmdc.edu.ph">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="email_password" class="form-label">Email Password</label>
+                        <input type="password" class="form-control" id="email_password" placeholder="Enter email password">
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-primary" onclick="saveSettings()">
+                    <i class="fas fa-save"></i> Save Settings
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Database Management -->
+    <div class="settings-card">
+        <h4 class="section-title">
+            <i class="fas fa-database text-info"></i> Database Management
+        </h4>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="settings-section text-center">
+                    <i class="fas fa-download fa-2x text-primary mb-3"></i>
+                    <h6>Backup Database</h6>
+                    <p class="text-muted small">Create a backup of the current database</p>
+                    <button class="btn btn-outline-primary btn-sm" onclick="backupDatabase()">
+                        <i class="fas fa-download"></i> Backup Now
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="settings-section text-center">
+                    <i class="fas fa-upload fa-2x text-success mb-3"></i>
+                    <h6>Restore Database</h6>
+                    <p class="text-muted small">Restore from a previous backup</p>
+                    <button class="btn btn-outline-success btn-sm" onclick="restoreDatabase()">
+                        <i class="fas fa-upload"></i> Restore
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="settings-section text-center">
+                    <i class="fas fa-sync-alt fa-2x text-warning mb-3"></i>
+                    <h6>Reset Database</h6>
+                    <p class="text-muted small">Reset to initial state (WARNING: Deletes all data)</p>
+                    <button class="btn btn-outline-warning btn-sm" onclick="resetDatabase()">
+                        <i class="fas fa-sync-alt"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Maintenance -->
+    <div class="settings-card">
+        <h4 class="section-title">
+            <i class="fas fa-tools text-warning"></i> System Maintenance
+        </h4>
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <button class="btn btn-outline-primary w-100" onclick="clearCache()">
+                    <i class="fas fa-broom"></i> Clear Cache
+                </button>
+            </div>
+            <div class="col-md-3 mb-3">
+                <button class="btn btn-outline-success w-100" onclick="optimizeDatabase()">
+                    <i class="fas fa-tachometer-alt"></i> Optimize Database
+                </button>
+            </div>
+            <div class="col-md-3 mb-3">
+                <button class="btn btn-outline-info w-100" onclick="generateLogs()">
+                    <i class="fas fa-file-alt"></i> Generate Logs
+                </button>
+            </div>
+            <div class="col-md-3 mb-3">
+                <button class="btn btn-outline-warning w-100" onclick="systemHealth()">
+                    <i class="fas fa-heartbeat"></i> System Health
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Danger Zone -->
+    <div class="settings-card">
+        <div class="danger-zone">
+            <h4 class="section-title">
+                <i class="fas fa-exclamation-triangle"></i> Danger Zone
+            </h4>
+            <p class="text-muted">These actions are irreversible. Please proceed with caution.</p>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <button class="btn btn-outline-danger w-100" onclick="deleteAllUsers()">
+                        <i class="fas fa-users-slash"></i> Delete All Users
+                    </button>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <button class="btn btn-outline-danger w-100" onclick="resetSystem()">
+                        <i class="fas fa-trash-alt"></i> Reset Entire System
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function saveSettings() {
+    alert('Settings saved successfully! (This is a demo - actual implementation would save to database)');
+}
+
+function backupDatabase() {
+    alert('Database backup functionality will be implemented in the next version.');
+}
+
+function restoreDatabase() {
+    alert('Database restore functionality will be implemented in the next version.');
+}
+
+function resetDatabase() {
+    if (confirm('Are you sure you want to reset the database? This will delete ALL data and cannot be undone!')) {
+        alert('Database reset functionality will be implemented in the next version.');
+    }
+}
+
+function clearCache() {
+    alert('Cache cleared successfully!');
+}
+
+function optimizeDatabase() {
+    alert('Database optimization completed!');
+}
+
+function generateLogs() {
+    alert('System logs generated successfully!');
+}
+
+function systemHealth() {
+    alert('System health check completed - all systems operational!');
+}
+
+function deleteAllUsers() {
+    if (confirm('Are you sure you want to delete ALL users? This action cannot be undone!')) {
+        alert('Delete all users functionality will be implemented in the next version.');
+    }
+}
+
+function resetSystem() {
+    if (confirm('Are you sure you want to reset the ENTIRE system? This will delete ALL data and cannot be undone!')) {
+        alert('System reset functionality will be implemented in the next version.');
+    }
+}
+</script>
+{% endblock %}

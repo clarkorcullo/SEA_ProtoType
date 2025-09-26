@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% block title %}Program Survey - Social Engineering Awareness{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-lg">
+                <div class="card-header bg-success text-white">
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <img src="{{ url_for('static', filename='MMDCLogo.png') }}" alt="MMDC Logo" style="height: 40px; width: auto; border-radius: 6px;">
+                        <img src="{{ url_for('static', filename='SEALogo.png') }}" alt="SEA Logo" style="height: 40px; width: auto; border-radius: 6px;">
+                    </div>
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-clipboard-list"></i> Program Feedback Survey
+                    </h3>
+                    <p class="mb-0">Help us improve the program for future students</p>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Survey Introduction -->
+                    <div class="alert alert-info mb-4">
+                        <h5><i class="fas fa-info-circle"></i> Survey Information</h5>
+                        <p class="mb-0">Congratulations on completing the Social Engineering Awareness program! Please take a moment to provide feedback about your learning experience. This helps us improve the program for future students.</p>
+                    </div>
+
+                    <!-- Survey Form -->
+                    <form id="survey-form">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><strong>1. How would you rate the overall quality of the program?</strong></label>
+                                <select class="form-select" name="rating" required>
+                                    <option value="">Select rating...</option>
+                                    <option value="5">Excellent (5/5)</option>
+                                    <option value="4">Very Good (4/5)</option>
+                                    <option value="3">Good (3/5)</option>
+                                    <option value="2">Fair (2/5)</option>
+                                    <option value="1">Poor (1/5)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><strong>2. How relevant was the content to your current situation?</strong></label>
+                                <select class="form-select" name="relevance" required>
+                                    <option value="">Select relevance...</option>
+                                    <option value="5">Very Relevant (5/5)</option>
+                                    <option value="4">Relevant (4/5)</option>
+                                    <option value="3">Somewhat Relevant (3/5)</option>
+                                    <option value="2">Not Very Relevant (2/5)</option>
+                                    <option value="1">Not Relevant (1/5)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><strong>3. How helpful were the interactive simulations?</strong></label>
+                                <select class="form-select" name="simulations_helpful" required>
+                                    <option value="">Select rating...</option>
+                                    <option value="5">Very Helpful (5/5)</option>
+                                    <option value="4">Helpful (4/5)</option>
+                                    <option value="3">Somewhat Helpful (3/5)</option>
+                                    <option value="2">Not Very Helpful (2/5)</option>
+                                    <option value="1">Not Helpful (1/5)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><strong>4. How confident do you feel in identifying social engineering attacks?</strong></label>
+                                <select class="form-select" name="confidence" required>
+                                    <option value="">Select confidence level...</option>
+                                    <option value="5">Very Confident (5/5)</option>
+                                    <option value="4">Confident (4/5)</option>
+                                    <option value="3">Somewhat Confident (3/5)</option>
+                                    <option value="2">Not Very Confident (2/5)</option>
+                                    <option value="1">Not Confident (1/5)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label"><strong>5. What aspects of the program need the most improvement?</strong></label>
+                            <textarea class="form-control" name="improvements" rows="3" placeholder="Please share your suggestions for improvement..."></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label"><strong>6. How has this program helped you in your current situation?</strong></label>
+                            <textarea class="form-control" name="current_situation_help" rows="3" placeholder="Please describe how this program has benefited you..."></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label"><strong>7. Would you recommend this program to other students?</strong></label>
+                            <select class="form-select" name="recommendation" required>
+                                <option value="">Select answer...</option>
+                                <option value="yes">Yes, definitely</option>
+                                <option value="probably">Probably</option>
+                                <option value="maybe">Maybe</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label"><strong>8. How would you rate the difficulty level of the program?</strong></label>
+                            <select class="form-select" name="difficulty_level" required>
+                                <option value="">Select difficulty...</option>
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-paper-plane"></i> Submit Survey & Generate Certificate
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Success Message (initially hidden) -->
+                    <div id="success-section" style="display: none;">
+                        <div class="text-center">
+                            <div class="alert alert-success">
+                                <h5><i class="fas fa-check-circle"></i> Survey Submitted Successfully!</h5>
+                                <p>Thank you for your feedback! Your responses help us improve the program for future students.</p>
+                            </div>
+                            <a href="{{ url_for('certificate') }}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-certificate"></i> Generate Completion Certificate
+                            </a>
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-home"></i> Go to Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('survey-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const surveyData = {};
+    
+    for (let [key, value] of formData.entries()) {
+        surveyData[key] = value;
+    }
+    
+    // Submit survey data
+    fetch('/api/submit-survey', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(surveyData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Hide form and show success message
+            document.getElementById('survey-form').style.display = 'none';
+            document.getElementById('success-section').style.display = 'block';
+        } else {
+            alert('Error submitting survey: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error submitting survey. Please try again.');
+    });
+});
+</script>
+
+<style>
+.form-label {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.form-select, .form-control {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.form-select:focus, .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn-lg {
+    padding: 12px 30px;
+    font-size: 1.1em;
+}
+</style>
+{% endblock %} 

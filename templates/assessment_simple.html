@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}{{ module.name }} - Knowledge Check{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <img src="{{ url_for('static', filename='MMDCLogo.png') }}" alt="MMDC Logo" style="height: 40px; width: auto; border-radius: 6px;">
+                        <img src="{{ url_for('static', filename='SEALogo.png') }}" alt="SEA Logo" style="height: 40px; width: auto; border-radius: 6px;">
+                    </div>
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-question-circle"></i> Knowledge Check - {{ module.name }}
+                    </h3>
+                    <p class="mb-0">Test your understanding of the module content</p>
+                </div>
+                
+                <div class="card-body p-4">
+                    <!-- Assessment Instructions -->
+                    <div class="alert alert-info mb-4">
+                        <h5><i class="fas fa-info-circle"></i> Assessment Instructions</h5>
+                        <ul class="mb-0">
+                            <li><strong>Questions:</strong> 5 multiple-choice questions</li>
+                            <li><strong>Time:</strong> No time limit - take your time to think</li>
+                            <li><strong>Passing Score:</strong> 80% (4 out of 5 correct)</li>
+                            <li><strong>Retakes:</strong> Unlimited attempts if you don't pass</li>
+                            <li><strong>Format:</strong> Select the best answer for each question</li>
+                        </ul>
+                    </div>
+
+                    <!-- Assessment Form -->
+                    <form id="assessment-form" method="POST" action="{{ url_for('submit_assessment', module_id=module.id) }}">
+                        {% if questions %}
+                            {% for question in questions %}
+                            <div class="question-container mb-4 p-3 border rounded">
+                                <h5 class="question-number mb-3">
+                                    <span class="badge bg-secondary me-2">{{ loop.index }}</span>
+                                    {{ question.question_text }}
+                                </h5>
+                                
+                                <div class="options-container">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" 
+                                               name="question_{{ question.id }}" 
+                                               id="q{{ question.id }}_a" 
+                                               value="a">
+                                        <label class="form-check-label" for="q{{ question.id }}_a">
+                                            <strong>A.</strong> {{ question.option_a }}
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" 
+                                               name="question_{{ question.id }}" 
+                                               id="q{{ question.id }}_b" 
+                                               value="b">
+                                        <label class="form-check-label" for="q{{ question.id }}_b">
+                                            <strong>B.</strong> {{ question.option_b }}
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" 
+                                               name="question_{{ question.id }}" 
+                                               id="q{{ question.id }}_c" 
+                                               value="c">
+                                        <label class="form-check-label" for="q{{ question.id }}_c">
+                                            <strong>C.</strong> {{ question.option_c }}
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" 
+                                               name="question_{{ question.id }}" 
+                                               id="q{{ question.id }}_d" 
+                                               value="d">
+                                        <label class="form-check-label" for="q{{ question.id }}_d">
+                                            <strong>D.</strong> {{ question.option_d }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            <!-- Identify exactly which questions were shown so the backend grades only these -->
+                            <input type="hidden" name="question_ids" value="{{ questions | map(attribute='id') | join(',') }}">
+                            
+                            <!-- Submit Button -->
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-success btn-lg">
+                                    <i class="fas fa-paper-plane"></i> Submit Assessment
+                                </button>
+                                <a href="{{ url_for('module', module_id=module.id) }}" class="btn btn-secondary btn-lg ms-2">
+                                    <i class="fas fa-arrow-left"></i> Back to Module
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning text-center">
+                                <h5><i class="fas fa-exclamation-triangle"></i> No Questions Available</h5>
+                                <p>There are no questions available for this module at the moment.</p>
+                                <a href="{{ url_for('module', module_id=module.id) }}" class="btn btn-primary">
+                                    <i class="fas fa-arrow-left"></i> Back to Module
+                                </a>
+                            </div>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Form validation with better user experience
+document.getElementById('assessment-form').addEventListener('submit', function(e) {
+    const questions = document.querySelectorAll('.question-container');
+    let allAnswered = true;
+    let unansweredQuestions = [];
+    
+    questions.forEach(function(question, index) {
+        const radioButtons = question.querySelectorAll('input[type="radio"]');
+        const answered = Array.from(radioButtons).some(radio => radio.checked);
+        
+        if (!answered) {
+            allAnswered = false;
+            question.style.borderColor = '#dc3545';
+            question.style.backgroundColor = '#fff5f5';
+            unansweredQuestions.push(index + 1);
+        } else {
+            question.style.borderColor = '#dee2e6';
+            question.style.backgroundColor = '#f8f9fa';
+        }
+    });
+    
+    if (!allAnswered) {
+        e.preventDefault();
+        const message = `Please answer the following questions before submitting:\n\nQuestion(s): ${unansweredQuestions.join(', ')}`;
+        alert(message);
+        
+        // Scroll to first unanswered question
+        const firstUnanswered = document.querySelector('.question-container[style*="border-color: rgb(220, 53, 69)"]');
+        if (firstUnanswered) {
+            firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+});
+
+// Visual feedback for selected answers
+document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+        const questionContainer = this.closest('.question-container');
+        questionContainer.style.borderColor = '#28a745';
+        questionContainer.style.backgroundColor = '#f8f9fa';
+        
+        // Remove error styling from other questions in the same group
+        const radioGroup = questionContainer.querySelectorAll('input[type="radio"]');
+        radioGroup.forEach(function(otherRadio) {
+            if (otherRadio !== this) {
+                otherRadio.closest('.question-container').style.borderColor = '#dee2e6';
+                otherRadio.closest('.question-container').style.backgroundColor = '#f8f9fa';
+            }
+        });
+    });
+});
+
+// Add visual indicators for unanswered questions on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const questions = document.querySelectorAll('.question-container');
+    questions.forEach(function(question) {
+        const radioButtons = question.querySelectorAll('input[type="radio"]');
+        const answered = Array.from(radioButtons).some(radio => radio.checked);
+        
+        if (!answered) {
+            question.style.borderColor = '#ffc107';
+            question.style.backgroundColor = '#fffbf0';
+        }
+    });
+});
+</script>
+{% endblock %} 

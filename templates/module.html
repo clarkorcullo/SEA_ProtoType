@@ -1,0 +1,1100 @@
+{% extends "base.html" %}
+
+{% block title %}{{ module.name }} - Social Engineering Awareness Program{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            <div class="module-container">
+                <!-- Module Header -->
+                <div class="module-header">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="header-content">
+                            <div class="module-badge">
+                                <i class="fas fa-shield-alt"></i>
+                                Module {{ module.id }}
+                            </div>
+                            <h1 class="module-title">{{ module.name }}</h1>
+                            <p class="module-description">{{ module.description }}</p>
+                        </div>
+                        <div class="module-meta">
+                            <span class="status-badge {% if progress.status == 'completed' %}completed{% elif progress.status == 'in_progress' %}in-progress{% else %}not-started{% endif %}">
+                                <i class="fas {% if progress.status == 'completed' %}fa-check-circle{% elif progress.status == 'in_progress' %}fa-clock{% else %}fa-circle{% endif %} me-2"></i>
+                                {{ progress.status.replace('_', ' ').title() }}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="module-info-cards">
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="info-content">
+                                <span class="info-label">Estimated Time</span>
+                                <span class="info-value">{{ module.estimated_time or 30 }} min</span>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="fas fa-signal"></i>
+                            </div>
+                            <div class="info-content">
+                                <span class="info-label">Difficulty</span>
+                                <span class="info-value">{{ module.difficulty_level or 'Beginner' }}</span>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div class="info-content">
+                                <span class="info-label">Interactive</span>
+                                <span class="info-value">Learning</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Professional Drawer-Style Content -->
+                <div class="content-drawers">
+                    {{ module.content | safe }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced Sidebar -->
+        <div class="col-lg-3">
+            <div class="module-sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card progress-card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-line"></i>
+                        <h5>Your Progress</h5>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-item">
+                            <div class="progress-label">
+                                <span>Completion Status</span>
+                                <span class="progress-percentage">{{ knowledge_check_score }}%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar {% if knowledge_check_score >= 80 %}completed{% elif knowledge_check_score > 0 %}in-progress{% else %}not-started{% endif %}" 
+                                     style="width: {% if knowledge_check_score >= 80 %}100{% else %}{{ knowledge_check_score }}{% endif %}%">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-clock"></i>
+                                <span>{{ progress.time_spent }} min spent</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-star"></i>
+                                <span>{{ knowledge_check_score }}% score</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Card -->
+                <div class="sidebar-card actions-card">
+                    <div class="card-header">
+                        <i class="fas fa-tasks"></i>
+                        <h5>Quick Actions</h5>
+                    </div>
+                    <div class="action-buttons">
+                        {% if module.has_simulation %}
+                            <a href="/simulation/{{ module.simulation_type }}" class="action-btn simulation-btn">
+                                <i class="fas fa-gamepad"></i>
+                                <span>Start Simulation</span>
+                            </a>
+                        {% endif %}
+                        
+                        {% if progress.status != 'completed' %}
+                            <a href="/assessment/{{ module.id }}" class="action-btn assessment-btn">
+                                <i class="fas fa-question-circle"></i>
+                                <span>
+                                    {% if knowledge_check_score >= 80 %}
+                                        Review Knowledge Check
+                                    {% else %}
+                                        Take Knowledge Check
+                                    {% endif %}
+                                </span>
+                            </a>
+                        {% endif %}
+                        
+                        <a href="/dashboard" class="action-btn dashboard-btn">
+                            <i class="fas fa-home"></i>
+                            <span>Back to Dashboard</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ===== MODULE CONTAINER ===== */
+.module-container {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+/* ===== MODULE HEADER ===== */
+.module-header {
+    border-bottom: 3px solid #f8f9fa;
+    padding-bottom: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.header-content {
+    flex: 1;
+}
+
+.module-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+}
+
+.module-title {
+    color: #2c3e50;
+    font-weight: 800;
+    font-size: 2.2rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+}
+
+.module-description {
+    color: #6c757d;
+    font-size: 1.2rem;
+    margin-bottom: 0;
+    line-height: 1.5;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.completed {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+}
+
+.status-badge.in-progress {
+    background: linear-gradient(135deg, #ffc107, #fd7e14);
+    color: white;
+}
+
+.status-badge.not-started {
+    background: linear-gradient(135deg, #6c757d, #495057);
+    color: white;
+}
+
+/* ===== INFO CARDS ===== */
+.module-info-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.info-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.info-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.info-content {
+    flex: 1;
+}
+
+.info-label {
+    display: block;
+    color: #6c757d;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+}
+
+.info-value {
+    display: block;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+/* ===== CONTENT DRAWERS ===== */
+.content-drawers {
+    line-height: 1.7;
+}
+
+/* ===== SIDEBAR ===== */
+.module-sidebar {
+    position: sticky;
+    top: 2rem;
+}
+
+.sidebar-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.card-header i {
+    font-size: 1.2rem;
+}
+
+.card-header h5 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* ===== PROGRESS CARD ===== */
+.progress-card .progress-section {
+    padding: 1.5rem;
+}
+
+.progress-item {
+    margin-bottom: 1.5rem;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.progress-label span:first-child {
+    color: #495057;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.progress-percentage {
+    color: #667eea;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.progress-bar-container {
+    height: 8px;
+    background: #e9ecef;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.progress-bar.completed {
+    background: linear-gradient(90deg, #28a745, #20c997);
+}
+
+.progress-bar.in-progress {
+    background: linear-gradient(90deg, #ffc107, #fd7e14);
+}
+
+.progress-bar.not-started {
+    background: linear-gradient(90deg, #6c757d, #495057);
+}
+
+.progress-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f8f9fa;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6c757d;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.stat-item i {
+    color: #667eea;
+    width: 16px;
+}
+
+/* ===== ACTIONS CARD ===== */
+.actions-card .action-buttons {
+    padding: 1.5rem;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+    border: none;
+    cursor: pointer;
+}
+
+.action-btn:last-child {
+    margin-bottom: 0;
+}
+
+.action-btn i {
+    font-size: 1.1rem;
+    width: 20px;
+    text-align: center;
+}
+
+.simulation-btn {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+}
+
+.simulation-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+    color: white;
+}
+
+.assessment-btn {
+    background: linear-gradient(135deg, #007bff, #6610f2);
+    color: white;
+}
+
+.assessment-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+    color: white;
+}
+
+.dashboard-btn {
+    background: linear-gradient(135deg, #6c757d, #495057);
+    color: white;
+}
+
+.dashboard-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(108, 117, 125, 0.3);
+    color: white;
+}
+
+/* ===== PROFESSIONAL DRAWER-STYLE ACCORDION ===== */
+.accordion {
+    --bs-accordion-border-width: 0;
+    --bs-accordion-border-radius: 0;
+    --bs-accordion-inner-border-radius: 0;
+    --bs-accordion-btn-padding-x: 0;
+    --bs-accordion-btn-padding-y: 0;
+    --bs-accordion-btn-color: inherit;
+    --bs-accordion-btn-bg: transparent;
+    --bs-accordion-btn-icon: none;
+    --bs-accordion-btn-icon-width: 0;
+    --bs-accordion-btn-icon-transform: none;
+    --bs-accordion-btn-icon-transition: none;
+    --bs-accordion-btn-active-icon: none;
+    --bs-accordion-btn-focus-border-color: none;
+    --bs-accordion-btn-focus-box-shadow: none;
+    --bs-accordion-body-padding-x: 0;
+    --bs-accordion-body-padding-y: 0;
+    --bs-accordion-active-color: inherit;
+    --bs-accordion-active-bg: transparent;
+}
+
+.accordion-item {
+    background: transparent;
+    border: none;
+    margin-bottom: 1rem;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.accordion-item:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+/* Main Topic Drawers */
+.accordion-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 16px !important;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.accordion-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.accordion-button:hover::before {
+    opacity: 1;
+}
+
+.accordion-button:not(.collapsed) {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    color: white;
+    box-shadow: 0 8px 30px rgba(102, 126, 234, 0.3);
+}
+
+.accordion-button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+}
+
+.accordion-button::after {
+    content: '\f078';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 1rem;
+    margin-left: auto;
+    transition: transform 0.3s ease;
+}
+
+.accordion-button:not(.collapsed)::after {
+    transform: rotate(180deg);
+}
+
+.accordion-body {
+    background: white;
+    padding: 0;
+    border-radius: 0 0 16px 16px;
+}
+
+/* Sub Topic Drawers */
+.sub-accordion {
+    margin: 0;
+}
+
+.sub-accordion-item {
+    background: transparent;
+    border: none;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.sub-accordion-button {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: #495057;
+    border: none;
+    border-radius: 0;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 1.25rem 2rem 1.25rem 3rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.sub-accordion-button:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    color: #2c3e50;
+}
+
+.sub-accordion-button:not(.collapsed) {
+    background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+    color: white;
+    box-shadow: none;
+}
+
+.sub-accordion-button::after {
+    content: '\f078';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 0.9rem;
+    margin-left: auto;
+    transition: transform 0.3s ease;
+}
+
+.sub-accordion-button:not(.collapsed)::after {
+    transform: rotate(180deg);
+}
+
+.sub-accordion-body {
+    background: #fafbfc;
+    padding: 0;
+    border-radius: 0;
+}
+
+/* Sub of Sub Topic Items */
+.sub-sub-topic {
+    padding: 1rem 2rem 1rem 4rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.sub-sub-topic:hover {
+    background: rgba(102, 126, 234, 0.05);
+    color: #667eea;
+}
+
+.sub-sub-topic:last-child {
+    border-bottom: none;
+}
+
+.sub-sub-topic-number {
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.sub-sub-topic-text {
+    flex: 1;
+    font-weight: 500;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.sub-sub-topic-icon {
+    color: #6c757d;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.sub-sub-topic:hover .sub-sub-topic-icon {
+    color: #667eea;
+    opacity: 1;
+}
+
+/* Special Topic Styles */
+.reflection-topic .accordion-button {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.knowledge-check-topic .accordion-button {
+    background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+}
+
+.references-topic .accordion-button {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+}
+
+.simulation-topic .accordion-button {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+}
+
+.conclusion-topic .accordion-button {
+    background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);
+}
+
+/* Content Styling */
+.accordion-content {
+    padding: 2rem;
+    line-height: 1.7;
+    color: #495057;
+}
+
+.accordion-content h3 {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.accordion-content h4 {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+}
+
+.accordion-content p {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.accordion-content ul, .accordion-content ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+
+.accordion-content li {
+    margin-bottom: 0.5rem;
+}
+
+/* ===== ENHANCED CONTENT STYLING ===== */
+.video-container {
+    margin: 2rem 0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.video-caption {
+    text-align: center;
+    font-style: italic;
+    color: #6c757d;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0 1rem;
+}
+
+.infographic-container {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.infographic-container img {
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    height: auto;
+}
+
+/* Enhanced Content Sections */
+.lesson-intro {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-left: 5px solid #2196f3;
+    padding: 2rem;
+    border-radius: 0 16px 16px 0;
+    margin: 2rem 0;
+    box-shadow: 0 4px 20px rgba(33, 150, 243, 0.1);
+}
+
+.lesson-intro h2 {
+    color: #1976d2;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.resources-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.resource-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.resource-list li {
+    margin-bottom: 1rem;
+    padding: 1.25rem;
+    background: white;
+    border-radius: 12px;
+    border-left: 4px solid #007bff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.resource-list li:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15);
+}
+
+.resource-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.resource-link:hover {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+.next-steps {
+    background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 4px 20px rgba(40, 167, 69, 0.1);
+}
+
+.next-steps h4 {
+    color: #2e7d32;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+/* Alert Boxes */
+.alert {
+    border-radius: 12px;
+    border: none;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    color: #1976d2;
+    border-left: 4px solid #2196f3;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffcc02 100%);
+    color: #f57c00;
+    border-left: 4px solid #ff9800;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+    color: #2e7d32;
+    border-left: 4px solid #4caf50;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1200px) {
+    .module-container {
+        padding: 2rem;
+    }
+    
+    .module-info-cards {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .module-container {
+        padding: 1.5rem;
+        margin: 1rem;
+        border-radius: 12px;
+    }
+    
+    .module-header {
+        padding-bottom: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .module-title {
+        font-size: 1.8rem;
+    }
+    
+    .module-description {
+        font-size: 1.1rem;
+    }
+    
+    .module-info-cards {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+    
+    .info-card {
+        padding: 1.25rem;
+    }
+    
+    .module-sidebar {
+        position: relative;
+        top: auto;
+        margin-top: 2rem;
+    }
+    
+    .sidebar-card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .card-header {
+        padding: 1.25rem;
+    }
+    
+    .progress-card .progress-section,
+    .actions-card .action-buttons {
+        padding: 1.25rem;
+    }
+    
+    .accordion-button {
+        padding: 1.25rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .sub-accordion-button {
+        padding: 1rem 1.5rem 1rem 2.5rem;
+        font-size: 0.95rem;
+    }
+    
+    .sub-sub-topic {
+        padding: 0.875rem 1.5rem 0.875rem 3rem;
+    }
+    
+    .accordion-content {
+        padding: 1.5rem;
+    }
+    
+    .video-container {
+        margin: 1.5rem 0;
+    }
+    
+    .lesson-intro,
+    .resources-section,
+    .next-steps {
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .module-container {
+        padding: 1rem;
+        margin: 0.5rem;
+    }
+    
+    .module-title {
+        font-size: 1.5rem;
+    }
+    
+    .module-description {
+        font-size: 1rem;
+    }
+    
+    .accordion-button {
+        padding: 1rem;
+        font-size: 0.95rem;
+    }
+    
+    .sub-accordion-button {
+        padding: 0.875rem 1rem 0.875rem 2rem;
+        font-size: 0.9rem;
+    }
+    
+    .sub-sub-topic {
+        padding: 0.75rem 1rem 0.75rem 2.5rem;
+    }
+    
+    .sub-sub-topic-text {
+        font-size: 0.9rem;
+    }
+    
+    .accordion-content {
+        padding: 1.25rem;
+    }
+    
+    .lesson-intro,
+    .resources-section,
+    .next-steps {
+        padding: 1.25rem;
+    }
+    
+    .resource-list li {
+        padding: 1rem;
+    }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.accordion-item {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.accordion-item:nth-child(1) { animation-delay: 0.1s; }
+.accordion-item:nth-child(2) { animation-delay: 0.2s; }
+.accordion-item:nth-child(3) { animation-delay: 0.3s; }
+.accordion-item:nth-child(4) { animation-delay: 0.4s; }
+.accordion-item:nth-child(5) { animation-delay: 0.5s; }
+
+/* ===== SMOOTH SCROLLING ===== */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ===== ACCESSIBILITY ===== */
+.accordion-button:focus,
+.sub-accordion-button:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+.sub-sub-topic:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+    .module-sidebar {
+        display: none;
+    }
+    
+    .accordion-button,
+    .sub-accordion-button {
+        background: #f8f9fa !important;
+        color: #000 !important;
+    }
+    
+    .accordion-body {
+        display: block !important;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle Mark as Complete button
+    const markCompleteBtn = document.getElementById('markCompleteBtn');
+    if (markCompleteBtn) {
+        markCompleteBtn.addEventListener('click', function() {
+            if (confirm('Are you sure you want to mark this module as complete?')) {
+                // Update progress via API
+                fetch('{{ url_for("update_progress") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        module_id: {{ module.id }},
+                        status: 'completed',
+                        score: {{ knowledge_check_score }},
+                        time_spent: {{ progress.time_spent }}
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Module marked as complete!');
+                        location.reload();
+                    } else {
+                        alert('Error updating progress. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error updating progress. Please try again.');
+                });
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

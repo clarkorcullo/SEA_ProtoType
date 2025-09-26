@@ -1,0 +1,646 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Social Engineering Awareness{% endblock %}
+
+{% block content %}
+<style>
+/* Cache busting - v2.0 */
+/* Cybersecurity Theme Styles */
+:root {
+    --neon-blue: #00d4ff;
+    --neon-green: #00ff88;
+    --neon-purple: #8a2be2;
+    --light-bg: #f8f9fa;
+    --dark-text: #2c3e50;
+    --cyber-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --matrix-gradient: linear-gradient(45deg, #0a0a0a, #1a1a1a, #0a0a0a);
+}
+
+body {
+    color: var(--dark-text);
+    font-family: 'Arial', 'Helvetica', sans-serif;
+    line-height: 1.6;
+}
+
+/* Animated Background */
+.cyber-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 255, 136, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(138, 43, 226, 0.05) 0%, transparent 50%);
+    z-index: -1;
+    animation: cyberPulse 8s ease-in-out infinite;
+}
+
+@keyframes cyberPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+}
+
+/* Module Layout Styles */
+.modules-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modules-row {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.modules-row.first-row {
+    justify-content: space-around;
+}
+
+.modules-row.second-row {
+    justify-content: center;
+    max-width: 66.666%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .modules-row.first-row {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .modules-row.second-row {
+        flex-direction: column;
+        align-items: center;
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+    .modules-row.first-row {
+        justify-content: space-between;
+    }
+    
+    .modules-row.second-row {
+        justify-content: center;
+        max-width: 80%;
+    }
+}
+
+/* Matrix Rain Effect */
+.matrix-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.matrix-rain::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 255, 0, 0.03) 2px,
+            rgba(0, 255, 0, 0.03) 4px
+        );
+    animation: matrixMove 20s linear infinite;
+}
+
+@keyframes matrixMove {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.9) 100%);
+    border-radius: 20px;
+    border: 2px solid rgba(0, 212, 255, 0.5);
+    box-shadow: 
+        0 8px 32px rgba(0, 212, 255, 0.2),
+        inset 0 0 20px rgba(0, 212, 255, 0.05);
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(0, 212, 255, 0.1) 50%, transparent 70%);
+    animation: cyberScan 3s ease-in-out infinite;
+}
+
+@keyframes cyberScan {
+    0%, 100% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+}
+
+/* Clean Text Effects */
+.neon-text {
+    color: var(--dark-text);
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.neon-green {
+    color: #2c3e50;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Readable Text Classes */
+.text-light {
+    color: #495057 !important;
+    font-weight: 400;
+}
+
+.text-justify {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.lead {
+    color: #495057 !important;
+    font-weight: 400;
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.small {
+    color: #6c757d !important;
+    font-weight: 400;
+}
+
+/* Cyber Cards */
+.cyber-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.9) 100%);
+    border: 2px solid var(--neon-blue);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.cyber-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.cyber-card:hover::before {
+    left: 100%;
+}
+
+.cyber-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 10px 30px rgba(0, 212, 255, 0.3),
+        0 0 20px rgba(0, 212, 255, 0.2);
+}
+
+/* Feature Icons */
+.feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(45deg, var(--neon-blue), var(--neon-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: iconGlow 3s ease-in-out infinite;
+}
+
+@keyframes iconGlow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.3) drop-shadow(0 0 10px var(--neon-blue)); }
+}
+
+/* Animated Buttons */
+.cyber-btn {
+    background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+    border: none;
+    border-radius: 25px;
+    padding: 10px 25px;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+    text-decoration: none;
+}
+
+.cyber-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.cyber-btn:hover::before {
+    left: 100%;
+}
+
+.cyber-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.5);
+    text-decoration: none;
+}
+
+/* Progress Bars */
+.cyber-progress {
+    height: 6px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.cyber-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+    border-radius: 3px;
+    animation: progressGlow 2s ease-in-out infinite;
+}
+
+@keyframes progressGlow {
+    0%, 100% { box-shadow: 0 0 10px var(--neon-blue); }
+    50% { box-shadow: 0 0 20px var(--neon-blue), 0 0 30px var(--neon-blue); }
+}
+
+/* Floating Elements */
+.floating {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Glitch Effect */
+.glitch {
+    position: relative;
+    animation: glitch 2s infinite;
+}
+
+@keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-section {
+        margin: 5px;
+        padding: 15px;
+    }
+    
+    .feature-icon {
+        font-size: 1.8rem;
+    }
+    
+    .text-justify {
+        text-align: left;
+    }
+    
+    .lead {
+        text-align: left;
+    }
+}
+
+/* Neon pulse animation for module icons */
+@keyframes neonPulse {
+    0%, 100% { 
+        text-shadow: 0 0 2px currentColor;
+    }
+    50% { 
+        text-shadow: 0 0 3px currentColor;
+    }
+}
+</style>
+
+<!-- Animated Background -->
+<div class="cyber-bg"></div>
+<div class="matrix-rain"></div>
+
+<div class="container-fluid p-3">
+    <!-- Hero Section -->
+    <div class="row align-items-stretch mb-4">
+        <div class="col-lg-6">
+            <div class="cyber-card p-4 text-center h-100" style="min-height: 400px; display: flex; flex-direction: column; justify-content: center;">
+                <div class="d-flex justify-content-center align-items-center gap-3 mb-3 floating">
+                    <img src="{{ url_for('static', filename='MMDCLogo.png') }}" alt="MMDC Logo" style="height: 100px; width: auto; object-fit: contain; max-width: 200px;">
+                    <img src="{{ url_for('static', filename='SEALogo.png') }}" alt="Social Engineering Awareness Logo" style="height: 120px; width: auto; object-fit: contain; max-width: 240px;">
+                </div>
+                <h1 class="display-5 fw-bold neon-text mb-3 glitch">
+                    Social Engineering Awareness
+                </h1>
+                <h2 class="h5 neon-green mb-2">For BSIT Students</h2>
+                <p class="lead mb-3 text-light text-justify">
+                    Empowering MMDC IT students with the knowledge and skills to recognize, 
+                    prevent, and respond to social engineering attacks through comprehensive 
+                    training and hands-on simulations.
+                </p>
+                <div class="d-flex gap-3 justify-content-center mt-auto">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('dashboard') }}" class="cyber-btn">
+                            <i class="fas fa-tachometer-alt"></i> Go to Dashboard
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('register') }}" class="cyber-btn">
+                            <i class="fas fa-user-plus"></i> Get Started
+                        </a>
+                        <a href="{{ url_for('login') }}" class="cyber-btn" style="background: linear-gradient(45deg, var(--neon-green), var(--neon-blue));">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="cyber-card p-4 floating h-100" style="min-height: 400px; display: flex; flex-direction: column; justify-content: center;">
+                <h3 class="text-center mb-3 neon-text">
+                    <i class="fas fa-shield-alt"></i> Program Overview
+                </h3>
+                <div class="row text-center flex-grow-1">
+                    <div class="col-6 mb-3">
+                        <div class="feature-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h5 class="neon-green">5 Learning Modules</h5>
+                        <small class="text-light">Comprehensive Training</small>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="feature-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <h5 class="neon-green">Interactive Simulations</h5>
+                        <small class="text-light">Real-world Scenarios</small>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h5 class="neon-green">Progress Tracking</h5>
+                        <small class="text-light">Performance Analytics</small>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="feature-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <h5 class="neon-green">Certification</h5>
+                        <small class="text-light">Completion Certificate</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Institution Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="cyber-card text-center p-3">
+                <div class="d-flex justify-content-center align-items-center gap-3 mb-2 floating">
+                    <img src="{{ url_for('static', filename='MMDCLogo.png') }}" alt="MMDC Logo" style="height: 80px; width: auto; object-fit: contain; max-width: 160px;">
+                    <div>
+                        <h4 class="mb-1 neon-text">Mapúa Malayan Digital College</h4>
+                        <p class="text-light mb-0">A College under Mapúa Malayan Colleges Laguna</p>
+                    </div>
+                </div>
+                <p class="mb-0 text-light text-center">
+                    This program is designed specifically for Bachelor of Science in Information Technology (BSIT) students 
+                    to enhance their cybersecurity awareness and practical skills in identifying and preventing social engineering attacks.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="text-center mb-4 neon-text" style="background: rgba(255, 255, 255, 0.95); padding: 15px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                <img src="{{ url_for('static', filename='SEALogo.png') }}" alt="SEA Logo" style="height: 60px; width: auto; margin-right: 15px; vertical-align: middle; object-fit: contain; max-width: 120px;">
+                <i class="fas fa-cogs"></i> Program Features
+            </h2>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="cyber-card p-3 h-100">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4 class="neon-green mb-2">Comprehensive Learning</h4>
+                    <p class="text-dark text-justify" style="background: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 8px;">Five detailed modules covering all aspects of social engineering, from basic concepts to advanced defense strategies.</p>
+                    <div class="cyber-progress mt-2">
+                        <div class="cyber-progress-bar" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="cyber-card p-3 h-100">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-vr-cardboard"></i>
+                    </div>
+                    <h4 class="neon-green mb-2">Interactive Simulations</h4>
+                    <p class="text-dark text-justify" style="background: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 8px;">Hands-on phishing simulations and real-world scenarios to test your knowledge in a safe environment.</p>
+                    <div class="cyber-progress mt-2">
+                        <div class="cyber-progress-bar" style="width: 85%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="cyber-card p-3 h-100">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h4 class="neon-green mb-2">Progress Analytics</h4>
+                    <p class="text-dark text-justify" style="background: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 8px;">Track your learning progress with detailed analytics and performance metrics throughout the program.</p>
+                    <div class="cyber-progress mt-2">
+                        <div class="cyber-progress-bar" style="width: 90%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Learning Modules Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="text-center mb-4 neon-text" style="background: rgba(255, 255, 255, 0.95); padding: 15px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                <img src="{{ url_for('static', filename='SEALogo.png') }}" alt="SEA Logo" style="height: 60px; width: auto; margin-right: 15px; vertical-align: middle; object-fit: contain; max-width: 120px;">
+                <i class="fas fa-book"></i> Learning Modules
+            </h2>
+        </div>
+        
+        <div class="col-12">
+            <div class="modules-container">
+                <!-- First Row: 3 Modules -->
+                <div class="row modules-row first-row">
+                    <div class="col-md-4 col-lg-4 mb-3">
+                        <div class="cyber-card p-2 text-center">
+                            <div class="feature-icon" style="font-size: 2.5rem; color: #00d4ff; text-shadow: 0 0 2px #00d4ff; animation: neonPulse 4s ease-in-out infinite;">
+                                👤
+                            </div>
+                            <h5 class="neon-green">Module 1</h5>
+                            <p class="text-dark small" style="background: rgba(255, 255, 255, 0.9); padding: 8px; border-radius: 6px; margin: 0;">Introduction to Social Engineering</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 col-lg-4 mb-3">
+                        <div class="cyber-card p-2 text-center">
+                            <div class="feature-icon" style="font-size: 2.5rem; color: #17a2b8; text-shadow: 0 0 2px #17a2b8; animation: neonPulse 4s ease-in-out infinite;">
+                                👥
+                            </div>
+                            <h5 class="neon-green">Module 2</h5>
+                            <p class="text-dark small" style="background: rgba(255, 255, 255, 0.9); padding: 8px; border-radius: 6px; margin: 0;">Types of Social Engineering Attacks</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 col-lg-4 mb-3">
+                        <div class="cyber-card p-2 text-center">
+                            <div class="feature-icon" style="font-size: 2.5rem; color: #28a745; text-shadow: 0 0 2px #28a745; animation: neonPulse 4s ease-in-out infinite;">
+                                📧
+                            </div>
+                            <h5 class="neon-green">Module 3</h5>
+                            <p class="text-dark small" style="background: rgba(255, 255, 255, 0.9); padding: 8px; border-radius: 6px; margin: 0;">Phishing Attacks</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Second Row: 2 Modules (centered) -->
+                <div class="row modules-row second-row">
+                    <div class="col-md-6 col-lg-6 mb-3">
+                        <div class="cyber-card p-2 text-center">
+                            <div class="feature-icon" style="font-size: 2.5rem; color: #ffc107; text-shadow: 0 0 2px #ffc107; animation: neonPulse 4s ease-in-out infinite;">
+                                🎭
+                            </div>
+                            <h5 class="neon-green">Module 4</h5>
+                            <p class="text-dark small" style="background: rgba(255, 255, 255, 0.9); padding: 8px; border-radius: 6px; margin: 0;">Pretexting & Baiting</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-6 mb-3">
+                        <div class="cyber-card p-2 text-center">
+                            <div class="feature-icon" style="font-size: 2.5rem; color: #dc3545; text-shadow: 0 0 2px #dc3545; animation: neonPulse 4s ease-in-out infinite;">
+                                🛡️
+                            </div>
+                            <h5 class="neon-green">Module 5</h5>
+                            <p class="text-dark small" style="background: rgba(255, 255, 255, 0.9); padding: 8px; border-radius: 6px; margin: 0;">Defense Strategies</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Program Impact Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="text-center mb-4 neon-text" style="background: rgba(255, 255, 255, 0.95); padding: 15px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                <img src="{{ url_for('static', filename='MMDCLogo.png') }}" alt="MMDC Logo" style="height: 50px; width: auto; margin-right: 15px; vertical-align: middle; object-fit: contain; max-width: 100px;">
+                <i class="fas fa-chart-line"></i> Program Impact
+            </h2>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="cyber-card p-3 text-center">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="neon-text mb-2">100+</h3>
+                <p class="text-dark" style="background: rgba(255, 255, 255, 0.9); padding: 8px; border-radius: 6px; margin: 0;">Students Trained</p>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="cyber-card p-3 text-center">
+                <div class="feature-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h3 class="neon-text mb-2">95%</h3>
+                <p class="text-dark" style="background: rgba(255, 255, 255, 0.9); padding: 8px; border-radius: 6px; margin: 0;">Success Rate</p>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="cyber-card p-3 text-center">
+                <div class="feature-icon">
+                    <i class="fas fa-certificate"></i>
+                </div>
+                <h3 class="neon-text mb-2">100%</h3>
+                <p class="text-dark" style="background: rgba(255, 255, 255, 0.9); padding: 8px; border-radius: 6px; margin: 0;">Certification Rate</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="cyber-card text-center p-4">
+                <div class="d-flex justify-content-center align-items-center gap-3 mb-3 floating">
+                    <img src="{{ url_for('static', filename='MMDCLogo.png') }}" alt="MMDC Logo" style="height: 80px; width: auto; object-fit: contain; max-width: 160px;">
+                    <img src="{{ url_for('static', filename='SEALogo.png') }}" alt="SEA Logo" style="height: 100px; width: auto; object-fit: contain; max-width: 200px;">
+                </div>
+                <h2 class="neon-text mb-3">Ready to Master Cybersecurity?</h2>
+                <p class="lead text-light mb-3 text-center">
+                    Join the fight against social engineering attacks. Start your journey to become a cybersecurity expert today.
+                </p>
+                <div class="d-flex gap-3 justify-content-center">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('dashboard') }}" class="cyber-btn">
+                            <i class="fas fa-tachometer-alt"></i> Continue Learning
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('register') }}" class="cyber-btn">
+                            <i class="fas fa-user-plus"></i> Get Started Now
+                        </a>
+                        <a href="{{ url_for('login') }}" class="cyber-btn" style="background: linear-gradient(45deg, var(--neon-green), var(--neon-blue));">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

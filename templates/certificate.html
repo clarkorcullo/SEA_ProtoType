@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Certificate - Social Engineering Awareness{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <!-- Certificate Header -->
+                    <div class="text-center mb-4">
+                        <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
+                            <img src="{{ url_for('static', filename='MMDCLogo.png') }}" alt="MMDC Logo" style="height: 60px; width: auto;">
+                            <img src="{{ url_for('static', filename='SEALogo.png') }}" alt="SEA Logo" style="height: 60px; width: auto;">
+                        </div>
+                        <h2 class="text-primary mb-2">Certificate of Completion</h2>
+                        <h4 class="text-secondary">Social Engineering Awareness Program</h4>
+                    </div>
+
+                    <!-- Certificate Content -->
+                    <div class="certificate-content text-center p-4" style="border: 3px solid #007bff; border-radius: 15px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                        <div class="mb-4">
+                            <p class="lead mb-3">This is to certify that</p>
+                            <h3 class="text-primary mb-4" style="font-weight: bold; text-decoration: underline;">{{ certificate.student_name }}</h3>
+                            <p class="lead">has successfully completed the</p>
+                            <h4 class="text-danger mb-3">Social Engineering Awareness Program</h4>
+                            <p class="text-muted">for BSIT Students</p>
+                        </div>
+
+                        <div class="row justify-content-center mb-4">
+                            <div class="col-md-8">
+                                <div class="alert alert-info">
+                                    <h6 class="mb-2"><i class="fas fa-user-graduate"></i> Student Information</h6>
+                                    <div class="row text-start">
+                                        <div class="col-md-6">
+                                            <p class="mb-1"><strong>Username:</strong> {{ certificate.username }}</p>
+                                            <p class="mb-1"><strong>Specialization:</strong> {{ certificate.specialization }}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="mb-1"><strong>Year Level:</strong> {{ certificate.year_level }}</p>
+                                            <p class="mb-1"><strong>Completion Date:</strong> {{ certificate.completion_date }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center mb-4">
+                            <div class="col-md-8">
+                                <div class="alert alert-success">
+                                    <h6 class="mb-2"><i class="fas fa-trophy"></i> Achievement Summary</h6>
+                                    <div class="row text-start">
+                                        <div class="col-md-6">
+                                            <p class="mb-1"><strong>Modules Completed:</strong> {{ certificate.modules_completed }}/5</p>
+                                            <p class="mb-1"><strong>Total Score:</strong> {{ certificate.score }}%</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="mb-1"><strong>Final Assessment:</strong> Passed</p>
+                                            <p class="mb-1"><strong>Program Status:</strong> Completed</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <p class="lead">This certificate acknowledges the successful completion of comprehensive training in:</p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Social Engineering Threat Recognition</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Phishing Attack Prevention</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Pretexting and Baiting Awareness</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Quid Pro Quo Attack Prevention</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Interactive Simulation Training</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Real-world Scenario Analysis</li>
+                            </ul>
+                        </div>
+
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="text-center">
+                                        <div style="border-top: 2px solid #007bff; width: 150px; margin: 0 auto;"></div>
+                                        <p class="mt-2 mb-0"><strong>Program Director</strong></p>
+                                        <small class="text-muted">Mapúa Malayan Digital College</small>
+                                    </div>
+                                    <div class="text-center">
+                                        <div style="border-top: 2px solid #007bff; width: 150px; margin: 0 auto;"></div>
+                                        <p class="mt-2 mb-0"><strong>Academic Coordinator</strong></p>
+                                        <small class="text-muted">BSIT Department</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="text-center mt-4">
+                        <button class="btn btn-primary btn-lg me-3" onclick="window.print()">
+                            <i class="fas fa-print me-2"></i>Print Certificate
+                        </button>
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-home me-2"></i>Back to Dashboard
+                        </a>
+                    </div>
+
+                    <!-- Certificate Verification -->
+                    <div class="mt-4 text-center">
+                        <small class="text-muted">
+                            <i class="fas fa-shield-alt me-1"></i>
+                            Certificate ID: {{ certificate.username }}-{{ certificate.completion_date.split(',')[0].split()[-1] }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+@media print {
+    .navbar, .footer, .btn {
+        display: none !important;
+    }
+    
+    .certificate-content {
+        border: 3px solid #007bff !important;
+        background: white !important;
+    }
+    
+    body {
+        margin: 0;
+        padding: 20px;
+    }
+    
+    .card {
+        box-shadow: none !important;
+        border: none !important;
+    }
+}
+</style>
+{% endblock %} 

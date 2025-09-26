@@ -1,0 +1,381 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - Admin Dashboard{% endblock %}
+
+{% block content %}
+<style>
+.admin-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: 10px;
+}
+
+.analytics-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.chart-container {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    color: #6c757d;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.admin-nav {
+    background: white;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.admin-nav .nav-link {
+    color: #495057;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.admin-nav .nav-link:hover {
+    background: #f8f9fa;
+    color: #007bff;
+}
+
+.admin-nav .nav-link.active {
+    background: #007bff;
+    color: white;
+}
+
+.progress-bar-custom {
+    height: 8px;
+    border-radius: 4px;
+}
+
+.analytics-section {
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #dee2e6;
+}
+</style>
+
+<div class="admin-header text-center">
+    <div class="container">
+        <h1 class="mb-3">
+            <i class="fas fa-chart-bar"></i> Analytics & Reports
+        </h1>
+        <p class="lead mb-0">Comprehensive analytics and performance insights</p>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Admin Navigation -->
+    <div class="admin-nav">
+        <nav class="nav nav-pills nav-fill">
+            <a class="nav-link" href="{{ url_for('admin_dashboard') }}">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a class="nav-link" href="{{ url_for('admin_users') }}">
+                <i class="fas fa-users"></i> Users
+            </a>
+            <a class="nav-link" href="{{ url_for('admin_modules') }}">
+                <i class="fas fa-book"></i> Modules
+            </a>
+            <a class="nav-link active" href="{{ url_for('admin_analytics') }}">
+                <i class="fas fa-chart-bar"></i> Analytics
+            </a>
+            <a class="nav-link" href="{{ url_for('admin_settings') }}">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </nav>
+    </div>
+
+    <!-- System Statistics -->
+    <div class="analytics-section">
+        <h4 class="section-title">
+            <i class="fas fa-tachometer-alt text-primary"></i> System Overview
+        </h4>
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <div class="stat-card">
+                    <div class="stat-number text-primary">{{ system_stats.total_users if system_stats else 0 }}</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stat-card">
+                    <div class="stat-number text-success">{{ system_stats.total_modules if system_stats else 0 }}</div>
+                    <div class="stat-label">Learning Modules</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stat-card">
+                    <div class="stat-number text-warning">{{ system_stats.total_assessments if system_stats else 0 }}</div>
+                    <div class="stat-label">Assessments Taken</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stat-card">
+                    <div class="stat-number text-danger">{{ system_stats.total_simulations if system_stats else 0 }}</div>
+                    <div class="stat-label">Simulations Completed</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Performance Analytics -->
+    <div class="analytics-section">
+        <h4 class="section-title">
+            <i class="fas fa-users text-success"></i> User Performance Analytics
+        </h4>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="analytics-card">
+                    <h6 class="mb-3">
+                        <i class="fas fa-chart-pie text-info"></i> Completion Distribution
+                    </h6>
+                    {% if user_performance and user_performance.completion_distribution %}
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between">
+                                <span>Completed All (5/5 modules)</span>
+                                <span class="badge bg-success">{{ user_performance.completion_distribution.completed_all }}</span>
+                            </div>
+                            <div class="progress progress-bar-custom mt-1">
+                                <div class="progress-bar bg-success" style="width: {{ (user_performance.completion_distribution.completed_all / system_stats.total_users * 100) if system_stats and system_stats.total_users > 0 else 0 }}%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between">
+                                <span>Halfway (3-4 modules)</span>
+                                <span class="badge bg-warning">{{ user_performance.completion_distribution.completed_half }}</span>
+                            </div>
+                            <div class="progress progress-bar-custom mt-1">
+                                <div class="progress-bar bg-warning" style="width: {{ (user_performance.completion_distribution.completed_half / system_stats.total_users * 100) if system_stats and system_stats.total_users > 0 else 0 }}%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between">
+                                <span>Started (1-2 modules)</span>
+                                <span class="badge bg-info">{{ user_performance.completion_distribution.started }}</span>
+                            </div>
+                            <div class="progress progress-bar-custom mt-1">
+                                <div class="progress-bar bg-info" style="width: {{ (user_performance.completion_distribution.started / system_stats.total_users * 100) if system_stats and system_stats.total_users > 0 else 0 }}%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between">
+                                <span>Not Started</span>
+                                <span class="badge bg-secondary">{{ user_performance.completion_distribution.not_started }}</span>
+                            </div>
+                            <div class="progress progress-bar-custom mt-1">
+                                <div class="progress-bar bg-secondary" style="width: {{ (user_performance.completion_distribution.not_started / system_stats.total_users * 100) if system_stats and system_stats.total_users > 0 else 0 }}%"></div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No completion data available.</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="analytics-card">
+                    <h6 class="mb-3">
+                        <i class="fas fa-chart-bar text-warning"></i> Average Scores
+                    </h6>
+                    {% if user_performance and user_performance.average_scores %}
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between">
+                                <span>Knowledge Check Average</span>
+                                <span class="fw-bold">{{ "%.1f"|format(user_performance.average_scores.knowledge_check) }}%</span>
+                            </div>
+                            <div class="progress progress-bar-custom mt-1">
+                                <div class="progress-bar bg-primary" style="width: {{ user_performance.average_scores.knowledge_check }}%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between">
+                                <span>Final Assessment Average</span>
+                                <span class="fw-bold">{{ "%.1f"|format(user_performance.average_scores.final_assessment) }}%</span>
+                            </div>
+                            <div class="progress progress-bar-custom mt-1">
+                                <div class="progress-bar bg-success" style="width: {{ user_performance.average_scores.final_assessment }}%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between">
+                                <span>Simulation Average</span>
+                                <span class="fw-bold">{{ "%.1f"|format(user_performance.average_scores.simulation) }}%</span>
+                            </div>
+                            <div class="progress progress-bar-custom mt-1">
+                                <div class="progress-bar bg-warning" style="width: {{ user_performance.average_scores.simulation }}%"></div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No score data available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Module Analytics -->
+    <div class="analytics-section">
+        <h4 class="section-title">
+            <i class="fas fa-book text-info"></i> Module Performance Analytics
+        </h4>
+        <div class="row">
+            {% if module_analytics %}
+                {% for module_id, data in module_analytics.items() %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="analytics-card">
+                        <h6 class="mb-3">
+                            <i class="fas fa-book text-primary"></i> Module {{ module_id }}
+                        </h6>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between">
+                                <span>Completion Rate</span>
+                                <span class="fw-bold">{{ "%.1f"|format(data.completion_rate) }}%</span>
+                            </div>
+                            <div class="progress progress-bar-custom mt-1">
+                                <div class="progress-bar bg-success" style="width: {{ data.completion_rate }}%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between">
+                                <span>Average Score</span>
+                                <span class="fw-bold">{{ "%.1f"|format(data.average_score) }}%</span>
+                            </div>
+                            <div class="progress progress-bar-custom mt-1">
+                                <div class="progress-bar bg-primary" style="width: {{ data.average_score }}%"></div>
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <div class="fw-bold text-success">{{ data.completed_users }}</div>
+                                <div class="small text-muted">Completed</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="fw-bold text-warning">{{ data.total_attempts }}</div>
+                                <div class="small text-muted">Attempts</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <div class="analytics-card text-center">
+                        <i class="fas fa-chart-bar fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No module analytics available</h5>
+                        <p class="text-muted">Analytics will appear as users complete modules.</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Export and Reports -->
+    <div class="analytics-section">
+        <h4 class="section-title">
+            <i class="fas fa-download text-success"></i> Reports & Export
+        </h4>
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <div class="analytics-card text-center">
+                    <i class="fas fa-file-excel fa-2x text-success mb-3"></i>
+                    <h6>User Report</h6>
+                    <p class="text-muted small">Export user data and progress</p>
+                    <button class="btn btn-outline-success btn-sm" onclick="exportUserReport()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="analytics-card text-center">
+                    <i class="fas fa-chart-line fa-2x text-primary mb-3"></i>
+                    <h6>Performance Report</h6>
+                    <p class="text-muted small">Detailed performance analytics</p>
+                    <button class="btn btn-outline-primary btn-sm" onclick="exportPerformanceReport()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="analytics-card text-center">
+                    <i class="fas fa-book fa-2x text-info mb-3"></i>
+                    <h6>Module Report</h6>
+                    <p class="text-muted small">Module completion statistics</p>
+                    <button class="btn btn-outline-info btn-sm" onclick="exportModuleReport()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="analytics-card text-center">
+                    <i class="fas fa-file-pdf fa-2x text-danger mb-3"></i>
+                    <h6>Full Report</h6>
+                    <p class="text-muted small">Comprehensive system report</p>
+                    <button class="btn btn-outline-danger btn-sm" onclick="exportFullReport()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function exportUserReport() {
+    alert('User report export functionality will be implemented in the next version.');
+}
+
+function exportPerformanceReport() {
+    alert('Performance report export functionality will be implemented in the next version.');
+}
+
+function exportModuleReport() {
+    alert('Module report export functionality will be implemented in the next version.');
+}
+
+function exportFullReport() {
+    alert('Full report export functionality will be implemented in the next version.');
+}
+</script>
+{% endblock %}

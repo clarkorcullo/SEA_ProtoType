@@ -1,0 +1,498 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Social Engineering Awareness{% endblock %}
+
+{% block content %}
+<style>
+    .form-control.is-valid {
+        border-color: #198754;
+        box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+    }
+    
+    .form-select.is-valid {
+        border-color: #198754;
+        box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+    }
+    
+    .valid-feedback {
+        display: block;
+        color: #198754;
+        font-size: 0.875em;
+        margin-top: 0.25rem;
+    }
+    
+    .form-control.is-invalid {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+    
+    .form-select.is-invalid {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+    
+    .invalid-feedback {
+        display: block;
+        color: #dc3545;
+        font-size: 0.875em;
+        margin-top: 0.25rem;
+    }
+
+    .requirement-popup {
+        position: absolute;
+        background: #dc3545;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 0.8em;
+        z-index: 1000;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        max-width: 250px;
+        white-space: nowrap;
+    }
+
+    .requirement-popup::before {
+        content: '';
+        position: absolute;
+        top: -5px;
+        left: 20px;
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 5px solid #dc3545;
+    }
+
+    .input-group {
+        position: relative;
+    }
+
+    .register-container {
+        min-height: calc(100vh - 160px); /* Account for header and footer */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 0;
+    }
+</style>
+
+<div class="register-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-lg">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-3">
+                            <img src="{{ url_for('static', filename='MMDCLogo.png') }}" alt="MMDC Logo" class="img-fluid mb-2" style="height: 60px; max-width: 150px; object-fit: contain;">
+                            <img src="{{ url_for('static', filename='SEALogo.png') }}" alt="SEA Logo" class="img-fluid mb-2" style="height: 60px; max-width: 150px; object-fit: contain;">
+                            <h2 class="card-title">Create Account</h2>
+                            <p class="text-muted">Join the Social Engineering Awareness Program</p>
+                        </div>
+
+                        <form method="POST" action="{{ url_for('register') }}">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="username" class="form-label">
+                                        <i class="fas fa-user me-1"></i><span class="icon-fallback icon-user me-1"></span>Username <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control {% if errors and errors.get('username') %}is-invalid{% elif form_data and form_data.username and not errors %}is-valid{% endif %}" 
+                                        id="username" name="username" required 
+                                        minlength="8" 
+                                        pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                                        title="Username must be at least 8 characters with both letters and numbers"
+                                        placeholder="Enter username"
+                                        value="{{ form_data.username if form_data else '' }}">
+                                    {% if errors and errors.get('username') %}
+                                        <div class="invalid-feedback">
+                                            <i class="fas fa-exclamation-circle me-1"></i><span class="icon-fallback icon-exclamation-triangle me-1"></span>{{ errors.username }}
+                                        </div>
+                                    {% elif form_data and form_data.username and not errors %}
+                                        <div class="valid-feedback">
+                                            <i class="fas fa-check-circle me-1"></i><span class="icon-fallback icon-check-circle me-1"></span>Username looks good!
+                                        </div>
+                                    {% else %}
+                                        <div class="form-text mt-1">
+                                            <i class="fas fa-info-circle text-muted"></i><span class="icon-fallback icon-info-circle text-muted"></span> 8+ chars with letters & numbers
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">
+                                        <i class="fas fa-envelope me-1"></i><span class="icon-fallback icon-envelope me-1"></span>Email <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="email" class="form-control {% if errors and errors.get('email') %}is-invalid{% elif form_data and form_data.email and not errors %}is-valid{% endif %}" 
+                                        id="email" name="email" required 
+                                        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                                        title="Please enter a valid email address"
+                                        placeholder="Enter your email address"
+                                        value="{{ form_data.email if form_data else '' }}">
+                                    {% if errors and errors.get('email') %}
+                                        <div class="invalid-feedback">
+                                            <i class="fas fa-exclamation-circle me-1"></i><span class="icon-fallback icon-exclamation-triangle me-1"></span>{{ errors.email }}
+                                        </div>
+                                    {% elif form_data and form_data.email and not errors %}
+                                        <div class="valid-feedback">
+                                            <i class="fas fa-check-circle me-1"></i><span class="icon-fallback icon-check-circle me-1"></span>Email format is correct!
+                                        </div>
+                                    {% else %}
+                                        <div class="form-text mt-1">
+                                            <i class="fas fa-info-circle text-muted"></i><span class="icon-fallback icon-info-circle text-muted"></span> Valid email required
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="specialization" class="form-label">
+                                        <i class="fas fa-graduation-cap me-1"></i><span class="icon-fallback icon-graduation-cap me-1"></span>IT Specialization <span class="text-danger">*</span>
+                                    </label>
+                                    <select class="form-select {% if errors and errors.get('specialization') %}is-invalid{% elif form_data and form_data.specialization and not errors %}is-valid{% endif %}" 
+                                        id="specialization" name="specialization" required>
+                                        <option value="">Select specialization</option>
+                                        <option value="Software Development" {% if form_data and form_data.specialization == 'Software Development' %}selected{% endif %}>Software Development</option>
+                                        <option value="Network & Cybersecurity" {% if form_data and form_data.specialization == 'Network & Cybersecurity' %}selected{% endif %}>Network & Cybersecurity</option>
+                                        <option value="Data Analytics" {% if form_data and form_data.specialization == 'Data Analytics' %}selected{% endif %}>Data Analytics</option>
+                                        <option value="Entrepreneurship Technology" {% if form_data and form_data.specialization == 'Entrepreneurship Technology' %}selected{% endif %}>Entrepreneurship Technology</option>
+                                        <option value="Marketing Technology" {% if form_data and form_data.specialization == 'Marketing Technology' %}selected{% endif %}>Marketing Technology</option>
+                                    </select>
+                                    {% if errors and errors.get('specialization') %}
+                                        <div class="invalid-feedback">
+                                            <i class="fas fa-exclamation-circle me-1"></i><span class="icon-fallback icon-exclamation-triangle me-1"></span>{{ errors.specialization }}
+                                        </div>
+                                    {% elif form_data and form_data.specialization and not errors %}
+                                        <div class="valid-feedback">
+                                            <i class="fas fa-check-circle me-1"></i><span class="icon-fallback icon-check-circle me-1"></span>Specialization selected!
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="year_level" class="form-label">
+                                        <i class="fas fa-calendar-alt me-1"></i><span class="icon-fallback icon-calendar-alt me-1"></span>Year Level <span class="text-danger">*</span>
+                                    </label>
+                                    <select class="form-select {% if errors and errors.get('year_level') %}is-invalid{% elif form_data and form_data.year_level and not errors %}is-valid{% endif %}" 
+                                        id="year_level" name="year_level" required>
+                                        <option value="">Select year level</option>
+                                        <option value="1st Year" {% if form_data and form_data.year_level == '1st Year' %}selected{% endif %}>1st Year</option>
+                                        <option value="2nd Year" {% if form_data and form_data.year_level == '2nd Year' %}selected{% endif %}>2nd Year</option>
+                                        <option value="3rd Year" {% if form_data and form_data.year_level == '3rd Year' %}selected{% endif %}>3rd Year</option>
+                                        <option value="4th Year" {% if form_data and form_data.year_level == '4th Year' %}selected{% endif %}>4th Year</option>
+                                    </select>
+                                    {% if errors and errors.get('year_level') %}
+                                        <div class="invalid-feedback">
+                                            <i class="fas fa-exclamation-circle me-1"></i><span class="icon-fallback icon-exclamation-triangle me-1"></span>{{ errors.year_level }}
+                                        </div>
+                                    {% elif form_data and form_data.year_level and not errors %}
+                                        <div class="valid-feedback">
+                                            <i class="fas fa-check-circle me-1"></i><span class="icon-fallback icon-check-circle me-1"></span>Year level selected!
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="password" class="form-label">
+                                        <i class="fas fa-lock me-1"></i><span class="icon-fallback icon-lock me-1"></span>Password <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control {% if errors and errors.get('password') %}is-invalid{% elif form_data and form_data.password and not errors %}is-valid{% endif %}" 
+                                            id="password" name="password" required 
+                                            minlength="12" 
+                                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]).{12,}"
+                                            title="Password must be at least 12 characters with: at least 1 capital letter, 1 special character, and 1 number"
+                                            placeholder="Enter password"
+                                            value="{{ form_data.password if form_data else '' }}">
+                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword" title="Show/Hide Password">
+                                            <i class="fas fa-eye" id="eyeIcon"></i><span class="icon-fallback icon-eye" id="eyeIconFallback"></span>
+                                        </button>
+                                    </div>
+                                    {% if errors and errors.get('password') %}
+                                        <div class="invalid-feedback">
+                                            <i class="fas fa-exclamation-circle me-1"></i><span class="icon-fallback icon-exclamation-triangle me-1"></span>{{ errors.password }}
+                                        </div>
+                                    {% elif form_data and form_data.password and not errors %}
+                                        <div class="valid-feedback">
+                                            <i class="fas fa-check-circle me-1"></i><span class="icon-fallback icon-check-circle me-1"></span>Password meets requirements!
+                                        </div>
+                                    {% else %}
+                                        <div class="form-text mt-1">
+                                            <i class="fas fa-info-circle text-muted"></i><span class="icon-fallback icon-info-circle text-muted"></span> Strong password required
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="confirm_password" class="form-label">
+                                        <i class="fas fa-lock me-1"></i><span class="icon-fallback icon-lock me-1"></span>Confirm Password <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control {% if errors and errors.get('confirm_password') %}is-invalid{% elif form_data and form_data.confirm_password and not errors %}is-valid{% endif %}" 
+                                            id="confirm_password" name="confirm_password" required 
+                                            placeholder="Confirm password"
+                                            value="{{ form_data.confirm_password if form_data else '' }}">
+                                        <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword" title="Show/Hide Password">
+                                            <i class="fas fa-eye" id="confirmEyeIcon"></i><span class="icon-fallback icon-eye" id="confirmEyeIconFallback"></span>
+                                        </button>
+                                    </div>
+                                    {% if errors and errors.get('confirm_password') %}
+                                        <div class="invalid-feedback">
+                                            <i class="fas fa-exclamation-circle me-1"></i><span class="icon-fallback icon-exclamation-triangle me-1"></span>{{ errors.confirm_password }}
+                                        </div>
+                                    {% elif form_data and form_data.confirm_password and not errors %}
+                                        <div class="valid-feedback">
+                                            <i class="fas fa-check-circle me-1"></i><span class="icon-fallback icon-check-circle me-1"></span>Passwords match!
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="cybersecurity_experience" name="cybersecurity_experience" 
+                                        {% if form_data and form_data.cybersecurity_experience %}checked{% endif %}>
+                                    <label class="form-check-label" for="cybersecurity_experience">
+                                        <i class="fas fa-shield-alt me-1"></i><span class="icon-fallback icon-shield-alt me-1"></span>I have previous cybersecurity experience
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-user-plus me-2"></i><span class="icon-fallback icon-user-plus me-2"></span>Create Account
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="text-center">
+                            <p class="mb-0">Already have an account? <a href="{{ url_for('login') }}" class="text-decoration-none">Sign in here</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Password toggle functionality
+    const togglePassword = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+    const eyeIcon = document.getElementById('eyeIcon');
+    const eyeIconFallback = document.getElementById('eyeIconFallback');
+
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    const confirmPassword = document.getElementById('confirm_password');
+    const confirmEyeIcon = document.getElementById('confirmEyeIcon');
+    const confirmEyeIconFallback = document.getElementById('confirmEyeIconFallback');
+
+    // Main password toggle
+    togglePassword.addEventListener('click', function() {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        
+        if (type === 'text') {
+            eyeIcon.classList.remove('fa-eye');
+            eyeIcon.classList.add('fa-eye-slash');
+            eyeIconFallback.classList.remove('icon-eye');
+            eyeIconFallback.classList.add('icon-eye-slash');
+        } else {
+            eyeIcon.classList.remove('fa-eye-slash');
+            eyeIcon.classList.add('fa-eye');
+            eyeIconFallback.classList.remove('icon-eye-slash');
+            eyeIconFallback.classList.add('icon-eye');
+        }
+    });
+
+    // Confirm password toggle
+    toggleConfirmPassword.addEventListener('click', function() {
+        const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        confirmPassword.setAttribute('type', type);
+        
+        if (type === 'text') {
+            confirmEyeIcon.classList.remove('fa-eye');
+            confirmEyeIcon.classList.add('fa-eye-slash');
+            confirmEyeIconFallback.classList.remove('icon-eye');
+            confirmEyeIconFallback.classList.add('icon-eye-slash');
+        } else {
+            confirmEyeIcon.classList.remove('fa-eye-slash');
+            confirmEyeIcon.classList.add('fa-eye');
+            confirmEyeIconFallback.classList.remove('icon-eye-slash');
+            confirmEyeIconFallback.classList.add('icon-eye');
+        }
+    });
+
+    // Function to show popup notification
+    function showPopup(element, message) {
+        // Remove existing popup
+        const existingPopup = document.querySelector('.requirement-popup');
+        if (existingPopup) {
+            existingPopup.remove();
+        }
+
+        // Create new popup
+        const popup = document.createElement('div');
+        popup.className = 'requirement-popup';
+        popup.textContent = message;
+        
+        // Position popup
+        const rect = element.getBoundingClientRect();
+        popup.style.left = rect.left + 'px';
+        popup.style.top = (rect.bottom + 5) + 'px';
+        
+        document.body.appendChild(popup);
+        
+        // Remove popup after 3 seconds
+        setTimeout(() => {
+            if (popup.parentNode) {
+                popup.remove();
+            }
+        }, 3000);
+    }
+
+    // Real-time validation for username (FIXED: requires both letters AND numbers)
+    const username = document.getElementById('username');
+    username.addEventListener('input', function() {
+        const value = this.value;
+        const hasLetters = /[A-Za-z]/.test(value);
+        const hasNumbers = /\d/.test(value);
+        const hasMinLength = value.length >= 8;
+        const isValid = hasLetters && hasNumbers && hasMinLength;
+        
+        if (value.length > 0) {
+            if (isValid) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+                
+                // Show popup for specific issues
+                if (value.length < 8) {
+                    showPopup(this, 'Username must be at least 8 characters');
+                } else if (!hasLetters) {
+                    showPopup(this, 'Username must contain at least 1 letter');
+                } else if (!hasNumbers) {
+                    showPopup(this, 'Username must contain at least 1 number');
+                }
+            }
+        } else {
+            this.classList.remove('is-valid', 'is-invalid');
+        }
+    });
+
+    // Real-time validation for email
+    const email = document.getElementById('email');
+    email.addEventListener('input', function() {
+        const value = this.value;
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const isValid = emailPattern.test(value);
+        
+        if (value.length > 0) {
+            if (isValid) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+                
+                // Show popup for specific issues
+                if (!value.includes('@')) {
+                    showPopup(this, 'Email must contain @ symbol');
+                } else if (!value.includes('.')) {
+                    showPopup(this, 'Email must contain a domain (e.g., .com, .org)');
+                } else {
+                    showPopup(this, 'Please enter a valid email address');
+                }
+            }
+        } else {
+            this.classList.remove('is-valid', 'is-invalid');
+        }
+    });
+
+    // Real-time validation for password with popup notifications
+    password.addEventListener('input', function() {
+        const value = this.value;
+        const hasCapital = /[A-Z]/.test(value);
+        const hasSpecial = /[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(value);
+        const hasNumber = /[0-9]/.test(value);
+        const hasMinLength = value.length >= 12;
+        
+        const isValid = hasCapital && hasSpecial && hasNumber && hasMinLength;
+        
+        if (value.length > 0) {
+            if (isValid) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+                
+                // Show popup for specific missing requirements
+                if (!hasMinLength) {
+                    showPopup(this, 'Missing: At least 12 characters');
+                } else if (!hasCapital) {
+                    showPopup(this, 'Missing: At least 1 capital letter');
+                } else if (!hasSpecial) {
+                    showPopup(this, 'Missing: At least 1 special character');
+                } else if (!hasNumber) {
+                    showPopup(this, 'Missing: At least 1 number');
+                }
+            }
+        } else {
+            this.classList.remove('is-valid', 'is-invalid');
+        }
+    });
+
+    // Real-time validation for confirm password
+    confirmPassword.addEventListener('input', function() {
+        const passwordValue = password.value;
+        const confirmValue = this.value;
+        
+        if (confirmValue.length > 0) {
+            if (passwordValue === confirmValue && passwordValue.length > 0) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+                
+                if (passwordValue.length === 0) {
+                    showPopup(this, 'Please enter a password first');
+                } else {
+                    showPopup(this, 'Passwords do not match');
+                }
+            }
+        } else {
+            this.classList.remove('is-valid', 'is-invalid');
+        }
+    });
+
+    // Real-time validation for dropdowns
+    const specialization = document.getElementById('specialization');
+    const yearLevel = document.getElementById('year_level');
+    
+    specialization.addEventListener('change', function() {
+        if (this.value) {
+            this.classList.remove('is-invalid');
+            this.classList.add('is-valid');
+        } else {
+            this.classList.remove('is-valid');
+            this.classList.add('is-invalid');
+            showPopup(this, 'Please select a specialization');
+        }
+    });
+    
+    yearLevel.addEventListener('change', function() {
+        if (this.value) {
+            this.classList.remove('is-invalid');
+            this.classList.add('is-valid');
+        } else {
+            this.classList.remove('is-valid');
+            this.classList.add('is-invalid');
+            showPopup(this, 'Please select a year level');
+        }
+    });
+});
+</script>
+{% endblock %} 

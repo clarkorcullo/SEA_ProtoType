@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}Assessment Result - Social Engineering Awareness{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <img src="{{ url_for('static', filename='MMDCLogo.png') }}" alt="MMDC Logo" style="height: 40px; width: auto; border-radius: 6px;">
+                        <img src="{{ url_for('static', filename='SEALogo.png') }}" alt="SEA Logo" style="height: 40px; width: auto; border-radius: 6px;">
+                    </div>
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-chart-bar"></i> Knowledge Check Results
+                    </h3>
+                    <p class="mb-0">Your assessment performance summary</p>
+                </div>
+                
+                <div class="card-body p-4">
+                    <!-- Score Summary -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <h4 class="card-title">Your Score</h4>
+                                    <div class="display-4 fw-bold {% if (percentage|default(0)) >= 80 %}text-success{% else %}text-danger{% endif %}">
+                                        {{ score }}/{{ total_questions }}
+                                    </div>
+                                    <p class="card-text">
+                                        <strong>{{ "%.1f"|format(percentage|default(0)) }}%</strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <h4 class="card-title">Result</h4>
+                                    {% if (percentage|default(0)) >= 80 %}
+                                        <div class="text-success">
+                                            <i class="fas fa-check-circle fa-3x mb-2"></i>
+                                            <h5>PASSED!</h5>
+                                            <p>Congratulations! You've successfully completed this knowledge check.</p>
+                                        </div>
+                                    {% else %}
+                                        <div class="text-danger">
+                                            <i class="fas fa-times-circle fa-3x mb-2"></i>
+                                            <h5>NOT PASSED</h5>
+                                            <p>You need 80% to pass. You can retake this assessment.</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Results -->
+                    {% if detailed_results %}
+                    <div class="mb-4">
+                        <h5><i class="fas fa-list"></i> Question Review</h5>
+                        <div class="accordion" id="resultsAccordion">
+                            {% for result in detailed_results %}
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="heading{{ loop.index }}">
+                                    <button class="accordion-button {% if not result.is_correct %}collapsed{% endif %}" 
+                                            type="button" 
+                                            data-bs-toggle="collapse" 
+                                            data-bs-target="#collapse{{ loop.index }}" 
+                                            aria-expanded="{% if result.is_correct %}true{% else %}false{% endif %}" 
+                                            aria-controls="collapse{{ loop.index }}">
+                                        <span class="me-3">
+                                            {% if result.is_correct %}
+                                                <i class="fas fa-check-circle text-success"></i>
+                                            {% else %}
+                                                <i class="fas fa-times-circle text-danger"></i>
+                                            {% endif %}
+                                        </span>
+                                        <strong>Question {{ loop.index }}:</strong> {{ result.question_text[:50] }}...
+                                    </button>
+                                </h2>
+                                <div id="collapse{{ loop.index }}" 
+                                     class="accordion-collapse collapse {% if result.is_correct %}show{% endif %}" 
+                                     aria-labelledby="heading{{ loop.index }}" 
+                                     data-bs-parent="#resultsAccordion">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h6>Your Answer:</h6>
+                                                <p class="{% if result.is_correct %}text-success{% else %}text-danger{% endif %}">
+                                                    <strong>{{ result.user_answer.upper() }}</strong>
+                                                </p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h6>Correct Answer:</h6>
+                                                <p class="text-success">
+                                                    <strong>{{ result.correct_answer.upper() }}</strong>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <h6>Explanation:</h6>
+                                            <p class="text-muted">{{ result.explanation }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Action Buttons -->
+                    <div class="text-center">
+                        {% if (percentage|default(0)) >= 80 %}
+                            <div class="alert alert-success">
+                                <h6><i class="fas fa-trophy"></i> Module Completed!</h6>
+                                <p>You've successfully passed this knowledge check. You can now proceed to the next module.</p>
+                                {% if (module.id|default(0)) == 1 %}
+                                <div class="mt-3 p-3 bg-light rounded">
+                                    <h6><i class="fas fa-graduation-cap"></i> Congratulations on completing the Module 1 Knowledge Check!</h6>
+                                    <p class="mb-2">You've successfully learned what social engineering is and the psychological principles that make it work. This knowledge is your most powerful tool in building a mental firewall.</p>
+                                    <p class="mb-0"><strong>Up next, we'll explore specific types of real-world attacks. See you in Module 2!</strong></p>
+                                </div>
+                                {% elif (module.id|default(0)) == 2 %}
+                                <div class="mt-3 p-3 bg-light rounded">
+                                    <h6><i class="fas fa-shield-alt"></i> Excellent work! You have completed the Module 2 Knowledge Check!</h6>
+                                    <p class="mb-2">You have successfully learned to identify some of the most common and clever attacks used by social engineers, both online and in the physical world.</p>
+                                    <p class="mb-0"><strong>You are now ready to move on to the next module, where we will focus on proactive defense strategies and how to build a resilient security mindset. Keep up the great work!</strong></p>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-success btn-lg">
+                                <i class="fas fa-home"></i> Back to Dashboard
+                            </a>
+                        {% else %}
+                            <div class="alert alert-warning">
+                                <h6><i class="fas fa-exclamation-triangle"></i> Retake Available</h6>
+                                <p>You can retake this knowledge check as many times as needed until you pass.</p>
+                            </div>
+                            <a href="{{ url_for('assessment', module_id=(module_id|default(module.id))) }}" class="btn btn-warning btn-lg">
+                                <i class="fas fa-redo"></i> Retake Assessment
+                            </a>
+                        {% endif %}
+                        <a href="{{ url_for('module', module_id=(module_id|default(module.id))) }}" class="btn btn-secondary btn-lg ms-2">
+                            <i class="fas fa-arrow-left"></i> Back to Module
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

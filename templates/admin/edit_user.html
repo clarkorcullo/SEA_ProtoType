@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}Edit User - {{ user.full_name }}{% endblock %}
+
+{% block content %}
+<style>
+.admin-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: 10px;
+}
+
+.edit-form {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.admin-nav {
+    background: white;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.admin-nav .nav-link {
+    color: #495057;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.admin-nav .nav-link:hover {
+    background: #f8f9fa;
+    color: #007bff;
+}
+
+.admin-nav .nav-link.active {
+    background: #007bff;
+    color: white;
+}
+
+.form-section {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.section-title {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #dee2e6;
+}
+</style>
+
+<div class="admin-header text-center">
+    <div class="container">
+        <h1 class="mb-3">
+            <i class="fas fa-user-edit"></i> Edit User
+        </h1>
+        <p class="lead mb-0">Update information for {{ user.full_name }}</p>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Admin Navigation -->
+    <div class="admin-nav">
+        <nav class="nav nav-pills nav-fill">
+            <a class="nav-link" href="{{ url_for('admin_dashboard') }}">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a class="nav-link" href="{{ url_for('admin_users') }}">
+                <i class="fas fa-users"></i> Users
+            </a>
+            <a class="nav-link" href="{{ url_for('admin_modules') }}">
+                <i class="fas fa-book"></i> Modules
+            </a>
+            <a class="nav-link" href="{{ url_for('admin_analytics') }}">
+                <i class="fas fa-chart-bar"></i> Analytics
+            </a>
+            <a class="nav-link" href="{{ url_for('admin_settings') }}">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </nav>
+    </div>
+
+    <!-- Edit Form -->
+    <div class="edit-form">
+        <form method="POST">
+            <!-- Personal Information Section -->
+            <div class="form-section">
+                <h5 class="section-title">
+                    <i class="fas fa-user"></i> Personal Information
+                </h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="full_name" class="form-label">Full Name *</label>
+                        <input type="text" class="form-control" id="full_name" name="full_name" 
+                               value="{{ user.full_name }}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="email" class="form-label">Email Address *</label>
+                        <input type="email" class="form-control" id="email" name="email" 
+                               value="{{ user.email }}" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="specialization" class="form-label">Specialization *</label>
+                        <select class="form-select" id="specialization" name="specialization" required>
+                            <option value="">Select Specialization</option>
+                            <option value="Computer Science" {% if user.specialization == 'Computer Science' %}selected{% endif %}>Computer Science</option>
+                            <option value="Information Technology" {% if user.specialization == 'Information Technology' %}selected{% endif %}>Information Technology</option>
+                            <option value="Cybersecurity" {% if user.specialization == 'Cybersecurity' %}selected{% endif %}>Cybersecurity</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="year_level" class="form-label">Year Level *</label>
+                        <select class="form-select" id="year_level" name="year_level" required>
+                            <option value="">Select Year Level</option>
+                            <option value="1st Year" {% if user.year_level == '1st Year' %}selected{% endif %}>1st Year</option>
+                            <option value="2nd Year" {% if user.year_level == '2nd Year' %}selected{% endif %}>2nd Year</option>
+                            <option value="3rd Year" {% if user.year_level == '3rd Year' %}selected{% endif %}>3rd Year</option>
+                            <option value="4th Year" {% if user.year_level == '4th Year' %}selected{% endif %}>4th Year</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <textarea class="form-control" id="address" name="address" rows="2" 
+                                  placeholder="Enter user's address">{{ user.address or '' }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Information Section -->
+            <div class="form-section">
+                <h5 class="section-title">
+                    <i class="fas fa-info-circle"></i> Account Information
+                </h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-control" value="{{ user.username }}" readonly>
+                        <div class="form-text">Username cannot be changed</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Member Since</label>
+                        <input type="text" class="form-control" 
+                               value="{{ user.created_at.strftime('%B %d, %Y at %I:%M %p') }}" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Information Section -->
+            <div class="form-section">
+                <h5 class="section-title">
+                    <i class="fas fa-chart-line"></i> Learning Progress
+                </h5>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Modules Completed</label>
+                        <input type="text" class="form-control" value="{{ user.modules_completed }}" readonly>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Simulations Completed</label>
+                        <input type="text" class="form-control" value="{{ user.simulations_completed }}" readonly>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Total Score</label>
+                        <input type="text" class="form-control" value="{{ user.total_score }}" readonly>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Completion %</label>
+                        <input type="text" class="form-control" value="{{ "%.1f"|format(user.completion_percentage) }}%" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-between">
+                <div>
+                    <a href="{{ url_for('admin_user_detail', user_id=user.id) }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to User Details
+                    </a>
+                    <a href="{{ url_for('admin_users') }}" class="btn btn-outline-secondary ms-2">
+                        <i class="fas fa-users"></i> Back to Users
+                    </a>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

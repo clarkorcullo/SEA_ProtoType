@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}{{ content.title }} - Social Engineering Awareness{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="card-title mb-0">
+                        <i class="fas fa-gamepad me-2"></i>{{ content.title }}
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <!-- Scenario Description -->
+                    <div class="scenario-section mb-4">
+                        <h4 class="text-primary">
+                            <i class="fas fa-info-circle me-2"></i>Scenario
+                        </h4>
+                        <p class="lead">{{ content.description }}</p>
+                        
+                        {% if content.email_subject %}
+                        <div class="email-preview bg-light p-3 rounded mb-3">
+                            <h6><strong>Email Subject:</strong> {{ content.email_subject }}</h6>
+                            <h6><strong>From:</strong> {{ content.email_sender }}</h6>
+                            <div class="email-content mt-2">
+                                <pre class="mb-0">{{ content.email_content }}</pre>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if content.scenario %}
+                        <div class="scenario-preview bg-light p-3 rounded mb-3">
+                            <h6><strong>Scenario:</strong></h6>
+                            <p class="mb-0">{{ content.scenario }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Question Form -->
+                    <form method="POST" action="{{ url_for('submit_simulation', simulation_type=simulation_type) }}">
+                        <div class="question-section">
+                            <h4 class="text-primary mb-3">
+                                <i class="fas fa-question-circle me-2"></i>What would you do?
+                            </h4>
+                            
+                            {% for option in content.options %}
+                            <div class="option-item mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" 
+                                           name="option_{{ option.id }}" 
+                                           id="option_{{ option.id }}" 
+                                           value="{{ option.id }}">
+                                    <label class="form-check-label" for="option_{{ option.id }}">
+                                        <strong>{{ option.id.upper() }}.</strong> {{ option.text }}
+                                    </label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Instructions -->
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-lightbulb me-2"></i>Instructions</h6>
+                            <ul class="mb-0">
+                                <li>Read the scenario carefully</li>
+                                <li>Choose the best response based on security best practices</li>
+                                <li>You can only select one option</li>
+                                <li>You'll receive immediate feedback after submission</li>
+                            </ul>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-paper-plane me-2"></i>Submit Answer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Form validation for simulation
+document.querySelector('form').addEventListener('submit', function(e) {
+    const radioButtons = document.querySelectorAll('input[type="radio"]');
+    const answered = Array.from(radioButtons).some(radio => radio.checked);
+    
+    if (!answered) {
+        e.preventDefault();
+        alert('Please select an option before submitting.');
+        return false;
+    }
+});
+
+// Visual feedback for selected options
+document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+        // Remove previous selections
+        document.querySelectorAll('.option-item').forEach(function(item) {
+            item.style.borderColor = '#dee2e6';
+            item.style.backgroundColor = 'transparent';
+        });
+        
+        // Highlight selected option
+        const selectedItem = this.closest('.option-item');
+        if (selectedItem) {
+            selectedItem.style.borderColor = '#28a745';
+            selectedItem.style.backgroundColor = '#f8f9fa';
+        }
+    });
+});
+</script>
+
+<style>
+.email-preview, .scenario-preview {
+    border-left: 4px solid #007bff;
+}
+
+.option-item {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.option-item:hover {
+    border-color: #007bff;
+    background-color: #f8f9fa;
+}
+
+.form-check-input:checked + .form-check-label {
+    font-weight: bold;
+    color: #007bff;
+}
+</style>
+{% endblock %} 
