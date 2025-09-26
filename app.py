@@ -152,6 +152,21 @@ with app.app_context():
                     db.session.commit()
                 except Exception:
                     db.session.rollback()
+        # Ensure Module 1 has drawer placeholders so injector template renders consistently
+        try:
+            m1 = Module.get_by_order(1)
+            if m1 and m1.content and 'content-sub1-1' not in m1.content:
+                # Minimal standardized skeleton expected by templates/modules/module1.html
+                standardized = (
+                    '<div class="drawer-subcontent" id="content-sub1-1"><div class="content-wrapper" id="placeholder-sub1-1"></div></div>'
+                    '<div class="drawer-subcontent" id="content-sub1-2"><div class="content-wrapper"></div></div>'
+                    '<div class="drawer-subcontent" id="content-sub1-3"><div class="content-wrapper"></div></div>'
+                )
+                # Prepend to preserve any existing text while guaranteeing anchors exist
+                m1.content = standardized + (m1.content or '')
+                m1.save()
+        except Exception:
+            pass
     except Exception:
         pass
 
