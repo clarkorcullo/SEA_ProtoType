@@ -1467,13 +1467,17 @@ def final_assessment():
         str: Rendered final assessment template or redirect
     """
     try:
-        # Check if user has completed all modules
+        # Check if user has completed all modules (admins bypass for review)
         completed_modules = len(user_service.get_user_completed_modules(current_user.id))
         total_modules = Module.count()
         
-        if completed_modules < total_modules:
-            flash('You must complete all modules before taking the Final Assessment.', 'warning')
-            return redirect(url_for('dashboard'))
+        if not getattr(current_user, 'is_admin', False):
+            if completed_modules < total_modules:
+                flash('You must complete all modules before taking the Final Assessment.', 'warning')
+                return redirect(url_for('dashboard'))
+        else:
+            # For admins, present as fully completed to unlock UI state
+            completed_modules = total_modules
         
         # Check if user has already passed
         existing_result = AssessmentResult.query.filter_by(
@@ -1486,7 +1490,9 @@ def final_assessment():
             flash('You have already passed the Final Assessment!', 'info')
             return redirect(url_for('dashboard'))
         
-        return render_template('final_assessment_simple.html')
+        return render_template('final_assessment_simple.html',
+                               completed_modules=completed_modules,
+                               total_modules=total_modules)
         
     except Exception as e:
         flash(f'Error loading final assessment: {e}', 'error')
