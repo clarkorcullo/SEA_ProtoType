@@ -221,6 +221,24 @@ with app.app_context():
                                     module_id=existing.id
                                 )
                                 nq.save()
+                    # Replace final assessment questions as well
+                    from data_models.content_models import FinalAssessmentQuestion
+                    fa_existing = FinalAssessmentQuestion.query.all()
+                    for q in fa_existing:
+                        db.session.delete(q)
+                    db.session.commit()
+                    for q in payload.get('final_assessment_questions', []):
+                        nq = FinalAssessmentQuestion(
+                            question_text=q['question_text'],
+                            option_a=q['option_a'],
+                            option_b=q['option_b'],
+                            option_c=q['option_c'],
+                            option_d=q['option_d'],
+                            correct_answer=q['correct_answer'],
+                            explanation=q['explanation'],
+                            question_set=q.get('question_set', 1)
+                        )
+                        nq.save()
         except Exception:
             pass
     except Exception:

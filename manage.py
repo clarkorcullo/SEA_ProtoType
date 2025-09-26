@@ -14,6 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from app import app, db, init_database, create_default_data
 from data_models import User, Module, KnowledgeCheckQuestion
+from data_models.content_models import FinalAssessmentQuestion
 from business_services import UserService
 
 def reset_database():
@@ -135,7 +136,8 @@ def export_content(output_path: str = 'content_seed/modules.json'):
     with app.app_context():
         data = {
             'exported_at': datetime.utcnow().isoformat(),
-            'modules': []
+            'modules': [],
+            'final_assessment_questions': []
         }
         modules = Module.get_all_ordered()
         for m in modules:
@@ -161,6 +163,20 @@ def export_content(output_path: str = 'content_seed/modules.json'):
                     'question_set': q.question_set,
                 })
             data['modules'].append(module_obj)
+        # Export final assessment questions
+        fa_questions = FinalAssessmentQuestion.query.all()
+        for q in fa_questions:
+            data['final_assessment_questions'].append({
+                'question_text': q.question_text,
+                'option_a': q.option_a,
+                'option_b': q.option_b,
+                'option_c': q.option_c,
+                'option_d': q.option_d,
+                'correct_answer': q.correct_answer,
+                'explanation': q.explanation,
+                'question_set': q.question_set,
+            })
+
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
         print(f"✅ Exported content to {output_path}")
@@ -214,6 +230,24 @@ def import_content(input_path: str = 'content_seed/modules.json'):
                         module_id=existing.id
                     )
                     nq.save()
+        # Replace final assessment questions
+        existing_fa = FinalAssessmentQuestion.query.all()
+        for q in existing_fa:
+            db.session.delete(q)
+        db.session.commit()
+        for q in payload.get('final_assessment_questions', []):
+            nq = FinalAssessmentQuestion(
+                question_text=q['question_text'],
+                option_a=q['option_a'],
+                option_b=q['option_b'],
+                option_c=q['option_c'],
+                option_d=q['option_d'],
+                correct_answer=q['correct_answer'],
+                explanation=q['explanation'],
+                question_set=q.get('question_set', 1)
+            )
+            nq.save()
+
         print(f"✅ Imported content from {input_path}")
 
 def main():
