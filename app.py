@@ -152,19 +152,25 @@ with app.app_context():
                     db.session.commit()
                 except Exception:
                     db.session.rollback()
-        # Ensure Module 1 has drawer placeholders so injector template renders consistently
+        # Ensure modules have drawer placeholders so UI renders consistently in production
         try:
-            m1 = Module.get_by_order(1)
-            if m1 and m1.content and 'content-sub1-1' not in m1.content:
-                # Minimal standardized skeleton expected by templates/modules/module1.html
-                standardized = (
-                    '<div class="drawer-subcontent" id="content-sub1-1"><div class="content-wrapper" id="placeholder-sub1-1"></div></div>'
-                    '<div class="drawer-subcontent" id="content-sub1-2"><div class="content-wrapper"></div></div>'
-                    '<div class="drawer-subcontent" id="content-sub1-3"><div class="content-wrapper"></div></div>'
+            def build_standard_skeleton(module_index: int) -> str:
+                # Generic three-section skeleton per module
+                return (
+                    f'<div class="drawer-subcontent" id="content-sub{module_index}-1"><div class="content-wrapper" id="placeholder-sub{module_index}-1"></div></div>'
+                    f'<div class="drawer-subcontent" id="content-sub{module_index}-2"><div class="content-wrapper"></div></div>'
+                    f'<div class="drawer-subcontent" id="content-sub{module_index}-3"><div class="content-wrapper"></div></div>'
                 )
-                # Prepend to preserve any existing text while guaranteeing anchors exist
-                m1.content = standardized + (m1.content or '')
-                m1.save()
+
+            modules = Module.get_all_ordered()
+            for mod in modules:
+                # Use different index base per module to avoid ID collisions across lessons
+                index_base = mod.order if mod.order and mod.order > 0 else 1
+                needs_standardization = not mod.content or 'drawer-subcontent' not in mod.content
+                if needs_standardization:
+                    standardized = build_standard_skeleton(index_base)
+                    mod.content = (standardized + (mod.content or ''))
+                    mod.save()
         except Exception:
             pass
     except Exception:
