@@ -128,11 +128,99 @@ def show_statistics():
             print(f"Total Scores: {total_scores}")
             print(f"Average Score per User: {total_scores / total_users:.1f}")
 
+def export_content(output_path: str = 'content_seed/modules.json'):
+    """Export modules and knowledge check questions to JSON."""
+    import json
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    with app.app_context():
+        data = {
+            'exported_at': datetime.utcnow().isoformat(),
+            'modules': []
+        }
+        modules = Module.get_all_ordered()
+        for m in modules:
+            module_obj = {
+                'order': m.order,
+                'name': m.name,
+                'description': m.description,
+                'content': m.content,
+                'has_simulation': m.has_simulation,
+                'simulation_type': m.simulation_type,
+                'questions': []
+            }
+            questions = KnowledgeCheckQuestion.get_by_module_and_set(m.id, 1)
+            for q in questions:
+                module_obj['questions'].append({
+                    'question_text': q.question_text,
+                    'option_a': q.option_a,
+                    'option_b': q.option_b,
+                    'option_c': q.option_c,
+                    'option_d': q.option_d,
+                    'correct_answer': q.correct_answer,
+                    'explanation': q.explanation,
+                    'question_set': q.question_set,
+                })
+            data['modules'].append(module_obj)
+        with open(output_path, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        print(f"✅ Exported content to {output_path}")
+
+def import_content(input_path: str = 'content_seed/modules.json'):
+    """Import modules and questions from JSON (upsert by order)."""
+    import json
+    if not os.path.exists(input_path):
+        print(f"❌ Seed file not found: {input_path}")
+        return
+    with app.app_context():
+        with open(input_path, 'r', encoding='utf-8') as f:
+            payload = json.load(f)
+        modules = payload.get('modules', [])
+        for m in modules:
+            existing = Module.get_by_order(m.get('order'))
+            if existing:
+                existing.name = m.get('name', existing.name)
+                existing.description = m.get('description', existing.description)
+                existing.content = m.get('content', existing.content)
+                existing.has_simulation = m.get('has_simulation', existing.has_simulation)
+                existing.simulation_type = m.get('simulation_type', existing.simulation_type)
+                existing.save()
+            else:
+                created = Module(
+                    name=m.get('name', ''),
+                    description=m.get('description', ''),
+                    content=m.get('content', ''),
+                    order=m.get('order'),
+                    has_simulation=m.get('has_simulation', False),
+                    simulation_type=m.get('simulation_type')
+                )
+                created.save()
+                existing = created
+            # Replace questions for set=1
+            if existing:
+                existing_questions = KnowledgeCheckQuestion.get_by_module_and_set(existing.id, 1)
+                for q in existing_questions:
+                    db.session.delete(q)
+                db.session.commit()
+                for q in m.get('questions', []):
+                    nq = KnowledgeCheckQuestion(
+                        question_text=q['question_text'],
+                        option_a=q['option_a'],
+                        option_b=q['option_b'],
+                        option_c=q['option_c'],
+                        option_d=q['option_d'],
+                        correct_answer=q['correct_answer'],
+                        explanation=q['explanation'],
+                        question_set=q.get('question_set', 1),
+                        module_id=existing.id
+                    )
+                    nq.save()
+        print(f"✅ Imported content from {input_path}")
+
 def main():
     parser = argparse.ArgumentParser(description='Social Engineering Awareness Program Management')
     parser.add_argument('command', choices=[
         'reset-db', 'create-admin', 'list-users', 'list-modules', 
-        'backup', 'stats', 'init'
+        'backup', 'stats', 'init', 'export-content', 'import-content'
     ], help='Command to execute')
     
     parser.add_argument('--username', help='Username for admin creation')
@@ -171,6 +259,12 @@ def main():
             print("🔧 Initializing database...")
             init_database()
             print("✅ Database initialized successfully")
+
+    elif args.command == 'export-content':
+        export_content()
+
+    elif args.command == 'import-content':
+        import_content()
 
 if __name__ == '__main__':
     main()
