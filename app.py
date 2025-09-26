@@ -173,6 +173,56 @@ with app.app_context():
                     mod.save()
         except Exception:
             pass
+        # Import content seed on Render to mirror local content
+        try:
+            if os.environ.get('RENDER'):
+                seed_path = os.path.join(os.path.dirname(__file__), 'content_seed', 'modules.json')
+                if os.path.exists(seed_path):
+                    import json
+                    from data_models.content_models import Module, KnowledgeCheckQuestion
+                    with open(seed_path, 'r', encoding='utf-8') as f:
+                        payload = json.load(f)
+                    for m in payload.get('modules', []):
+                        existing = Module.get_by_order(m.get('order'))
+                        if existing:
+                            existing.name = m.get('name', existing.name)
+                            existing.description = m.get('description', existing.description)
+                            existing.content = m.get('content', existing.content)
+                            existing.has_simulation = m.get('has_simulation', existing.has_simulation)
+                            existing.simulation_type = m.get('simulation_type', existing.simulation_type)
+                            existing.save()
+                        else:
+                            created = Module(
+                                name=m.get('name', ''),
+                                description=m.get('description', ''),
+                                content=m.get('content', ''),
+                                order=m.get('order'),
+                                has_simulation=m.get('has_simulation', False),
+                                simulation_type=m.get('simulation_type')
+                            )
+                            created.save()
+                            existing = created
+                        # Replace questions for set=1
+                        if existing:
+                            qs = KnowledgeCheckQuestion.get_by_module_and_set(existing.id, 1)
+                            for q in qs:
+                                db.session.delete(q)
+                            db.session.commit()
+                            for q in m.get('questions', []):
+                                nq = KnowledgeCheckQuestion(
+                                    question_text=q['question_text'],
+                                    option_a=q['option_a'],
+                                    option_b=q['option_b'],
+                                    option_c=q['option_c'],
+                                    option_d=q['option_d'],
+                                    correct_answer=q['correct_answer'],
+                                    explanation=q['explanation'],
+                                    question_set=q.get('question_set', 1),
+                                    module_id=existing.id
+                                )
+                                nq.save()
+        except Exception:
+            pass
     except Exception:
         pass
 
