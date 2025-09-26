@@ -91,8 +91,8 @@
                                 <span class="progress-percentage">{{ knowledge_check_score }}%</span>
                             </div>
                             <div class="progress-bar-container">
-                                <div class="progress-bar {% if knowledge_check_score >= 80 %}completed{% elif knowledge_check_score > 0 %}in-progress{% else %}not-started{% endif %}" 
-                                     style="width: {% if knowledge_check_score >= 80 %}100{% else %}{{ knowledge_check_score }}{% endif %}%">
+                            <div class="progress-bar {% if knowledge_check_score >= 80 %}completed{% elif knowledge_check_score > 0 %}in-progress{% else %}not-started{% endif %}"
+                                 data-progress="{{ 100 if knowledge_check_score >= 80 else knowledge_check_score }}">
                                 </div>
                             </div>
                         </div>
@@ -156,6 +156,7 @@
     padding: 2.5rem;
     margin-bottom: 2rem;
     border: 1px solid rgba(255, 255, 255, 0.2);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
 }
 
@@ -301,6 +302,7 @@
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
     border: 1px solid rgba(255, 255, 255, 0.2);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     overflow: hidden;
 }
@@ -1069,25 +1071,38 @@ html {
 }
 </style>
 
+<div id="moduleMeta" data-module-id="{{ module.id }}" data-score="{{ knowledge_check_score }}" data-time-spent="{{ progress.time_spent }}" style="display:none"></div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Reflect progress bar width via data attribute to avoid inline style lint errors
+    var pb = document.querySelector('.progress-bar');
+    if (pb) {
+        var pct = parseInt(pb.getAttribute('data-progress') || '0', 10);
+        if (!isNaN(pct)) {
+            pb.style.width = Math.max(0, Math.min(100, pct)) + '%';
+        }
+    }
     // Handle Mark as Complete button
     const markCompleteBtn = document.getElementById('markCompleteBtn');
     if (markCompleteBtn) {
         markCompleteBtn.addEventListener('click', function() {
             if (confirm('Are you sure you want to mark this module as complete?')) {
                 // Update progress via API
+                const metaEl = document.getElementById('moduleMeta');
+                const payload = {
+                    module_id: parseInt(metaEl.getAttribute('data-module-id'), 10),
+                    status: 'completed',
+                    score: parseInt(metaEl.getAttribute('data-score'), 10) || 0,
+                    time_spent: parseInt(metaEl.getAttribute('data-time-spent'), 10) || 0
+                };
+
                 fetch('{{ url_for("update_progress") }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        module_id: {{ module.id }},
-                        status: 'completed',
-                        score: {{ knowledge_check_score }},
-                        time_spent: {{ progress.time_spent }}
-                    })
+                    body: JSON.stringify(payload)
                 })
                 .then(response => response.json())
                 .then(data => {
