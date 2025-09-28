@@ -248,7 +248,7 @@ def import_content(input_path: str = 'content_seed/modules.json'):
             )
             nq.save()
 
-        print(f"✅ Imported content from {input_path}")
+        print(f"[OK] Imported content from {input_path}")
 
 def main():
     parser = argparse.ArgumentParser(description='Social Engineering Awareness Program Management')

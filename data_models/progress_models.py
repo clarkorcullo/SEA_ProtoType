@@ -37,6 +37,7 @@ class UserProgress(BaseModel, TimestampMixin):
     module_id = db.Column(db.Integer, db.ForeignKey('module.id'), nullable=False)
     status = db.Column(db.String(20), default=ProgressStatus.NOT_STARTED.value)
     score = db.Column(db.Integer, default=0)
+    highest_score = db.Column(db.Integer, default=0)  # Track the highest score achieved
     attempts = db.Column(db.Integer, default=0)
     time_spent = db.Column(db.Integer, default=0)  # in minutes
     completed_at = db.Column(db.DateTime, nullable=True)
@@ -54,6 +55,26 @@ class UserProgress(BaseModel, TimestampMixin):
         return self.status == ProgressStatus.COMPLETED.value
     
     @property
+    def completed(self) -> bool:
+        """Alias for is_completed for template compatibility"""
+        return self.is_completed
+    
+    @property
+    def completion_percentage(self) -> float:
+        """Calculate completion percentage based on status and highest score"""
+        if self.status == ProgressStatus.COMPLETED.value:
+            return 100.0
+        elif self.status == ProgressStatus.IN_PROGRESS.value:
+            # Use highest score achieved for display
+            display_score = max(self.score, self.highest_score)
+            if display_score > 0:
+                return min(90.0, (display_score / 10) * 100)  # Assume max score is 100
+            else:
+                return 25.0  # Just started
+        else:
+            return 0.0
+    
+    @property
     def completion_time(self) -> Optional[int]:
         """Get completion time in minutes"""
         if self.completed_at and self.created_at:
@@ -69,12 +90,37 @@ class UserProgress(BaseModel, TimestampMixin):
         )
     
     def complete_progress(self, score: int) -> bool:
-        """Complete progress with score"""
-        return self.update(
-            status=ProgressStatus.COMPLETED.value,
-            score=score,
-            completed_at=datetime.utcnow()
-        )
+        """Complete progress with score - implements 'Pass Once, Always Complete' rule"""
+        # Update highest score if this is better
+        if score > self.highest_score:
+            self.highest_score = score
+        
+        # Update current score
+        self.score = score
+        
+        # Once completed, always stay completed (never revert)
+        if self.status != ProgressStatus.COMPLETED.value:
+            self.status = ProgressStatus.COMPLETED.value
+            self.completed_at = datetime.utcnow()
+        
+        return self.save()
+    
+    def update_score(self, score: int) -> bool:
+        """Update score while maintaining completion status - for retakes"""
+        # Update highest score if this is better
+        if score > self.highest_score:
+            self.highest_score = score
+        
+        # Update current score
+        self.score = score
+        
+        # If already completed, stay completed regardless of new score
+        # If not completed and score >= 80%, mark as completed
+        if self.status != ProgressStatus.COMPLETED.value and score >= 80:
+            self.status = ProgressStatus.COMPLETED.value
+            self.completed_at = datetime.utcnow()
+        
+        return self.save()
     
     def update_time_spent(self, minutes: int) -> bool:
         """Update time spent on module"""
@@ -329,4 +375,42 @@ class FeedbackSurvey(BaseModel, TimestampMixin):
             distribution[rating] = count
         
         return distribution
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary"""
+        base_dict = super().to_dict()
+        base_dict.update({
+            'user_id': self.user_id,
+            'module_id': self.module_id,
+            'rating': self.rating,
+            'feedback_text': self.feedback_text,
+            'difficulty_level': self.difficulty_level,
+            'additional_questions': self.get_additional_questions()
+        })
+        return base_dict
+
+class SimpleReflection(BaseModel, TimestampMixin):
+    """Simple reflection submission model - minimal implementation"""
+    
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    module_id = db.Column(db.Integer, nullable=False)
+    reflection_text = db.Column(db.Text, nullable=False)
+    
+    # Relationships
+    user = db.relationship('User', backref='simple_reflections')
+    
+    @classmethod
+    def get_user_reflections(cls, user_id: int) -> List['SimpleReflection']:
+        """Get all reflections for a user"""
+        return cls.query.filter_by(user_id=user_id).order_by(cls.created_at.desc()).all()
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary"""
+        base_dict = super().to_dict()
+        base_dict.update({
+            'user_id': self.user_id,
+            'module_id': self.module_id,
+            'reflection_text': self.reflection_text
+        })
+        return base_dict
 

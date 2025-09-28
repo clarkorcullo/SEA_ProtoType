@@ -266,11 +266,11 @@
     </div>
 
     <!-- Module Progress -->
-    {% if progress %}
     <div class="progress-section">
         <h5 class="mb-3">
             <i class="fas fa-book text-success"></i> Module Progress
         </h5>
+        {% if progress and progress|length > 0 %}
         <div class="row">
             {% for module_progress in progress %}
             <div class="col-md-6 mb-3">
@@ -278,21 +278,35 @@
                     <span><strong>Module {{ module_progress.module_id }}</strong></span>
                     {% if module_progress.completed %}
                         <span class="badge bg-success">Completed</span>
-                    {% else %}
+                    {% elif module_progress.status == 'in_progress' %}
                         <span class="badge bg-warning">In Progress</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Not Started</span>
                     {% endif %}
                 </div>
                 <div class="progress mt-1" style="height: 6px;">
-                    <div class="progress-bar" style="width: {{ (module_progress.completion_percentage) if module_progress.completion_percentage else 0 }}%"></div>
+                    <div class="progress-bar 
+                        {% if module_progress.completed %}bg-success
+                        {% elif module_progress.status == 'in_progress' %}bg-warning
+                        {% else %}bg-secondary{% endif %}" 
+                        style="width: {{ module_progress.completion_percentage }}%">
+                    </div>
                 </div>
                 <small class="text-muted">
-                    Last updated: {{ module_progress.updated_at.strftime('%m/%d/%Y') }}
+                    Score: {{ max(module_progress.score, module_progress.highest_score) }} (Best: {{ module_progress.highest_score }}) | 
+                    Time: {{ module_progress.time_spent }} min | 
+                    Updated: {{ module_progress.updated_at.strftime('%m/%d/%Y') }}
                 </small>
             </div>
             {% endfor %}
         </div>
+        {% else %}
+        <div class="text-center text-muted py-4">
+            <i class="fas fa-info-circle fa-2x mb-2"></i>
+            <p>No module progress data available for this user.</p>
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
 
     <!-- Recent Assessments -->
     {% if assessments %}

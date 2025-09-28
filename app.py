@@ -53,7 +53,7 @@ from data_models.base_models import db
 from data_models import (
     User, PasswordResetToken, Module, KnowledgeCheckQuestion, 
     FinalAssessmentQuestion, UserProgress, AssessmentResult, 
-    SimulationResult, FeedbackSurvey
+    SimulationResult, FeedbackSurvey, SimpleReflection
 )
 # Assessment models imported only when needed to avoid circular imports
 from business_services import (
@@ -152,6 +152,25 @@ with app.app_context():
                     db.session.commit()
                 except Exception:
                     db.session.rollback()
+        # Auto-migrate highest_score column for production deployments
+        try:
+            if inspector.has_table('userprogress'):
+                columns = [col['name'] for col in inspector.get_columns('userprogress')]
+                if 'highest_score' not in columns:
+                    logger.info("[MIGRATION] Adding highest_score column to userprogress table...")
+                    db.session.execute(text(
+                        "ALTER TABLE userprogress ADD COLUMN highest_score INTEGER DEFAULT 0"
+                    ))
+                    # Update existing records to set highest_score = score
+                    db.session.execute(text(
+                        "UPDATE userprogress SET highest_score = score WHERE highest_score = 0"
+                    ))
+                    db.session.commit()
+                    logger.info("[MIGRATION] Successfully added highest_score column")
+        except Exception as e:
+            logger.warning(f"[MIGRATION] Could not migrate highest_score column: {e}")
+            db.session.rollback()
+
         # Ensure modules have drawer placeholders so UI renders consistently in production
         try:
             def build_standard_skeleton(module_index: int) -> str:
@@ -1427,17 +1446,20 @@ def submit_assessment(module_id):
         )
         
         if result.save():
-            # Update module progress
+            # Update module progress with "Pass Once, Always Complete" rule
             progress = UserProgress.get_module_progress(current_user.id, module_id)
             if progress:
-                progress.score = percentage
-                if passed:
-                    progress.status = 'completed'
-                    progress.completed_at = datetime.now()
-                else:
-                    # If they took the assessment but didn't pass, mark as in_progress
-                    progress.status = 'in_progress'
+                # Use the new update_score method that implements the rule
+                progress.update_score(percentage)
+            else:
+                # Create new progress record
+                progress = UserProgress(
+                    user_id=current_user.id,
+                    module_id=module_id,
+                    status='in_progress'
+                )
                 progress.save()
+                progress.update_score(percentage)
             
             flash(f'Assessment completed! Score: {percentage}%', 'success' if passed else 'warning')
             logger.info(f"User {current_user.username} completed assessment for module {module_id} with score {percentage}%")
@@ -1497,7 +1519,7 @@ def final_assessment():
             # For admins, present as fully completed to unlock UI state
             completed_modules = total_modules
         
-        # Check if user has already passed
+        # Check if user has already passed (allow retakes for better scores)
         existing_result = AssessmentResult.query.filter_by(
             user_id=current_user.id, 
             assessment_type='final_assessment',
@@ -1505,8 +1527,7 @@ def final_assessment():
         ).first()
         
         if existing_result:
-            flash('You have already passed the Final Assessment!', 'info')
-            return redirect(url_for('dashboard'))
+            flash('You have already passed the Final Assessment! You can retake for a better score.', 'info')
         
         return render_template('final_assessment_simple.html',
                                completed_modules=completed_modules,
@@ -1934,13 +1955,35 @@ def health_check():
 @app.route('/learning_assets/<path:filename>')
 def learning_assets(filename):
     """
-    Serve learning assets (e.g., images, PDFs) from learning_modules/Documents
-    to ensure module content can display media without altering layout.
+    Serve learning assets (e.g., images, PDFs) from approved subdirectories
+    under learning_modules. Supports nested paths like 'Visual_Aid/Lesson21.png'.
     """
     try:
         import os
-        directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'learning_modules', 'Documents')
-        return send_from_directory(directory, filename)
+        app_root = os.path.dirname(os.path.abspath(__file__))
+        base_dir = os.path.join(app_root, 'learning_modules')
+
+        # Only allow serving from these subdirectories
+        allowed_subdirs = ['Documents', 'Visual_Aid']
+
+        # If the filename already contains a subdirectory, try to serve directly
+        # from an allowed subdirectory. Otherwise, try each allowed subdir.
+        for subdir in allowed_subdirs:
+            candidate_dir = os.path.join(base_dir, subdir)
+            candidate_path = os.path.join(candidate_dir, filename)
+            if os.path.isfile(candidate_path):
+                return send_from_directory(candidate_dir, filename)
+
+        # As a fallback, if a fully qualified path under base_dir was provided and exists
+        fallback_path = os.path.join(base_dir, filename)
+        if os.path.isfile(fallback_path):
+            # Determine the directory and relative file for send_from_directory
+            rel_dir = os.path.dirname(fallback_path)
+            rel_file = os.path.basename(fallback_path)
+            return send_from_directory(rel_dir, rel_file)
+
+        # Not found
+        return ('', 404)
     except Exception as e:
         logger.error(f"Error serving learning asset {filename}: {e}")
         return ('', 404)
@@ -2102,6 +2145,9 @@ def admin_user_detail(user_id):
         if not user:
             flash('User not found.', 'error')
             return redirect(url_for('admin_users'))
+        
+        # Sync user progress counters with actual data
+        user.sync_progress_counters()
         
         # Get user progress
         progress = UserProgress.get_user_progress(user_id)
@@ -2902,6 +2948,39 @@ def new_assessment_status():
     except Exception as e:
         logger.error(f"Error getting assessment status: {e}")
         return jsonify({'error': 'Failed to get assessment status'}), 500
+
+# =============================================================================
+# 12. REFLECTION SUBMISSION ROUTE
+# =============================================================================
+
+@app.route('/submit_reflection', methods=['POST'])
+@login_required
+def submit_reflection():
+    """Simple reflection submission endpoint"""
+    try:
+        data = request.get_json()
+        reflection_text = data.get('reflection_text', '').strip()
+        module_id = data.get('module_id', 1)
+        
+        if not reflection_text:
+            return jsonify({'success': False, 'error': 'Reflection text is required'})
+        
+        # Create simple reflection record
+        reflection = SimpleReflection(
+            user_id=current_user.id,
+            module_id=module_id,
+            reflection_text=reflection_text
+        )
+        
+        if reflection.save():
+            logger.info(f"User {current_user.username} submitted reflection for module {module_id}")
+            return jsonify({'success': True, 'message': 'Reflection submitted successfully!'})
+        else:
+            return jsonify({'success': False, 'error': 'Failed to save reflection'})
+            
+    except Exception as e:
+        logger.error(f"Error submitting reflection: {e}")
+        return jsonify({'success': False, 'error': 'An error occurred while submitting your reflection'})
 
 # =============================================================================
 # 13. APPLICATION ENTRY POINT

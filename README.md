@@ -10,7 +10,7 @@ A **production-ready, enterprise-grade Flask application** that delivers compreh
 
 ## 🎯 Project Overview
 
-This educational platform guides learners through **seven comprehensive modules** and a final assessment, enforcing strict completion rules and offering realistic practice via **four types of simulations** (Phishing, Pretexting, Baiting, Quid Pro Quo). The system tracks detailed progress, scores, time spent, and recent activity, supporting survey collection and certificate generation upon completion.
+This educational platform guides learners through **five comprehensive modules** and a final assessment, enforcing strict completion rules and offering realistic practice via **four types of simulations** (Phishing, Pretexting, Baiting, Quid Pro Quo). The system tracks detailed progress, scores, time spent, and recent activity, supporting survey collection and certificate generation upon completion.
 
 ### 🏗️ Architecture Principles
 - **Clean Architecture**: Separation of concerns via service layer (`business_services/`) and data models (`data_models/`)
@@ -23,7 +23,7 @@ This educational platform guides learners through **seven comprehensive modules*
 ## 🚀 Key Features
 
 ### 📚 **Comprehensive Learning Modules**
-- **7 Progressive Modules**: From basic concepts to advanced incident response
+- **5 Progressive Modules**: From basic concepts to advanced threat landscape understanding
 - **Sequential Unlocking**: Each module requires previous completion
 - **Knowledge Checks**: 5 questions per module with detailed feedback
 - **Interactive Content**: Rich HTML content with practical examples

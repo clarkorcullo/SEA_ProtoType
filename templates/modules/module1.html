@@ -12,12 +12,12 @@ document.addEventListener('DOMContentLoaded', function() {
     '<iframe src="https://www.youtube.com/embed/G6GBRIRmsAg" title="Module 1 Lesson 1.1 Part A - What is Social Engineering" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>' +
     '</div><div class="video-caption">Module 1 Lesson 1.1 Part A — What is Social Engineering?</div></div>';
 
-  // Insert Lesson 1.1 -> 2. Core Lesson Content
+  // Insert Lesson 1.1 -> 2. The Anatomy of a Human-Based Attack
   var coreContent = document.getElementById('content-sub1-2');
   if (coreContent) {
     var coreWrapper = coreContent.querySelector('.content-wrapper') || coreContent;
     coreWrapper.innerHTML = '' +
-      '<h3>Core Lesson Content: The Anatomy of a Human-Based Attack</h3>' +
+      '<h3>The Anatomy of a Human-Based Attack</h3>' +
       '<p>Social engineering attacks manipulate people into sharing information, downloading software, or making other mistakes that compromise their security. It’s sometimes called “human hacking,” because it uses psychological manipulation instead of technical skills. According to reports, social engineering is a leading cause of network compromise today.</p>' +
       '<p>This is one of the biggest challenges in cybersecurity. Even with strong firewalls and up-to-date antivirus software, a crafty social engineer can get right through by targeting you, the user. It’s like having a strong lock on your door, but a scammer just convinces you to hand them the key.</p>' +
       '<p><strong>So, how does it work?</strong> Social engineering is a game of psychology. Attackers use one or more of these principles to trick you into acting against your own best interest:</p>' +
@@ -112,35 +112,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Insert Module 1 -> Reflection content
-  var reflection = document.getElementById('content-reflection');
-  if (reflection) {
-    var reflWrapper = reflection.querySelector('.content-wrapper') || reflection;
-    reflWrapper.innerHTML = '' +
-      '<h3>Module 1 Reflection: "Could This Happen to Me?"</h3>' +
-      '<p>Welcome to your first reflection! Now that you’ve completed Module 1, it’s time to think about how social engineering shows up in your own life. This isn\'t just theory; it’s about making sure you’re ready to protect yourself. Take a few minutes to think about the questions below and share your thoughts.</p>' +
-      '<h4>Reflection Prompts</h4>' +
-      '<ol>' +
-        '<li>Think about a time when someone tried to get you to act quickly, trust them blindly, or give out personal information—online or offline. What happened?</li>' +
-        '<li>Now that you’ve completed this module, do you think it might have been a social engineering attempt?</li>' +
-        '<li>How did you respond then, and how would you act differently now?</li>' +
-      '</ol>' +
-      '<div class="alert alert-info"><strong>BONUS:</strong> Share one "aha moment" from this module. What surprised you the most about social engineering, and what habit or mindset will you change starting today?</div>';
-  }
+  // Note: Reflection section will be controlled by user clicks, not auto-expanded
 
   // Insert Module 1 -> Knowledge Check rules and launcher
   var kc = document.getElementById('content-knowledge-check');
   if (kc) {
     var kcWrapper = kc.querySelector('.content-wrapper') || kc;
     kcWrapper.innerHTML = '' +
-      '<h3>Knowledge Check — Module 1 Rules</h3>' +
-      '<ol>' +
+      '<h3>Knowledge Check — Module 1</h3>' +
+      '<ul>' +
         '<li><strong>Unlimited attempts</strong>: You can take this knowledge check as many times as you need.</li>' +
         '<li><strong>5 questions</strong> per attempt. <strong>Passing score: 80%</strong>.</li>' +
-        '<li><strong>Fresh questions on retake</strong>: Questions are shuffled and may switch sets so you won\'t receive the exact same items if you retry.</li>' +
-        '<li><strong>Review with feedback</strong>: After submission, you can review your answers with explanations.</li>' +
-        '<li><strong>Pass message</strong>: A clear success message appears when you pass.</li>' +
-      '</ol>' +
+      '</ul>' +
       '<div class="next-steps" style="margin-top:1rem;">' +
         '<a href="/assessment/1" class="btn btn-primary">Start Knowledge Check</a>' +
       '</div>';
