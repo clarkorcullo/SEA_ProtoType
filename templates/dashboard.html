@@ -91,33 +91,379 @@
 }
 </style>
 <div class="container-fluid p-4">
-    <!-- Welcome Section -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card bg-primary text-white">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-md-8">
-                            <h2 class="card-title">
-                                <i class="fas fa-user-circle"></i> Welcome back, {{ current_user.username }}!
-                            </h2>
-                            <p class="card-text">
-                                Continue your journey in social engineering awareness. 
-                                You've completed {{ completed_modules }} modules so far.
-                            </p>
-                        </div>
-                        <div class="col-md-4 text-end">
-                            <div class="d-flex justify-content-end">
-                                <div class="text-center me-4">
-                                    <h4 class="mb-0">{{ completed_modules }}</h4>
-                                    <small>Modules Completed</small>
-                                </div>
-                                <div class="text-center">
-                                    <h4 class="mb-0">{{ user_stats.total_score if user_stats else 0 }}</h4>
-                                    <small>Total Score</small>
+        <!-- Welcome Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card" style="background: white; border-radius: 10px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #007bff;">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h2 class="card-title text-primary">
+                                    <i class="fas fa-user-circle"></i> Welcome back, {{ current_user.username }}!
+                                </h2>
+                                <p class="card-text text-dark">
+                                    Continue your journey in social engineering awareness. 
+                                    You've completed {{ completed_modules }} modules so far.
+                                </p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="d-flex justify-content-end">
+                                    <div class="text-center me-4">
+                                        <h4 class="mb-0 text-primary">{{ completed_modules }}</h4>
+                                        <small class="text-muted">Modules Completed</small>
+                                    </div>
+                                    <div class="text-center">
+                                        <h4 class="mb-0 text-primary">{{ user_stats.total_score if user_stats else 0 }}</h4>
+                                        <small class="text-muted">Total Score</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- Program Introduction Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card" style="background: white; border-radius: 10px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #28a745;">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-12">
+                            <div class="d-flex align-items-center mb-4">
+                                <h2 class="card-title mb-0 text-success fw-bold">
+                                    <i class="fas fa-star me-2"></i>Welcome to the Program
+                                </h2>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="card-text mb-3 text-dark" style="font-size: 1.1rem; line-height: 1.6;">
+                                        Welcome! This program, "Cybersecurity Awareness Program," is a project developed by students for students at Mapua Malayan Digital College.
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="card-text mb-3 text-dark" style="font-size: 1.1rem; line-height: 1.6;">
+                                        Our research shows that while Filipino students are digital natives, we are also a primary target for scams. This program is our solution.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Our Modules Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card" style="background: white; border-radius: 10px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #ffc107;">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-4">
+                        <h4 class="mb-0 text-warning fw-bold">
+                            <i class="fas fa-map-marked-alt me-2"></i>Our Modules: Your Journey to Becoming a Cyber Defender
+                        </h4>
+                    </div>
+                    <div class="text-center mb-4">
+                        <div class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-3">
+                            <i class="fas fa-calendar-alt me-2"></i>5-Week Journey
+                        </div>
+                        <p class="card-text text-dark fw-medium" style="font-size: 1.1rem; line-height: 1.6;">
+                            Our program is a comprehensive journey that will take you from a cybersecurity beginner to a confident defender.
+                        </p>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100 border-left-primary" style="border-left: 4px solid #007bff;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">
+                                        <i class="fas fa-user-secret me-2"></i>Module 1: Social Engineering Fundamentals
+                                    </h5>
+                                    <p class="card-text text-dark">
+                                        We start with the basics, defining social engineering and explaining the psychological tricks that make it so effective.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100 border-left-info" style="border-left: 4px solid #17a2b8;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-info">
+                                        <i class="fas fa-fish me-2"></i>Module 2: Common Attack Vectors
+                                    </h5>
+                                    <p class="card-text text-dark">
+                                        We'll show you how to spot the most common scams, like phishing, pretexting, and baiting, so you can recognize them in your daily life.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100 border-left-success" style="border-left: 4px solid #28a745;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-success">
+                                        <i class="fas fa-lock me-2"></i>Module 3: Proactive Digital Defense Strategies
+                                    </h5>
+                                    <p class="card-text text-dark">
+                                        You'll learn the essential habits to protect your accounts, from creating strong passwords and enabling MFA to safeguarding your social media.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100 border-left-warning" style="border-left: 4px solid #ffc107;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-warning">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>Module 4: Incident Response & Reporting
+                                    </h5>
+                                    <p class="card-text text-dark">
+                                        In this module, you'll learn what to do if a scam happens to you. You'll get a clear, step-by-step action plan for recovery and reporting.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-12 mb-3">
+                            <div class="card h-100 border-left-danger" style="border-left: 4px solid #dc3545;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-danger">
+                                        <i class="fas fa-robot me-2"></i>Module 5: Advanced SE & Continuous Awareness
+                                    </h5>
+                                    <p class="card-text text-dark">
+                                        We'll go beyond the basics, introducing you to next-gen threats like AI-powered scams and deepfakes, and giving you the tools to stay ahead of the curve.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Professional Review Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card" style="background: white; border-radius: 10px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #dc3545;">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h4 class="card-title mb-0 text-danger fw-bold">
+                            <i class="fas fa-award me-2"></i>Professional Review & Validation
+                        </h4>
+                        <div class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">
+                            <i class="fas fa-check-circle me-2"></i>Expert Validated
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <p class="card-text text-dark mb-0" style="font-size: 1.1rem; line-height: 1.6; text-align: justify;">
+                                To ensure the accuracy and relevance of this program, all content has been reviewed and validated by a certified cybersecurity professional. We extend our thanks to [Name of Expert], [Their Certification, e.g., CISSP], from [Their Company/Department], for providing their expertise and guidance.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Curriculum Overview Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card" style="background: white; border-radius: 10px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #6f42c1;">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-4">
+                        <h4 class="card-title mb-0 text-dark fw-bold">
+                            <i class="fas fa-graduation-cap me-2"></i>Curriculum Overview
+                        </h4>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 8%;" class="text-center">Week</th>
+                                    <th style="width: 25%;">Module & Title</th>
+                                    <th style="width: 20%;">Overall Goal</th>
+                                    <th style="width: 25%;">Activities & Output</th>
+                                    <th style="width: 22%;">Assessment & Flow</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center fw-bold text-primary">Week 1</td>
+                                    <td><strong>Module 1:</strong> Social Engineering Fundamentals</td>
+                                    <td>To educate students on the foundational concepts of social engineering.</td>
+                                    <td><strong>Lessons:</strong> Video on what SE is, video on the psychology of deception.<br><strong>Output:</strong> A foundational understanding of human hacking.</td>
+                                    <td><strong>Assessment:</strong> Pre-test survey at the start of the week.<br><strong>Flow:</strong> Proceeds to Module 2.</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center fw-bold text-info">Week 2</td>
+                                    <td><strong>Module 2:</strong> Common Attack Vectors</td>
+                                    <td>To equip students with the knowledge to identify common social engineering attacks.</td>
+                                    <td><strong>Lessons:</strong> Videos on phishing, pretexting, and baiting.<br><strong>Output:</strong> A checklist of red flags for phishing, and a narrative understanding of pretexting/baiting.</td>
+                                    <td><strong>Assessment:</strong> Module 2 Quiz, Reflection, and Simulation.<br><strong>Flow:</strong> Proceeds to Module 3.</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center fw-bold text-success">Week 3</td>
+                                    <td><strong>Module 3:</strong> Proactive Digital Defense Strategies</td>
+                                    <td>To empower students with practical skills to fortify their online accounts and secure their privacy.</td>
+                                    <td><strong>Lessons:</strong> Text on passwords, video on MFA, text/infographic on oversharing.<br><strong>Output:</strong> A personal digital defense checklist.</td>
+                                    <td><strong>Assessment:</strong> Module 3 Quiz, Reflection, and Simulation.<br><strong>Flow:</strong> Proceeds to Module 4.</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center fw-bold text-warning">Week 4</td>
+                                    <td><strong>Module 4:</strong> Incident Response & Reporting</td>
+                                    <td>To educate students on the appropriate actions to take when encountering a social engineering attack.</td>
+                                    <td><strong>Lessons:</strong> Video on immediate response, text/infographic on reporting, video on account recovery.<br><strong>Output:</strong> A clear MMDC reporting protocol and recovery plan.</td>
+                                    <td><strong>Assessment:</strong> Module 4 Quiz, Reflection, and Simulation.<br><strong>Flow:</strong> Proceeds to Module 5.</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center fw-bold text-danger">Week 5</td>
+                                    <td><strong>Module 5:</strong> Advanced SE & Continuous Awareness</td>
+                                    <td>To foster a mindset of continuous vigilance against evolving social engineering threats.</td>
+                                    <td><strong>Lessons:</strong> Video on evolving threats (AI, deepfakes), text on cybersecurity habits, video on becoming a cyber defender.<br><strong>Output:</strong> A personal cybersecurity learning toolkit.</td>
+                                    <td><strong>Assessment:</strong> Post-test survey at the end of the week. Final Quiz and Certification.<br><strong>Flow:</strong> Program Completion.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Master Reference List Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card" style="background: white; border-radius: 10px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #17a2b8;">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-4">
+                        <h4 class="card-title mb-0 text-dark fw-bold">
+                            <i class="fas fa-book me-2"></i>Master Reference List
+                        </h4>
+                    </div>
+                    <div class="mb-3">
+                        <p class="text-muted mb-0" style="font-size: 0.95rem; line-height: 1.5;">
+                            This is a comprehensive list of all the resources we've used in our curriculum. You will need to format this list according to your school's required citation style (e.g., APA).
+                        </p>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 5%;" class="text-center">#</th>
+                                    <th style="width: 25%;" class="fw-bold">Source</th>
+                                    <th style="width: 70%;" class="fw-bold">APA v7 Citation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center fw-bold text-primary">1</td>
+                                    <td class="fw-medium">Proofpoint</td>
+                                    <td class="text-dark" style="font-size: 0.9rem; line-height: 1.4;">
+                                        Proofpoint. (n.d.). <em>Pretexting</em>. Threat Reference. <a href="https://www.proofpoint.com/us/threat-reference/pretexting" target="_blank" class="text-primary text-decoration-none">https://www.proofpoint.com/us/threat-reference/pretexting</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center fw-bold text-primary">2</td>
+                                    <td class="fw-medium">IT Governance</td>
+                                    <td class="text-dark" style="font-size: 0.9rem; line-height: 1.4;">
+                                        IT Governance. (n.d.). <em>5 ways to detect a phishing email</em>. IT Governance Blog. <a href="https://www.itgovernance.co.uk/blog/5-ways-to-detect-a-phishing-email" target="_blank" class="text-primary text-decoration-none">https://www.itgovernance.co.uk/blog/5-ways-to-detect-a-phishing-email</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center fw-bold text-primary">3</td>
+                                    <td class="fw-medium">Microsoft Support</td>
+                                    <td class="text-dark" style="font-size: 0.9rem; line-height: 1.4;">
+                                        Microsoft. (n.d.). <em>The dangers of oversharing</em>. Microsoft Support. <a href="https://support.microsoft.com/en-us/topic/the-dangers-of-oversharing-79330a32-4ee1-433a-812e-fe4bb3d34511" target="_blank" class="text-primary text-decoration-none">https://support.microsoft.com/en-us/topic/the-dangers-of-oversharing-79330a32-4ee1-433a-812e-fe4bb3d34511</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center fw-bold text-primary">4</td>
+                                    <td class="fw-medium">Google Safety Center</td>
+                                    <td class="text-dark" style="font-size: 0.9rem; line-height: 1.4;">
+                                        Google. (n.d.). <em>Security tips</em>. Google Safety Center. <a href="https://safety.google/security/security-tips/" target="_blank" class="text-primary text-decoration-none">https://safety.google/security/security-tips/</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center fw-bold text-primary">5</td>
+                                    <td class="fw-medium">Kaspersky</td>
+                                    <td class="text-dark" style="font-size: 0.9rem; line-height: 1.4;">
+                                        Kaspersky. (n.d.). <em>Cyber hygiene habits</em>. Kaspersky Resource Center. <a href="https://www.kaspersky.com/resource-center/preemptive-safety/cyber-hygiene-habits" target="_blank" class="text-primary text-decoration-none">https://www.kaspersky.com/resource-center/preemptive-safety/cyber-hygiene-habits</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center fw-bold text-primary">6</td>
+                                    <td class="fw-medium">GMA News Online</td>
+                                    <td class="text-dark" style="font-size: 0.9rem; line-height: 1.4;">
+                                        GMA News Online. (2024). <em>Over 6 million text scams recorded in 2024 in PH</em>. GMA Network. <a href="https://www.gmanetwork.com/news/topstories/nation/932989/over-6-million-text-scams-recorded-in-2024-in-ph-whoscall/story/" target="_blank" class="text-primary text-decoration-none">https://www.gmanetwork.com/news/topstories/nation/932989/over-6-million-text-scams-recorded-in-2024-in-ph-whoscall/story/</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center fw-bold text-primary">7</td>
+                                    <td class="fw-medium">Philstar.com</td>
+                                    <td class="text-dark" style="font-size: 0.9rem; line-height: 1.4;">
+                                        Philstar.com. (2025, February 3). <em>DICT-DOST warn public vs AI chatbots</em>. Philstar Global. <a href="https://www.philstar.com/business/2025/02/03/3192534/dict-dost-warn-public-vs-ai-chatbots" target="_blank" class="text-primary text-decoration-none">https://www.philstar.com/business/2025/02/03/3192534/dict-dost-warn-public-vs-ai-chatbots</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center fw-bold text-primary">8</td>
+                                    <td class="fw-medium">Inquirer.net</td>
+                                    <td class="text-dark" style="font-size: 0.9rem; line-height: 1.4;">
+                                        Inquirer.net. (n.d.). <em>PNP-ACG, LTO team up to fight transport-related cybercrime</em>. Philippine Daily Inquirer. <a href="https://newsinfo.inquirer.net/2097691/pnp-acg-lto-team-up-to-fight-transport-related-cybercrime" target="_blank" class="text-primary text-decoration-none">https://newsinfo.inquirer.net/2097691/pnp-acg-lto-team-up-to-fight-transport-related-cybercrime</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center fw-bold text-primary">9</td>
+                                    <td class="fw-medium">Fortinet</td>
+                                    <td class="text-dark" style="font-size: 0.9rem; line-height: 1.4;">
+                                        Fortinet. (n.d.). <em>Tailgating attack</em>. Fortinet Cyber Glossary. <a href="https://www.fortinet.com/resources/cyberglossary/tailgating-attack" target="_blank" class="text-primary text-decoration-none">https://www.fortinet.com/resources/cyberglossary/tailgating-attack</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center fw-bold text-primary">10</td>
+                                    <td class="fw-medium">The SANS Institute</td>
+                                    <td class="text-dark" style="font-size: 0.9rem; line-height: 1.4;">
+                                        The SANS Institute. (n.d.). <em>Social engineering awareness</em> [Video]. YouTube. <a href="https://www.youtube.com/watch?v=F0p7L04Yy7Y" target="_blank" class="text-primary text-decoration-none">https://www.youtube.com/watch?v=F0p7L04Yy7Y</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center fw-bold text-primary">11</td>
+                                    <td class="fw-medium">University of the Philippines Diliman</td>
+                                    <td class="text-dark" style="font-size: 0.9rem; line-height: 1.4;">
+                                        University of the Philippines Diliman. (n.d.). <em>Bayanihan in the digital age</em>. UPD Official Website. <a href="https://upd.edu.ph/bayanihan-in-the-digital-age/" target="_blank" class="text-primary text-decoration-none">https://upd.edu.ph/bayanihan-in-the-digital-age/</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center fw-bold text-primary">12</td>
+                                    <td class="fw-medium">Bitwarden</td>
+                                    <td class="text-dark" style="font-size: 0.9rem; line-height: 1.4;">
+                                        Bitwarden. (n.d.). <em>Get started as an individual user</em>. Bitwarden Help Center. <a href="https://bitwarden.com/help/get-started-individual-user/" target="_blank" class="text-primary text-decoration-none">https://bitwarden.com/help/get-started-individual-user/</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center fw-bold text-primary">13</td>
+                                    <td class="fw-medium">GCash Help Center</td>
+                                    <td class="text-dark" style="font-size: 0.9rem; line-height: 1.4;">
+                                        GCash. (n.d.). <em>My SIM got lost, deactivated, or damaged. What should I do?</em> GCash Help Center. <a href="https://help.gcash.com/hc/en-us/articles/900006457043-My-SIM-got-lost-deactivated-damaged-What-should-I-do" target="_blank" class="text-primary text-decoration-none">https://help.gcash.com/hc/en-us/articles/900006457043-My-SIM-got-lost-deactivated-damaged-What-should-I-do</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center fw-bold text-primary">14</td>
+                                    <td class="fw-medium">Respicio & Co. Law Firm</td>
+                                    <td class="text-dark" style="font-size: 0.9rem; line-height: 1.4;">
+                                        Respicio & Co. Law Firm. (n.d.). <em>Online giveaway prize scam in the Philippines</em>. Respicio & Co. Commentaries. <a href="https://www.respicio.ph/commentaries/online-giveaway-prize-scam-in-the-philippines" target="_blank" class="text-primary text-decoration-none">https://www.respicio.ph/commentaries/online-giveaway-prize-scam-in-the-philippines</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -146,7 +492,7 @@
                 <div class="card-body d-flex flex-column">
                     <i class="fas fa-gamepad fa-2x text-warning mb-2"></i>
                     <h5 class="card-title">Simulations</h5>
-                    <h3 class="text-warning">{{ user_stats.simulations_completed if user_stats else 0 }}</h3>
+                    <h3 class="text-warning">{{ user_stats.simulation_statistics.completed_simulations if user_stats and user_stats.simulation_statistics else 0 }}</h3>
                     <p class="card-text mt-auto">Simulations completed</p>
                 </div>
             </div>

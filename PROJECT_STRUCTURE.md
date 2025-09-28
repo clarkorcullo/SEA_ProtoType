@@ -126,14 +126,12 @@ Each module file contains:
 - **Progressive Difficulty**: From basic to advanced concepts
 
 **Module Progression:**
-1. **Module 1**: Introduction to Social Engineering
-2. **Module 2**: Types of Social Engineering Attacks
-3. **Module 3**: Phishing Detection and Prevention
-4. **Module 4**: Password Security and Authentication
-5. **Module 5**: Social Media Security
-6. **Final Assessment**: Comprehensive Evaluation
-7. **Module 7**: Incident Response and Reporting
-8. **Final Assessment**: Comprehensive evaluation
+1. **Module 1**: What is Social Engineering
+2. **Module 2**: Phishing: The Digital Net
+3. **Module 3**: Fortifying Your Accounts
+4. **Module 4**: Immediate Action After a Suspected Attack
+5. **Module 5**: The Evolving Threat Landscape
+6. **Final Assessment**: Comprehensive evaluation
 
 ### **🎮 Interactive Simulations (`simulations/`)**
 

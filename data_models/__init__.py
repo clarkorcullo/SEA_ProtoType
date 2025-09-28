@@ -6,7 +6,7 @@ Contains all database models with proper inheritance and OOP structure
 from .base_models import BaseModel, TimestampMixin
 from .user_models import User, PasswordResetToken
 from .content_models import Module, KnowledgeCheckQuestion, FinalAssessmentQuestion
-from .progress_models import UserProgress, AssessmentResult, SimulationResult, FeedbackSurvey
+from .progress_models import UserProgress, AssessmentResult, SimulationResult, FeedbackSurvey, SimpleReflection
 
 __all__ = [
     'BaseModel',
@@ -19,6 +19,7 @@ __all__ = [
     'UserProgress',
     'AssessmentResult',
     'SimulationResult',
-    'FeedbackSurvey'
+    'FeedbackSurvey',
+    'SimpleReflection'
 ]
 

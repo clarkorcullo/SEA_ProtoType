@@ -94,11 +94,17 @@
                         <div class="progress-stats">
                             <div class="stat-item">
                                 <i class="fas fa-clock"></i>
-                                <span>{{ progress.time_spent }} min spent</span>
+                                <span id="timeSpentDisplay">{{ progress.time_spent }} min spent</span>
                             </div>
                             <div class="stat-item">
                                 <i class="fas fa-star"></i>
-                                <span>{{ knowledge_check_score }}% score</span>
+                                <span id="scoreDisplay">
+                                    {% if knowledge_check_score > 0 %}
+                                        {{ knowledge_check_score }}% score
+                                    {% else %}
+                                        Not taken
+                                    {% endif %}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -1078,6 +1084,80 @@ document.addEventListener('DOMContentLoaded', function() {
             pb.style.width = Math.max(0, Math.min(100, pct)) + '%';
         }
     }
+    
+    // Time tracking functionality
+    var startTime = new Date().getTime();
+    var timeUpdateInterval;
+    var metaEl = document.getElementById('moduleMeta');
+    
+    // Start time tracking
+    function startTimeTracking() {
+        timeUpdateInterval = setInterval(function() {
+            var currentTime = new Date().getTime();
+            var timeSpent = Math.floor((currentTime - startTime) / 60000); // Convert to minutes
+            
+            if (timeSpent > 0) {
+                // Update the display
+                var timeSpentElement = document.getElementById('timeSpentDisplay');
+                if (timeSpentElement) {
+                    timeSpentElement.textContent = timeSpent + ' min spent';
+                }
+                
+                // Update the meta element
+                metaEl.setAttribute('data-time-spent', timeSpent);
+                
+                // Auto-save progress every 5 minutes
+                if (timeSpent % 5 === 0 && timeSpent > 0) {
+                    updateProgressOnServer(timeSpent);
+                }
+            }
+        }, 60000); // Update every minute
+    }
+    
+    // Update progress on server
+    function updateProgressOnServer(timeSpent) {
+        var moduleId = parseInt(metaEl.getAttribute('data-module-id'), 10);
+        var score = parseInt(metaEl.getAttribute('data-score'), 10) || 0;
+        
+        fetch('/update_progress', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                module_id: moduleId,
+                status: 'in_progress',
+                score: score,
+                time_spent: timeSpent
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Progress updated successfully');
+            }
+        })
+        .catch(error => {
+            console.error('Error updating progress:', error);
+        });
+    }
+    
+    // Start time tracking
+    startTimeTracking();
+    
+    // Stop time tracking when page is unloaded
+    window.addEventListener('beforeunload', function() {
+        if (timeUpdateInterval) {
+            clearInterval(timeUpdateInterval);
+        }
+        
+        // Final time update
+        var finalTime = new Date().getTime();
+        var finalTimeSpent = Math.floor((finalTime - startTime) / 60000);
+        if (finalTimeSpent > 0) {
+            updateProgressOnServer(finalTimeSpent);
+        }
+    });
     // Handle Mark as Complete button
     const markCompleteBtn = document.getElementById('markCompleteBtn');
     if (markCompleteBtn) {

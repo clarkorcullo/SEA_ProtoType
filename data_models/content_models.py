@@ -128,6 +128,11 @@ class Module(BaseModel, TimestampMixin):
     def get_previous_module(cls, current_order: int):
         """Get previous module in sequence"""
         return cls.query.filter(cls.order < current_order).order_by(cls.order.desc()).first()
+    
+    @classmethod
+    def count(cls) -> int:
+        """Get total number of modules"""
+        return cls.query.count()
 
 class QuestionBase(BaseModel, TimestampMixin):
     """Base class for question models"""

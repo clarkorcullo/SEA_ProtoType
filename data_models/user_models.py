@@ -120,6 +120,36 @@ class User(UserMixin, BaseModel, TimestampMixin):
             print(f"Error updating progress: {e}")
             return False
     
+    def sync_progress_counters(self) -> bool:
+        """Sync user progress counters with actual data"""
+        try:
+            from data_models.progress_models import UserProgress, SimulationResult
+            
+            # Count completed modules
+            completed_progress = UserProgress.query.filter_by(
+                user_id=self.id, status='completed'
+            ).all()
+            self.modules_completed = len(completed_progress)
+            
+            # Calculate total score from highest scores achieved
+            total_score = 0
+            for progress in completed_progress:
+                # Use highest score for completed modules
+                total_score += max(progress.score, progress.highest_score)
+            self.total_score = total_score
+            
+            # Count completed simulations
+            completed_simulations = SimulationResult.query.filter_by(
+                user_id=self.id, completed=True
+            ).count()
+            self.simulations_completed = completed_simulations
+            
+            return self.save()
+            
+        except Exception as e:
+            print(f"Error syncing progress counters: {e}")
+            return False
+    
     def get_progress_summary(self) -> Dict[str, Any]:
         """Get comprehensive progress summary"""
         return {
