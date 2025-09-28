@@ -152,6 +152,25 @@ with app.app_context():
                     db.session.commit()
                 except Exception:
                     db.session.rollback()
+        # Auto-migrate highest_score column for production deployments
+        try:
+            if inspector.has_table('userprogress'):
+                columns = [col['name'] for col in inspector.get_columns('userprogress')]
+                if 'highest_score' not in columns:
+                    logger.info("[MIGRATION] Adding highest_score column to userprogress table...")
+                    db.session.execute(text(
+                        "ALTER TABLE userprogress ADD COLUMN highest_score INTEGER DEFAULT 0"
+                    ))
+                    # Update existing records to set highest_score = score
+                    db.session.execute(text(
+                        "UPDATE userprogress SET highest_score = score WHERE highest_score = 0"
+                    ))
+                    db.session.commit()
+                    logger.info("[MIGRATION] Successfully added highest_score column")
+        except Exception as e:
+            logger.warning(f"[MIGRATION] Could not migrate highest_score column: {e}")
+            db.session.rollback()
+
         # Ensure modules have drawer placeholders so UI renders consistently in production
         try:
             def build_standard_skeleton(module_index: int) -> str:
