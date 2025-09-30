@@ -164,6 +164,28 @@ document.addEventListener('DOMContentLoaded', function() {
       '</ul>' +
       '<div class="alert alert-info">Tip: Bookmark these to build a personal reference library as you progress through later modules.</div>';
   }
+  
+  // Ensure Lesson 1.2 drawer item TITLES are correct (fix duplicated labels from server-rendered HTML)
+  try {
+    var titleMap = {
+      'sub2-1': '1. The Psychology Behind the Deception',
+      'sub2-2': "2. The Manipulator's Toolkit",
+      'sub2-3': '3. Module 1 Conclusion: The Power of an Informed Mindset'
+    };
+    Object.keys(titleMap).forEach(function(key){
+      var header = document.querySelector('[onclick*="' + key + '"] .drawer-title h5');
+      if (header) {
+        header.textContent = titleMap[key];
+      }
+    });
+    // Also fix Lesson 1.1 subtopic 2 title by removing the unwanted prefix only
+    var l11s2 = document.querySelector('[onclick*="sub1-2"] .drawer-title h5');
+    if (l11s2 && l11s2.textContent.indexOf('Core Lesson Content: ') !== -1) {
+      l11s2.textContent = l11s2.textContent.replace('Core Lesson Content: ', '');
+    }
+  } catch (e) {
+    // no-op; avoid breaking page if structure changes
+  }
 });
 </script>
 

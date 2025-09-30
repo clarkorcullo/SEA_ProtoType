@@ -665,6 +665,130 @@ def seed_module1_kc_default() -> int:
         logger.error(f"Default Module 1 KC seeding failed: {e}")
         return 0
 
+def seed_module3_kc_default() -> int:
+    """Seed Module 3 Knowledge Check with curated questions if none exist.
+
+    Returns number of questions inserted.
+    """
+    try:
+        from data_models.content_models import KnowledgeCheckQuestion
+        # Ensure clean slate for module 3
+        KnowledgeCheckQuestion.query.filter_by(module_id=3).delete()
+        db.session.commit()
+
+        questions = [
+            {
+                'question_text': 'According to the lesson, what is the recommended minimum length for creating a strong, secure password?',
+                'option_a': '8 characters',
+                'option_b': '10 characters',
+                'option_c': '12 characters',
+                'option_d': '16 characters',
+                'correct_answer': 'c',
+                'explanation': 'Correct! Lesson 3.1 recommends at least 12 characters; 14+ is even better.'
+            },
+            {
+                'question_text': 'What is the primary purpose of Multi-Factor Authentication (MFA)?',
+                'option_a': 'To automatically create strong passwords for you.',
+                'option_b': 'To add a second layer of security, like a code from your phone, even if the password is known.',
+                'option_c': 'To scan your emails for phishing attempts.',
+                'option_d': 'To hide your personal information on social media.',
+                'correct_answer': 'b',
+                'explanation': "MFA is your 'double lock'—it adds a second verification step to block unauthorized access."
+            },
+            {
+                'question_text': 'The lesson describes a "digital footprint" as:',
+                'option_a': 'The antivirus software installed on your computer.',
+                'option_b': 'The trail of data you leave behind from online activities (posts, likes, comments).',
+                'option_c': 'A list of all your saved passwords in a password manager.',
+                'option_d': 'The physical location from which you access the internet.',
+                'correct_answer': 'b',
+                'explanation': 'Your digital footprint is the data trail left by your online activities.'
+            },
+            {
+                'question_text': 'The "Verification Toolkit" recommends hovering your mouse over a link before clicking to:',
+                'option_a': 'Make the link load faster when clicked.',
+                'option_b': 'Preview the actual destination URL to check if it is safe.',
+                'option_c': 'Automatically copy the link to your clipboard.',
+                'option_d': 'Report the link to IT.',
+                'correct_answer': 'b',
+                'explanation': 'Hovering reveals the true destination so you can spot suspicious or fake URLs safely.'
+            },
+            {
+                'question_text': 'Why is reusing the same password for multiple accounts a major security risk?',
+                'option_a': 'It can slow down your device when logging in.',
+                'option_b': 'Websites will block reused passwords.',
+                'option_c': 'If one site is breached, attackers can access your other accounts with the same password.',
+                'option_d': 'It makes it harder to remember which password to use.',
+                'correct_answer': 'c',
+                'explanation': 'Password reuse means a single breach can compromise many of your accounts.'
+            },
+            {
+                'question_text': 'Constantly posting your real-time location on social media significantly increases your risk of:',
+                'option_a': 'Your account being suspended for spam.',
+                'option_b': 'Cyberstalking and threats to your physical safety.',
+                'option_c': 'Your password being guessed more easily.',
+                'option_d': 'Your device getting a computer virus.',
+                'correct_answer': 'b',
+                'explanation': 'Real-time location tagging can enable cyberstalkers to track movements.'
+            },
+            {
+                'question_text': 'You receive an email from “MyCamu Admin,” but the sender is support@mycamu-login-portal.com. The biggest red flag is:',
+                'option_a': 'The display name is too simple.',
+                'option_b': 'The email domain is not the official one and is designed to look similar.',
+                'option_c': 'It was sent outside business hours.',
+                'option_d': 'The email contains no images.',
+                'correct_answer': 'b',
+                'explanation': 'A mismatched or fake domain is a primary phishing indicator.'
+            },
+            {
+                'question_text': 'According to the lesson’s privacy guidance, what is the safest initial setting for a new social media profile?',
+                'option_a': 'Public',
+                'option_b': 'Private',
+                'option_c': 'Friends of Friends',
+                'option_d': 'Customized for verified accounts only',
+                'correct_answer': 'b',
+                'explanation': 'Setting profiles to Private gives control over who sees your information.'
+            },
+            {
+                'question_text': 'What is the main benefit of using a password manager like Google Password Manager or iCloud Keychain?',
+                'option_a': 'Use the same simple password for everything.',
+                'option_b': 'Securely create and remember long, complex, unique passwords with one master password.',
+                'option_c': 'Receive alerts for every data breach on the internet.',
+                'option_d': 'Delete your digital footprint online.',
+                'correct_answer': 'b',
+                'explanation': 'Password managers generate and store unique, strong passwords for all accounts.'
+            },
+            {
+                'question_text': 'A text message claiming to be from GCash says your account will be locked unless you “verify” via a link. Safest action?',
+                'option_a': 'Click the link immediately to prevent lockout.',
+                'option_b': 'Reply and ask for more details.',
+                'option_c': 'Ignore the message and verify via the official GCash app or website.',
+                'option_d': 'Forward to a friend to check if it is real.',
+                'correct_answer': 'c',
+                'explanation': 'Always verify through official channels, not through the message itself.'
+            }
+        ]
+
+        for q in questions:
+            row = KnowledgeCheckQuestion(
+                question_text=q['question_text'],
+                option_a=q['option_a'],
+                option_b=q['option_b'],
+                option_c=q['option_c'],
+                option_d=q['option_d'],
+                correct_answer=q['correct_answer'],
+                explanation=q['explanation'],
+                module_id=3,
+                question_set=1
+            )
+            db.session.add(row)
+        db.session.commit()
+        return len(questions)
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Default Module 3 KC seeding failed: {e}")
+        return 0
+
 # =============================================================================
 # 10. ROUTE DEFINITIONS
 # =============================================================================
@@ -1116,8 +1240,22 @@ def dashboard():
         else:
             average_score = 0
         
-        # Calculate total time spent (estimate: 30 minutes per completed module)
-        total_time_spent = completed_modules * 30
+        # Calculate total time spent using real tracked minutes; fall back safely
+        total_time_spent = 0
+        try:
+            if user_stats:
+                # Prefer explicit aggregate minutes from service
+                total_time_spent = (
+                    user_stats.get('total_time_spent')
+                    or (user_stats.get('time_analytics', {}) or {}).get('total_time_spent_minutes')
+                    or 0
+                )
+            if not total_time_spent:
+                # Fallback: sum from in-memory progress list
+                total_time_spent = sum((p.time_spent or 0) for p in (user_progress or []))
+        except Exception:
+            # Last resort: retain previous estimate so UI never breaks
+            total_time_spent = completed_modules * 30
         
         # Ensure all variables are safe for template rendering
         safe_user_stats = user_stats or {}
@@ -1283,6 +1421,11 @@ def assessment(module_id):
         
         # Get questions from the determined set
         questions = KnowledgeCheckQuestion.get_by_module_and_set(module_id, question_set)
+        # If module 3 has no questions yet, seed defaults once
+        if module_id == 3 and not questions:
+            inserted = seed_module3_kc_default()
+            if inserted > 0:
+                questions = KnowledgeCheckQuestion.get_by_module_and_set(module_id, question_set)
         
         # If no questions in this set, try all questions; if still none, auto-seed from learning_modules
         if not questions:
@@ -1775,7 +1918,7 @@ def simulation(simulation_type):
         
         return render_template('simulation_simple.html', 
                              simulation_type=simulation_type,
-                             simulation_data=simulation_data)
+                             content=simulation_data)
     except Exception as e:
         flash(f'Error loading simulation: {e}', 'error')
         logger.error(f"Error loading simulation {simulation_type}: {e}")

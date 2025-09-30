@@ -66,6 +66,8 @@
                 {# Module-specific runtime content injectors #}
                 {% if module.id == 1 %}
                     {% include 'modules/module1.html' %}
+                {% elif module.id == 3 %}
+                    {% include 'modules/module3.html' %}
                 {% endif %}
             </div>
         </div>
@@ -1195,6 +1197,46 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    
+    // Normalize Module 2 Knowledge Check rules to 3 items and add Start button
+    try {
+        var meta = document.getElementById('moduleMeta');
+        var modId = parseInt(meta && meta.getAttribute('data-module-id') || '0', 10);
+        if (modId === 2) {
+            // Try to locate the knowledge check drawer body
+            var kcHeader = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+                .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'knowledge check'; });
+            var kcEl = null;
+            if (kcHeader) {
+                var kcItem = kcHeader.closest('.drawer-item');
+                if (kcItem) {
+                    var oc = kcItem.getAttribute('onclick') || '';
+                    var m = oc.match(/toggleDrawer\('([^']+)'\)/);
+                    if (m && m[1]) kcEl = document.getElementById('content-' + m[1]);
+                }
+            }
+            if (!kcEl) kcEl = document.getElementById('content-knowledge-check');
+            if (kcEl) {
+                var wrap = kcEl.querySelector('.content-wrapper') || kcEl;
+                wrap.innerHTML = ''+
+                    '<div class="accordion-content">'+
+                      '<h3 class="mb-3">Knowledge Check — Module 2</h3>'+
+                      '<div class="knowledge-check-rules" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px; border-radius: 12px; border-left: 5px solid #007bff;">'+
+                        '<ul style="font-size: 1.05rem; line-height: 1.7; margin: 0; color: #333;">'+
+                          '<li><strong>Unlimited attempts</strong></li>'+
+                          '<li><strong>5 questions per attempt</strong></li>'+
+                          '<li><strong>Passing score: 80%</strong></li>'+
+                        '</ul>'+
+                      '</div>'+
+                      '<div style="text-align:center; margin-top: 16px;">'+
+                        '<a href="/assessment/2" class="btn btn-primary btn-lg" style="padding: 12px 24px; font-weight: 600;">'+
+                          '<i class="fas fa-play me-2"></i>Start Knowledge Check'+
+                        '</a>'+
+                      '</div>'+
+                    '</div>';
+            }
+        }
+    } catch (e) { /* silent */ }
 });
 </script>
 {% endblock %}

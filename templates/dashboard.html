@@ -670,47 +670,7 @@
         </div>
     </div>
 
-    <!-- Survey Section -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-clipboard-list"></i> Program Survey
-                    </h5>
-                </div>
-                <div class="card-body">
-                    {# Determine final_passed using context provided by backend #}
-                    {% set final_passed = (final_result is not none) %}
-                    
-                    {% if final_passed %}
-                        {% if survey_completed %}
-                            <div class="alert alert-success">
-                                <h6><i class="fas fa-check-circle"></i> Survey Completed!</h6>
-                                <p class="mb-2">Thank you for completing the program survey. You can now generate your certificate.</p>
-                                <a href="{{ url_for('certificate') }}" class="btn btn-success">
-                                    <i class="fas fa-certificate"></i> Generate Certificate
-                                </a>
-                            </div>
-                        {% else %}
-                            <div class="alert alert-warning">
-                                <h6><i class="fas fa-clipboard-list"></i> Survey Required</h6>
-                                <p class="mb-2">You have passed the Final Assessment! Please complete the program survey to generate your certificate.</p>
-                                <a href="{{ url_for('survey') }}" class="btn btn-primary">
-                                    <i class="fas fa-clipboard-list"></i> Complete Survey
-                                </a>
-                            </div>
-                        {% endif %}
-                    {% else %}
-                        <div class="alert alert-info">
-                            <h6><i class="fas fa-info-circle"></i> Survey Information</h6>
-                            <p class="mb-0">Complete the Final Assessment to unlock the program survey and certificate generation.</p>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
+    
 
     <!-- Recent Activity -->
     <div class="row">
