@@ -1617,6 +1617,15 @@ def module(module_id):
             knowledge_check_score = int((knowledge_check_result.score / knowledge_check_result.total_questions) * 100)
         else:
             knowledge_check_score = 0
+
+        # Reconcile progress status with policy: mark Completed at ≥80% and never downgrade
+        try:
+            passing_threshold = app.config.get('KNOWLEDGE_CHECK_PASSING_SCORE', 80)
+            if progress and knowledge_check_score >= passing_threshold and progress.status != 'completed':
+                # Use model helper to persist the completion state safely
+                progress.complete_progress(knowledge_check_score)
+        except Exception as _e:
+            logger.warning(f"Could not reconcile module progress for user {current_user.id} module {module_id}: {_e}")
         
         return render_template('module.html', 
                              module=module_obj,
