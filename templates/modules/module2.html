@@ -312,14 +312,27 @@ document.addEventListener('DOMContentLoaded', function(){
               '<div id="m2ReflectionStatus" class="mt-2 text-muted" style="min-height: 1.25rem;"></div>' +
             '</div>';
 
-          // Preserve any existing lesson text; append the form if content already exists
-          var existing = (rfWrap.innerHTML || '').trim();
-          if (existing) {
-            if (!rfWrap.querySelector('#m2-reflection-form')) {
-              rfWrap.insertAdjacentHTML('beforeend', formHtml);
+          // If a reflection UI already exists in the drawer, do NOT add another one
+          var hasExistingUi = false;
+          try {
+            var textContent = (rfWrap.textContent || '').toLowerCase();
+            if (rfWrap.querySelector('form') || rfWrap.querySelector('button') || rfWrap.querySelector('textarea')) {
+              hasExistingUi = true;
             }
-          } else {
-            rfWrap.innerHTML = formHtml;
+            if (textContent.indexOf('submit reflection') !== -1 || textContent.indexOf('your reflection') !== -1) {
+              hasExistingUi = true;
+            }
+          } catch(_) { /* noop */ }
+
+          if (!hasExistingUi) {
+            var existing = (rfWrap.innerHTML || '').trim();
+            if (existing) {
+              if (!rfWrap.querySelector('#m2-reflection-form')) {
+                rfWrap.insertAdjacentHTML('beforeend', formHtml);
+              }
+            } else {
+              rfWrap.innerHTML = formHtml;
+            }
           }
 
           var btn = document.getElementById('m2ReflectionSubmit');
