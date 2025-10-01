@@ -3,113 +3,86 @@
 {% block title %}Certificate - Social Engineering Awareness{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container certificate-container">
     <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <div class="card shadow-lg">
-                <div class="card-body p-5">
+        <div class="col-lg-12">
+            <div class="card shadow-lg certificate-page">
+                <div class="card-body p-0">
+                    <div class="certificate-content certificate-bg">
+                        <img src="/learning_assets/Documents/CertTemplate.png" alt="Certificate Background" class="cert-bg-print"/>
                     <!-- Certificate Header -->
                     <div class="text-center mb-4">
                         <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
-                            <img src="{{ url_for('static', filename='MMDCLogo.png') }}" alt="MMDC Logo" style="height: 60px; width: auto;">
-                            <img src="{{ url_for('static', filename='SEALogo.png') }}" alt="SEA Logo" style="height: 60px; width: auto;">
+                            <img src="{{ url_for('static', filename='MMDCLogo.png') }}" alt="MMDC Logo" class="cert-logo">
+                            <img src="{{ url_for('static', filename='SEALogo.png') }}" alt="SEA Logo" class="cert-logo">
                         </div>
-                        <h2 class="text-primary mb-2">Certificate of Completion</h2>
-                        <h4 class="text-secondary">Social Engineering Awareness Program</h4>
+                        <div class="cert-title-row mb-1">
+                            <h2 class="text-primary certificate-title mb-0">Certificate of Completion</h2>
+                        </div>
+                        <img src="/learning_assets/Documents/CertRibbon.png" alt="Ribbon" class="cert-ribbon-vert" />
                     </div>
 
                     <!-- Certificate Content -->
-                    <div class="certificate-content text-center p-4" style="border: 3px solid #007bff; border-radius: 15px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                    <div class="certificate-inner text-center">
                         <div class="mb-4">
-                            <p class="lead mb-3">This is to certify that</p>
-                            <h3 class="text-primary mb-4" style="font-weight: bold; text-decoration: underline;">{{ certificate.student_name }}</h3>
+                            <p class="mb-2 certificate-intro">This certifies that</p>
+                            <h3 class="text-primary mb-3 certificate-name">{{ certificate.student_name }}</h3>
                             <p class="lead">has successfully completed the</p>
-                            <h4 class="text-danger mb-3">Social Engineering Awareness Program</h4>
+                            <h4 class="text-danger mb-2 certificate-program">Social Engineering Awareness Program</h4>
                             <p class="text-muted">for BSIT Students</p>
                         </div>
 
-                        <div class="row justify-content-center mb-4">
-                            <div class="col-md-8">
-                                <div class="alert alert-info">
-                                    <h6 class="mb-2"><i class="fas fa-user-graduate"></i> Student Information</h6>
-                                    <div class="row text-start">
-                                        <div class="col-md-6">
-                                            <p class="mb-1"><strong>Username:</strong> {{ certificate.username }}</p>
-                                            <p class="mb-1"><strong>Specialization:</strong> {{ certificate.specialization }}</p>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p class="mb-1"><strong>Year Level:</strong> {{ certificate.year_level }}</p>
-                                            <p class="mb-1"><strong>Completion Date:</strong> {{ certificate.completion_date }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
 
-                        <div class="row justify-content-center mb-4">
-                            <div class="col-md-8">
-                                <div class="alert alert-success">
-                                    <h6 class="mb-2"><i class="fas fa-trophy"></i> Achievement Summary</h6>
-                                    <div class="row text-start">
-                                        <div class="col-md-6">
-                                            <p class="mb-1"><strong>Modules Completed:</strong> {{ certificate.modules_completed }}/5</p>
-                                            <p class="mb-1"><strong>Total Score:</strong> {{ certificate.score }}%</p>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p class="mb-1"><strong>Final Assessment:</strong> Passed</p>
-                                            <p class="mb-1"><strong>Program Status:</strong> Completed</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
 
                         <div class="mb-4">
                             <p class="lead">This certificate acknowledges the successful completion of comprehensive training in:</p>
-                            <ul class="list-unstyled">
-                                <li><i class="fas fa-check-circle text-success me-2"></i>Social Engineering Threat Recognition</li>
-                                <li><i class="fas fa-check-circle text-success me-2"></i>Phishing Attack Prevention</li>
-                                <li><i class="fas fa-check-circle text-success me-2"></i>Pretexting and Baiting Awareness</li>
-                                <li><i class="fas fa-check-circle text-success me-2"></i>Quid Pro Quo Attack Prevention</li>
-                                <li><i class="fas fa-check-circle text-success me-2"></i>Interactive Simulation Training</li>
-                                <li><i class="fas fa-check-circle text-success me-2"></i>Real-world Scenario Analysis</li>
+                            <ul class="achievement-list achievement-grid">
+                                <li><i class="fas fa-check-circle"></i><span>Social Engineering Threat Recognition</span></li>
+                                <li><i class="fas fa-check-circle"></i><span>Phishing Attack Prevention</span></li>
+                                <li><i class="fas fa-check-circle"></i><span>Pretexting and Baiting Awareness</span></li>
+                                <li><i class="fas fa-check-circle"></i><span>Quid Pro Quo Attack Prevention</span></li>
+                                <li><i class="fas fa-check-circle"></i><span>Interactive Simulation Training</span></li>
+                                <li><i class="fas fa-check-circle"></i><span>Real‑world Scenario Analysis</span></li>
                             </ul>
                         </div>
 
                         <div class="row justify-content-center">
                             <div class="col-md-8">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="text-center">
-                                        <div style="border-top: 2px solid #007bff; width: 150px; margin: 0 auto;"></div>
-                                        <p class="mt-2 mb-0"><strong>Program Director</strong></p>
-                                        <small class="text-muted">Mapúa Malayan Digital College</small>
+                                <div class="signature-block">
+                                    <div class="signature-item">
+                                        <img class="signature-image" src="/learning_assets/Documents/KimSignature.png" alt="Signature - Kimberly Cruz">
+                                        <div class="signature-line"></div>
+                                        <p class="mt-1 mb-0 sig-name"><strong>Kimberly Cruz</strong></p>
+                                        <div class="sig-role">Program Director</div>
+                                        <div class="sig-org">Mapúa Malayan Digital College</div>
                                     </div>
-                                    <div class="text-center">
-                                        <div style="border-top: 2px solid #007bff; width: 150px; margin: 0 auto;"></div>
-                                        <p class="mt-2 mb-0"><strong>Academic Coordinator</strong></p>
-                                        <small class="text-muted">BSIT Department</small>
+                                    <div class="signature-item">
+                                        <img class="signature-image" src="/learning_assets/Documents/ClarosSign.png" alt="Signature - Claros Orcullo">
+                                        <div class="signature-line"></div>
+                                        <p class="mt-1 mb-0 sig-name"><strong>Claros Orcullo</strong></p>
+                                        <div class="sig-role">Academic Coordinator</div>
+                                        <div class="sig-org">Mapúa Malayan Digital College</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Certificate Verification (rotated vertical on left side) -->
+                    <div class="cert-id-vertical">
+                        <span>Certificate ID: {{ certificate.certificate_id }}</span>
+                    </div>
+
                     <!-- Action Buttons -->
-                    <div class="text-center mt-4">
-                        <button class="btn btn-primary btn-lg me-3" onclick="window.print()">
+                    <div class="text-center mt-3">
+                        <button class="btn btn-primary btn-lg me-3" id="printCertBtn">
                             <i class="fas fa-print me-2"></i>Print Certificate
                         </button>
                         <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-lg">
                             <i class="fas fa-home me-2"></i>Back to Dashboard
                         </a>
-                    </div>
-
-                    <!-- Certificate Verification -->
-                    <div class="mt-4 text-center">
-                        <small class="text-muted">
-                            <i class="fas fa-shield-alt me-1"></i>
-                            Certificate ID: {{ certificate.username }}-{{ certificate.completion_date.split(',')[0].split()[-1] }}
-                        </small>
                     </div>
                 </div>
             </div>
@@ -118,25 +91,126 @@
 </div>
 
 <style>
+/* Screen layout enhancements */
+.certificate-container { font-family: Georgia, "Times New Roman", Times, serif; }
+.certificate-page { border: none; }
+.certificate-content { position: relative; border: 3px solid #007bff; border-radius: 15px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); }
+.certificate-bg { 
+    background-image: url('/learning_assets/Documents/CertTemplate.png');
+    background-size: cover; 
+    background-repeat: no-repeat; 
+    background-position: center; 
+    border: none; 
+    border-radius: 0; 
+    /* inner safe area to keep content inside the border */
+    padding: 90px 100px 90px 100px; 
+}
+.certificate-inner { background: transparent; }
+.cert-bg-print { display: none; }
+.certificate-title { letter-spacing: 0.5px; font-size: 2.1rem; }
+.cert-title-row { display: inline-flex; align-items: center; gap: 12px; }
+.cert-ribbon { height: 36px; width: auto; mix-blend-mode: multiply; filter: contrast(140%) saturate(110%); }
+.cert-ribbon-vert {
+    position: absolute;
+    right: 110px; /* push into the free space on the right inside the border */
+    top: 74px;  /* moved up by ~15mm */
+    height: 320px; /* tall strip covering title down to program line area */
+    width: auto;
+    mix-blend-mode: multiply;
+    filter: contrast(140%) saturate(110%);
+    pointer-events: none;
+}
+.certificate-subtitle { font-weight: 500; }
+.certificate-intro { font-style: italic; font-size: 1.1rem; }
+.certificate-name { font-weight: 700; text-decoration: underline; font-size: 1.8rem; }
+.certificate-program { font-weight: 600; font-size: 1.35rem; }
+.cert-logo { height: 45px; width: auto; }
+.achievement-box { background: #f8fff9; border: 1px solid #d1e7dd; border-radius: 10px; padding: 16px; }
+.achievement-list { list-style: none; padding: 0; margin: 0 auto; max-width: 800px; }
+.achievement-list li { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; line-height: 1.4; }
+.achievement-list li i { color: #28a745; margin-top: 3px; min-width: 18px; }
+.achievement-list li span { flex: 1; }
+.achievement-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 24px; row-gap: 8px; }
+.achievement-grid li { margin: 0; }
+
+/* Remove decorative CSS borders when using image */
+.certificate-page { position: relative; }
+
+/* Vertical signature arrangement */
+.signature-block { display: flex; gap: 120px; justify-content: center; align-items: flex-start; }
+.signature-item { display: flex; flex-direction: column; align-items: center; }
+.signature-line { border-top: 2px solid #007bff; width: 220px; margin: 1px auto 0 auto; height: 2px; }
+.signature-image {
+    max-height: 100px; /* slightly larger */
+    margin-bottom: 0; /* bring closer to line/name */
+    opacity: 0.95;
+    mix-blend-mode: multiply; /* helps blend out white/light backgrounds */
+    filter: contrast(160%) saturate(0%); /* enhance strokes, remove coloration */
+    background: transparent;
+}
+.sig-name { font-size: 1.05rem; margin-top: 0 !important; }
+.sig-role, .sig-org { font-size: 0.95rem; color: #6c757d; line-height: 1.1; }
+
+/* Vertical Certificate ID (screen) */
+.cert-id-vertical {
+    position: absolute;
+    left: 6mm; /* moved another ~2mm left */
+    top: 50%;
+    transform: translateY(-50%);
+    writing-mode: vertical-rl; /* true vertical text */
+    text-orientation: mixed;
+    color: #6c757d;
+    font-size: 1.05rem;
+    letter-spacing: 0.6px;
+}
+
+/* A4 print settings */
+@page { size: A4 landscape; margin: 6mm; }
 @media print {
-    .navbar, .footer, .btn {
-        display: none !important;
-    }
-    
-    .certificate-content {
-        border: 3px solid #007bff !important;
-        background: white !important;
-    }
-    
-    body {
-        margin: 0;
-        padding: 20px;
-    }
-    
-    .card {
-        box-shadow: none !important;
-        border: none !important;
-    }
+    .navbar, .footer, .btn { display: none !important; }
+    html, body { margin: 0 !important; padding: 0 !important; width: 297mm; height: 210mm; overflow: hidden; }
+    .certificate-page, .certificate-content, .certificate-inner { box-shadow: none !important; background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .certificate-content { border: 3px solid #007bff !important; }
+    /* Force background template to print even if browser hides CSS backgrounds */
+    .certificate-bg { background: none !important; }
+    .cert-bg-print { display: block; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
+    /* Lock certificate to a single A4 landscape page (fixed canvas slightly smaller than page box) */
+    .certificate-container { width: 297mm !important; max-width: 297mm !important; margin: 0 auto !important; page-break-inside: avoid; }
+    .certificate-page { width: 285mm !important; height: 192mm !important; margin: 0 auto !important; break-inside: avoid; page-break-inside: avoid; page-break-after: avoid; }
+    .card-body { width: 285mm !important; height: 192mm !important; margin: 0 !important; padding: 0 !important; }
+    .certificate-content { width: 285mm !important; height: 192mm !important; overflow: hidden !important; position: relative; }
+    .certificate-bg { padding: 14mm 18mm 18mm 18mm !important; }
+    /* Vertical Cert ID for print */
+    .cert-id-vertical { left: 4mm; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; text-orientation: mixed; font-size: 1rem; }
+    /* Extra guards against accidental page breaking */
+    .certificate-container, .certificate-page, .card, .card-body, .certificate-content { page-break-before: avoid; page-break-after: avoid; }
+    .achievement-grid { column-gap: 18px; }
+    .certificate-title { font-size: 1.9rem; }
+    .cert-ribbon { height: 32px; }
+    .cert-ribbon-vert { height: 300px; right: 100px; top: 63px; }
+    .certificate-name { font-size: 1.7rem; }
+    .certificate-program { font-size: 1.25rem; }
+    .cert-logo { height: 42px; }
+}
+
+/* Explicit named page to force landscape across PDF/Printer drivers */
+@page a4land { size: 297mm 210mm; margin: 6mm; }
+@media print {
+  body.page-a4-land { page: a4land; }
+  /* Ensure the certificate fills the page area without unexpected shrinking */
+  .certificate-container, .certificate-page, .card-body, .certificate-content { width: 100% !important; max-width: 100% !important; }
 }
 </style>
+<script>
+// Ensure background graphics are visible by converting background to an inline image for print fallback
+// Force landscape via named page class before printing
+function prepareLandscapePrint() {
+  document.body.classList.add('page-a4-land');
+}
+document.addEventListener('DOMContentLoaded', prepareLandscapePrint);
+document.getElementById('printCertBtn')?.addEventListener('click', function(){
+  prepareLandscapePrint();
+  window.print();
+});
+</script>
 {% endblock %} 

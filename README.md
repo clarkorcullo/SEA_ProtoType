@@ -32,6 +32,7 @@ Each module may include: lessons, a Reflection form, and a Knowledge Check butto
 - Knowledge Checks: short quizzes per module, pass at 80%
 - Final Assessment: 25 questions, pass at 80%
 - Reflections: latest 3 shown on each module page; Admin sees latest 5 across all modules
+- Certificate generation: requires passing the Final Assessment and completing the Satisfaction Survey. Non-admin users must have a complete full name in Profile (first name + last name) before generating the certificate.
 
 ---
 
@@ -63,6 +64,10 @@ Environment variables (optional):
 - `APP_VERSION` — shown in `/health` and Admin → System Settings (e.g., 1.1.0)
 - `DATABASE_URL` — use Postgres in production; falls back to SQLite if not set
 - `LOG_LEVEL` — default INFO
+ 
+Certificate requirements policy
+- Non-admins must complete their Profile full name (e.g., "Juan Dela Cruz"). The certificate route validates this and redirects to Profile if missing.
+- Admins bypass this requirement for QA/testing.
 
 Where to change the version
 - Set `APP_VERSION` in your environment for deployment
@@ -77,6 +82,7 @@ Where to change the version
   - Admin Dashboard → Recent Assessments: shows up to 5; scrolls
   - Admin Dashboard → Recent Users: shows up to 5; scrolls
   - Admin Dashboard → Users Module Reflections: shows up to 5; scrolls (title stays fixed)
+  - Module 6 → Certificate drawer: the yellow "Generate Certificate" button navigates to `/certificate` (server enforces eligibility and full-name policy).
 
 ---
 
@@ -225,12 +231,17 @@ CapstoneProject_ProtType_Backup/
 - `/health` returns JSON including `version`.
 - Set via the env var `APP_VERSION` (e.g., `1.2.0`). The Admin → System Settings also shows this value.
 
+To change the version
+- Locally for testing: set `APP_VERSION` in your environment before running `python app.py`.
+- In Render: add/update the Environment Variable `APP_VERSION` in the service settings and redeploy; `/health` and Admin → System Settings will reflect the change.
+
 ---
 
 ### Policies (recap)
 - Knowledge Checks: pass at 80%; unlimited attempts; questions are auto‑seeded for Modules 4 and 5 if needed.
 - Final Assessment: exactly 25 questions; pass at 80%.
 - Simulations: embedded inside module pages where applicable (no Quick Action buttons for 2–5, per requirements).
+- Certificate: must pass Final Assessment AND complete the Satisfaction Survey. Additionally, learners must set a full name in Profile (admins bypass for QA).
 
 ---
 

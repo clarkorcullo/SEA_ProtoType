@@ -1207,6 +1207,77 @@ document.addEventListener('DOMContentLoaded', function() {
             updateProgressOnServer(finalTimeSpent);
         }
     });
+
+    // Normalize Module 6 survey drawer seeded content (safe client-side fix)
+    try {
+        // Update drawer header label if it shows the old text
+        var surveyHeader = Array.from(document.querySelectorAll('.drawer-subheader .drawer-title h4'))
+            .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'survey - google survey form'; });
+        if (surveyHeader) {
+            surveyHeader.textContent = 'Satisfaction Survey';
+        }
+
+        // Update the button/link inside the survey section
+        var surveyBody = document.getElementById('content-survey');
+        if (surveyBody) {
+            var link = surveyBody.querySelector('.survey-link a');
+            if (link) {
+                link.setAttribute('href', '/survey');
+                link.removeAttribute('target');
+                var icon = link.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('fa-external-link-alt');
+                    icon.classList.add('fa-edit');
+                }
+                // Ensure visible text is consistent
+                link.innerHTML = '<i class="fas fa-edit"></i> Take Survey';
+            }
+            var helperSmall = surveyBody.querySelector('.survey-link p small');
+            if (helperSmall) {
+                helperSmall.textContent = 'Opens the in-app survey form.';
+            }
+        }
+    } catch(e) { /* silent normalization */ }
+
+    // Normalize Module 6 certificate drawer: make "Generate Certificate" button work
+    try {
+        var certBody = document.getElementById('content-certificate');
+        if (certBody) {
+            var certBtn = Array.from(certBody.querySelectorAll('button, a'))
+                .find(function(el){ return ((el.textContent||'').trim().toLowerCase().indexOf('generate certificate') !== -1); });
+            if (certBtn) {
+                // Enable button if it was disabled in seeded HTML
+                certBtn.removeAttribute('disabled');
+                certBtn.classList && certBtn.classList.remove('disabled');
+                // Remove any inline handlers that show placeholder alerts
+                certBtn.removeAttribute('onclick');
+                // Route to certificate page; server enforces eligibility and full-name policy
+                certBtn.addEventListener('click', function(ev){
+                    ev.preventDefault();
+                    window.location.href = '/certificate';
+                });
+                if (certBtn.tagName === 'A') {
+                    certBtn.setAttribute('href', '/certificate');
+                }
+            }
+        }
+    } catch(e) { /* noop - seeded content may vary */ }
+
+    // Optionally auto-open a specific drawer via ?open=<id>
+    try {
+        var params = new URLSearchParams(window.location.search || '');
+        var openId = params.get('open'); // e.g., 'certificate'
+        if (openId) {
+            var content = document.getElementById('content-' + openId);
+            var arrow = document.getElementById('arrow-' + openId);
+            if (content && arrow) {
+                content.style.display = 'block';
+                arrow.classList.add('rotated');
+                // Scroll into view for better UX
+                setTimeout(function(){ content.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+            }
+        }
+    } catch(e) { /* noop */ }
     // Handle Mark as Complete button
     const markCompleteBtn = document.getElementById('markCompleteBtn');
     if (markCompleteBtn) {

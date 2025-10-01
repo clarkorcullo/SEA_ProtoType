@@ -2083,6 +2083,10 @@ def survey():
         str: Rendered survey template
     """
     try:
+        # Allow admins to access survey without prerequisites
+        if getattr(current_user, 'is_admin', False):
+            return render_template('survey.html')
+
         # Check if user has passed final assessment
         final_result = AssessmentResult.query.filter_by(
             user_id=current_user.id,
@@ -2106,6 +2110,60 @@ def survey():
         flash(f'Error loading survey: {e}', 'error')
         logger.error(f"Error loading survey: {e}")
         return redirect(url_for('dashboard'))
+
+@app.route('/api/submit-survey', methods=['POST'])
+@login_required
+def api_submit_survey():
+    """JSON survey submission used by the in‑app survey page.
+
+    Expects a JSON body with 1–5 ratings for ~10 questions plus an optional
+    free‑text suggestion. Saves core rating/difficulty and packs the rest
+    into FeedbackSurvey.additional_questions for easy aggregation.
+    """
+    try:
+        data = request.get_json(silent=True) or {}
+
+        # Core, required rating (fallback to 0 if missing)
+        rating = int(data.get('overall_quality') or data.get('rating') or 0)
+        difficulty_level = (data.get('difficulty_level') or '').strip() or None
+        suggestion = (data.get('feedback') or '').strip()
+
+        # Collect numeric answers for analysis
+        question_keys = [
+            'content_relevance',
+            'simulations_helpful',
+            'confidence_identify_attacks',
+            'content_clarity',
+            'module_flow',
+            'ui_usability',
+            'video_helpfulness',
+            'knowledge_check_fairness',
+            'final_assessment_fairness',
+            'recommendation_intent'
+        ]
+        additional = {}
+        for key in question_keys:
+            val = data.get(key)
+            if isinstance(val, (int, float)):
+                additional[key] = int(val)
+            elif isinstance(val, str) and val.isdigit():
+                additional[key] = int(val)
+
+        survey = FeedbackSurvey(
+            user_id=current_user.id,
+            rating=rating,
+            feedback_text=suggestion if suggestion else None,
+            difficulty_level=difficulty_level
+        )
+        if additional:
+            survey.set_additional_questions(additional)
+
+        if survey.save():
+            return jsonify({'success': True})
+        return jsonify({'success': False, 'error': 'Failed to save survey.'}), 400
+    except Exception as e:
+        logger.error(f"Error submitting survey (API): {e}")
+        return jsonify({'success': False, 'error': 'Server error'}), 500
 
 @app.route('/submit_survey', methods=['POST'])
 @login_required
@@ -2151,7 +2209,22 @@ def certificate():
         str: Rendered certificate template
     """
     try:
-        # Check if user is eligible for certificate
+        # Admin bypass: allow viewing the certificate page for testing
+        is_admin = getattr(current_user, 'is_admin', False)
+
+        # Enforce profile full name requirement (non-admins)
+        try:
+            full_name = (getattr(current_user, 'full_name', None) or '').strip()
+        except Exception:
+            full_name = ''
+        def _is_valid_full_name(name: str) -> bool:
+            return bool(name) and (' ' in name) and (len(name) >= 5)
+        if not is_admin and not _is_valid_full_name(full_name):
+            flash('Please complete your full name in your Profile before generating a certificate.', 'warning')
+            return redirect(url_for('profile'))
+
+        # Check eligibility only for non-admins
+        # Admins can view for QA even without prerequisites
         final_result = AssessmentResult.query.filter_by(
             user_id=current_user.id,
             assessment_type='final_assessment',
@@ -2160,15 +2233,41 @@ def certificate():
         
         survey_completed = FeedbackSurvey.query.filter_by(user_id=current_user.id).first()
         
-        if not final_result:
+        if not is_admin and not final_result:
             flash('You must pass the Final Assessment to generate a certificate.', 'warning')
             return redirect(url_for('dashboard'))
         
-        if not survey_completed:
+        if not is_admin and not survey_completed:
             flash('You must complete the survey to generate a certificate.', 'warning')
             return redirect(url_for('survey'))
-        
-        return render_template('certificate.html', user=current_user)
+
+        # Build minimal certificate context to avoid undefined errors
+        try:
+            completed_modules = len(user_service.get_user_completed_modules(current_user.id))
+        except Exception:
+            completed_modules = 0
+
+        try:
+            results = AssessmentResult.query.filter_by(user_id=current_user.id).all()
+            total_q = sum((r.total_questions or 0) for r in results)
+            total_s = sum((r.score or 0) for r in results)
+            avg_score = int((total_s / total_q) * 100) if total_q else 0
+        except Exception:
+            avg_score = 0
+
+        certificate_data = {
+            'student_name': getattr(current_user, 'full_name', None) or getattr(current_user, 'username', 'Student'),
+            'username': getattr(current_user, 'username', 'student'),
+            'specialization': getattr(current_user, 'specialization', None) or '—',
+            'year_level': getattr(current_user, 'year_level', None) or '—',
+            'completion_date': datetime.utcnow().strftime('%B %d, %Y, %I:%M %p'),
+            'modules_completed': completed_modules,
+            'score': avg_score,
+            # Certificate ID format: MMDCSEA-[MMDDYYYY]0000001 (use user id zero-padded to 7 digits)
+            'certificate_id': f"MMDCSEA-{datetime.utcnow().strftime('%m%d%Y')}{str(getattr(current_user, 'id', 1)).zfill(7)}"
+        }
+
+        return render_template('certificate.html', certificate=certificate_data)
         
     except Exception as e:
         flash(f'Error generating certificate: {e}', 'error')
@@ -2538,6 +2637,34 @@ def admin_dashboard():
             db.func.count(User.id)
         ).group_by(User.year_level).all()
         
+        # Aggregate simple survey summary from FeedbackSurvey
+        try:
+            surveys = FeedbackSurvey.query.order_by(FeedbackSurvey.created_at.desc()).all()
+            count = len(surveys)
+            def avg(getter):
+                vals = []
+                for s in surveys:
+                    # overall quality stored in rating
+                    if getter == 'overall':
+                        vals.append(s.rating or 0)
+                    else:
+                        extra = s.get_additional_questions() or {}
+                        v = extra.get(getter)
+                        if isinstance(v, (int, float)):
+                            vals.append(int(v))
+                return (sum(vals) / len(vals)) if vals else 0.0
+            survey_summary = type('Obj', (), dict(
+                avg_overall=avg('overall'),
+                avg_relevance=avg('content_relevance'),
+                avg_confidence=avg('confidence_identify_attacks'),
+                avg_usability=avg('ui_usability'),
+                count=count
+            ))
+            latest_suggestions = [s for s in surveys if getattr(s, 'feedback_text', None)][:5]
+        except Exception:
+            survey_summary = None
+            latest_suggestions = []
+
         return render_template('admin/dashboard.html',
                              total_users=total_users,
                              total_modules=total_modules,
@@ -2547,7 +2674,9 @@ def admin_dashboard():
                              recent_assessments=recent_assessments,
                              recent_reflections=recent_reflections,
                              users_by_specialization=users_by_specialization,
-                             users_by_year=users_by_year)
+                             users_by_year=users_by_year,
+                             survey_summary=survey_summary,
+                             latest_suggestions=latest_suggestions)
         
     except Exception as e:
         flash(f'Error loading admin dashboard: {e}', 'error')
