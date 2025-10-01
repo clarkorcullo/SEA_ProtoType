@@ -101,6 +101,51 @@ Making our digital community safer, one learner at a time.
 
 ---
 
+### Developer reference (deeper details)
+
+- Routes (in `app.py`)
+  - `/dashboard`: builds module cards, completion counts, recent activity
+  - `/module/<id>`: reconciles status to Completed at ≥80%, renders `templates/module.html`
+  - `/assessment/<id>`: loads questions (retake set logic: alternates set 1/2), auto‑seeds modules 4–5 if missing
+  - `/submit_assessment/<id>`: grades, stores `AssessmentResult`, updates `UserProgress`
+  - `/final_assessment` and `/final_assessment_questions`: selects exactly 25 questions
+  - `/api/module_reflections`: returns last reflections for a module (used by UI cards)
+  - `/learning_assets/<path>`: securely serves assets from `learning_modules/Documents` and `learning_modules/Visual_Aid`
+  - Error handlers: custom 404 and 500 pages with logging
+
+- Progress logic (in `data_models/progress_models.py`)
+  - `UserProgress.update_score(percentage)`: if not completed and score ≥80, mark completed; never downgrade
+  - `UserProgress.complete_progress(score)`: force mark completed and set timestamp
+
+- Admin dashboard cards (`templates/admin/dashboard.html`)
+  - Recent Assessments, Recent Users (max 5, scroll)
+  - Users Module Reflections (max 5, scroll; fixed title)
+
+- Learner dashboard card rules (`templates/dashboard.html`)
+  - Status badge shows: Completed if module ID in `completed_module_ids`, else Current if accessible, else Locked
+  - Recent Activity (UI): shows assessment, simulation, completion, and survey events (capped and scrollable)
+
+- Module page shell (`templates/module.html`)
+  - Shows Estimated Time, Difficulty, Interactive label, and a colored status badge (`completed` / `in-progress` / `not-started`)
+  - Includes per‑module script via `{% include 'modules/moduleX.html' %}`
+
+- Per‑module content files (`templates/modules/moduleX.html`)
+  - Attach to drawer items by IDs and inject HTML on `DOMContentLoaded`
+  - Images use absolute URLs built from `window.location.origin + '/learning_assets/…'`
+  - Reflections: simple form POST, client‑side validation; latest 3 displayed
+  - Knowledge Check: shows rules + “Start Knowledge Check” button linking to `/assessment/<id>`
+
+- Logging
+  - `TimedRotatingFileHandler`: rotates `app.log` nightly; keeps last 3 days
+  - Level controlled by `LOG_LEVEL` (default INFO)
+
+- Versioning
+  - `/health` includes `{ "version": APP_VERSION }`
+  - Set `APP_VERSION` in environment to change version shown in `/health` and Admin → System Settings
+
+
+---
+
 ### Project structure (what each folder/file is for)
 
 ```text
