@@ -284,6 +284,70 @@ document.addEventListener('DOMContentLoaded', function(){
       }
     })();
 
+    // Module 2 → Reflection (Drawer) with submission
+    (function initModule2Reflection(){
+      try {
+        var headerReflection = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+          .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'reflection'; });
+        var reflectionEl = null;
+        if (headerReflection) {
+          var item = headerReflection.closest('.drawer-item');
+          if (item) {
+            var oc = item.getAttribute('onclick') || '';
+            var m = oc.match(/toggleDrawer\('([^']+)'\)/);
+            if (m && m[1]) reflectionEl = document.getElementById('content-' + m[1]);
+          }
+        }
+        if (!reflectionEl) reflectionEl = document.getElementById('content-reflection');
+        if (reflectionEl) {
+          var rfWrap = reflectionEl.querySelector('.content-wrapper') || reflectionEl;
+          rfWrap.innerHTML = '' +
+            '<div class="accordion-content">' +
+              '<h3>Module 2 Reflection</h3>' +
+              '<p class="mb-2">Share your thoughts about phishing, pretexting, and baiting. 4–5 sentences is great.</p>' +
+              '<textarea id="m2ReflectionText" class="form-control" rows="5" placeholder="Type your reflection here..."></textarea>' +
+              '<div class="d-flex justify-content-end" style="margin-top: 0.75rem;">' +
+                '<button id="m2ReflectionSubmit" class="btn btn-primary">Submit Reflection</button>' +
+              '</div>' +
+              '<div id="m2ReflectionStatus" class="mt-2 text-muted" style="min-height: 1.25rem;"></div>' +
+            '</div>';
+
+          var btn = document.getElementById('m2ReflectionSubmit');
+          if (btn) {
+            btn.addEventListener('click', function(){
+              var txt = document.getElementById('m2ReflectionText');
+              var status = document.getElementById('m2ReflectionStatus');
+              var payload = { module_id: 2, reflection_text: (txt && txt.value || '').trim() };
+              if (!payload.reflection_text) {
+                status.textContent = 'Please enter your reflection before submitting.';
+                status.className = 'mt-2 text-danger';
+                return;
+              }
+              status.textContent = 'Submitting...';
+              status.className = 'mt-2 text-muted';
+              fetch('/submit_reflection', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+              }).then(function(r){ return r.json(); }).then(function(res){
+                if (res && res.success) {
+                  status.textContent = 'Reflection submitted successfully!';
+                  status.className = 'mt-2 text-success';
+                  if (txt) txt.value = '';
+                } else {
+                  status.textContent = (res && res.error) || 'Submission failed.';
+                  status.className = 'mt-2 text-danger';
+                }
+              }).catch(function(){
+                status.textContent = 'Network error. Please try again.';
+                status.className = 'mt-2 text-danger';
+              });
+            });
+          }
+        }
+      } catch(e) { /* silent */ }
+    })();
+
     function initModule2SimHandlers(){
       try {
         var feedbackData = {

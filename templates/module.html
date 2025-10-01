@@ -151,6 +151,17 @@
                             <i class="fas fa-home"></i>
                             <span>Back to Dashboard</span>
                         </a>
+                
+                <!-- Module Reflections (public, capped to 3 with scroll) -->
+                <div class="sidebar-card" style="margin-top: 1rem;">
+                    <div class="card-header">
+                        <i class="fas fa-comments"></i>
+                        <h5>Module Reflections</h5>
+                    </div>
+                    <div class="p-3" id="moduleReflectionsBox" style="max-height: 280px; overflow-y: auto;">
+                        <div class="text-muted">Loading reflections…</div>
+                    </div>
+                </div>
                     </div>
                 </div>
             </div>
@@ -1124,6 +1135,34 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 60000); // Update every minute
     }
     
+    // Load latest public reflections for this module (max 3)
+    try {
+        var meta2 = document.getElementById('moduleMeta');
+        var modId2 = parseInt(meta2 && meta2.getAttribute('data-module-id') || '0', 10);
+        var box = document.getElementById('moduleReflectionsBox');
+        if (box && modId2) {
+            fetch('/api/module_reflections?module_id=' + encodeURIComponent(modId2) + '&limit=3')
+              .then(function(r){ return r.ok ? r.json() : { reflections: [] }; })
+              .then(function(data){
+                var list = (data && data.reflections) || [];
+                if (!list.length) {
+                    box.innerHTML = '<div class="text-muted">No reflections yet. Be the first to share.</div>';
+                    return;
+                }
+                var html = '<div class="list-group list-group-flush">';
+                list.forEach(function(item){
+                    html += '<div class="list-group-item">'
+                         +    '<div class="small text-muted">' + (item.user_name || 'Student') + ' • '
+                         +    (item.created_at || '') + '</div>'
+                         +    '<div>' + (item.reflection_text || '') + '</div>'
+                         +  '</div>';
+                });
+                html += '</div>';
+                box.innerHTML = html;
+              })
+              .catch(function(){ box.innerHTML = '<div class="text-muted">Unable to load reflections.</div>'; });
+        }
+    } catch(e) { /* silent */ }
     // Update progress on server
     function updateProgressOnServer(timeSpent) {
         var moduleId = parseInt(metaEl.getAttribute('data-module-id'), 10);

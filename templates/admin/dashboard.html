@@ -156,12 +156,12 @@
     <div class="row">
         <!-- Recent Users -->
         <div class="col-md-6 mb-4">
-            <div class="recent-activity">
+            <div class="recent-activity" style="max-height: 420px; overflow-y: auto;">
                 <h5 class="mb-3">
                     <i class="fas fa-user-plus text-primary"></i> Recent Users
                 </h5>
                 {% if recent_users %}
-                    {% for user in recent_users %}
+                    {% for user in recent_users[:5] %}
                     <div class="activity-item">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
@@ -187,12 +187,12 @@
 
         <!-- Recent Assessments -->
         <div class="col-md-6 mb-4">
-            <div class="recent-activity">
+            <div class="recent-activity" style="max-height: 420px; overflow-y: auto;">
                 <h5 class="mb-3">
                     <i class="fas fa-clipboard-check text-success"></i> Recent Assessments
                 </h5>
                 {% if recent_assessments %}
-                    {% for assessment in recent_assessments %}
+                    {% for assessment in recent_assessments[:5] %}
                     <div class="activity-item">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
@@ -216,6 +216,34 @@
                 {% else %}
                     <p class="text-muted">No assessments found.</p>
                 {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Users Module Reflections -->
+        <div class="col-md-12 mb-4">
+            <div class="recent-activity">
+                <h5 class="mb-3">
+                    <i class="fas fa-comments text-secondary"></i> Users Module Reflections
+                </h5>
+                <div style="max-height: 420px; overflow-y: auto;">
+                    {% if recent_reflections %}
+                        {% for r in recent_reflections[:5] %}
+                        <div class="activity-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>Module {{ r.module_id }}</strong>
+                                    <div class="small text-muted">{{ r.user.full_name if r.user and r.user.full_name else (r.user.username if r.user else 'Student') }} • {{ r.created_at.strftime('%m/%d/%Y %I:%M %p') }}</div>
+                                    <div class="mt-1">{{ r.reflection_text }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">No reflections found.</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

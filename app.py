@@ -2516,6 +2516,7 @@ def admin_dashboard():
         # Get recent activity
         recent_users = User.query.order_by(User.created_at.desc()).limit(10).all()
         recent_assessments = AssessmentResult.query.order_by(AssessmentResult.created_at.desc()).limit(10).all()
+        recent_reflections = SimpleReflection.query.order_by(SimpleReflection.created_at.desc()).limit(20).all()
         
         # Get user statistics
         users_by_specialization = db.session.query(
@@ -2535,6 +2536,7 @@ def admin_dashboard():
                              total_simulations=total_simulations,
                              recent_users=recent_users,
                              recent_assessments=recent_assessments,
+                             recent_reflections=recent_reflections,
                              users_by_specialization=users_by_specialization,
                              users_by_year=users_by_year)
         
@@ -3409,6 +3411,35 @@ def submit_reflection():
     except Exception as e:
         logger.error(f"Error submitting reflection: {e}")
         return jsonify({'success': False, 'error': 'An error occurred while submitting your reflection'})
+
+@app.route('/api/module_reflections')
+@login_required
+def api_module_reflections():
+    """Return latest public reflections for a module (max N)."""
+    try:
+        module_id = int(request.args.get('module_id', 0))
+        limit = int(request.args.get('limit', 3))
+        limit = max(1, min(limit, 20))
+
+        if module_id <= 0:
+            return jsonify({'reflections': []})
+
+        q = SimpleReflection.query.filter_by(module_id=module_id).order_by(SimpleReflection.created_at.desc()).limit(limit)
+        items = []
+        for r in q.all():
+            user = getattr(r, 'user', None)
+            user_name = (getattr(user, 'full_name', None) or getattr(user, 'username', None) or 'Student') if user else 'Student'
+            items.append({
+                'user_name': user_name,
+                'module_id': r.module_id,
+                'reflection_text': r.reflection_text,
+                'created_at': r.created_at.strftime('%Y-%m-%d %H:%M') if getattr(r, 'created_at', None) else ''
+            })
+
+        return jsonify({'reflections': items})
+    except Exception as e:
+        logger.error(f"Error fetching module reflections: {e}")
+        return jsonify({'reflections': []})
 
 # =============================================================================
 # 13. APPLICATION ENTRY POINT
