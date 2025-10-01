@@ -26,8 +26,8 @@
                     <form id="survey-form">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label"><strong>1. How would you rate the overall quality of the program?</strong></label>
-                                <select class="form-select" name="rating" required>
+                                <label class="form-label"><strong>1. Overall quality of the program</strong></label>
+                                <select class="form-select" name="overall_quality" required>
                                     <option value="">Select rating...</option>
                                     <option value="5">Excellent (5/5)</option>
                                     <option value="4">Very Good (4/5)</option>
@@ -38,7 +38,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label"><strong>2. How relevant was the content to your current situation?</strong></label>
-                                <select class="form-select" name="relevance" required>
+                                <select class="form-select" name="content_relevance" required>
                                     <option value="">Select relevance...</option>
                                     <option value="5">Very Relevant (5/5)</option>
                                     <option value="4">Relevant (4/5)</option>
@@ -62,8 +62,8 @@
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label"><strong>4. How confident do you feel in identifying social engineering attacks?</strong></label>
-                                <select class="form-select" name="confidence" required>
+                                <label class="form-label"><strong>4. Confidence in identifying social engineering attacks</strong></label>
+                                <select class="form-select" name="confidence_identify_attacks" required>
                                     <option value="">Select confidence level...</option>
                                     <option value="5">Very Confident (5/5)</option>
                                     <option value="4">Confident (4/5)</option>
@@ -74,35 +74,107 @@
                             </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label class="form-label"><strong>5. What aspects of the program need the most improvement?</strong></label>
-                            <textarea class="form-control" name="improvements" rows="3" placeholder="Please share your suggestions for improvement..."></textarea>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><strong>5. Content clarity and organization</strong></label>
+                                <select class="form-select" name="content_clarity" required>
+                                    <option value="">Select rating...</option>
+                                    <option value="5">Excellent (5/5)</option>
+                                    <option value="4">Very Good (4/5)</option>
+                                    <option value="3">Good (3/5)</option>
+                                    <option value="2">Fair (2/5)</option>
+                                    <option value="1">Poor (1/5)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><strong>6. Lesson/module flow made sense</strong></label>
+                                <select class="form-select" name="module_flow" required>
+                                    <option value="">Select rating...</option>
+                                    <option value="5">Strongly Agree</option>
+                                    <option value="4">Agree</option>
+                                    <option value="3">Neutral</option>
+                                    <option value="2">Disagree</option>
+                                    <option value="1">Strongly Disagree</option>
+                                </select>
+                            </div>
                         </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label"><strong>6. How has this program helped you in your current situation?</strong></label>
-                            <textarea class="form-control" name="current_situation_help" rows="3" placeholder="Please describe how this program has benefited you..."></textarea>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><strong>7. UI/UX was easy to use</strong></label>
+                                <select class="form-select" name="ui_usability" required>
+                                    <option value="">Select rating...</option>
+                                    <option value="5">Excellent (5/5)</option>
+                                    <option value="4">Very Good (4/5)</option>
+                                    <option value="3">Good (3/5)</option>
+                                    <option value="2">Fair (2/5)</option>
+                                    <option value="1">Poor (1/5)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><strong>8. Videos helped me understand key ideas</strong></label>
+                                <select class="form-select" name="video_helpfulness" required>
+                                    <option value="">Select rating...</option>
+                                    <option value="5">Strongly Agree</option>
+                                    <option value="4">Agree</option>
+                                    <option value="3">Neutral</option>
+                                    <option value="2">Disagree</option>
+                                    <option value="1">Strongly Disagree</option>
+                                </select>
+                            </div>
                         </div>
-                        
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><strong>9. Knowledge Check fairness</strong></label>
+                                <select class="form-select" name="knowledge_check_fairness" required>
+                                    <option value="">Select rating...</option>
+                                    <option value="5">Very Fair</option>
+                                    <option value="4">Fair</option>
+                                    <option value="3">Neutral</option>
+                                    <option value="2">Somewhat Unfair</option>
+                                    <option value="1">Unfair</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><strong>10. Final Assessment fairness</strong></label>
+                                <select class="form-select" name="final_assessment_fairness" required>
+                                    <option value="">Select rating...</option>
+                                    <option value="5">Very Fair</option>
+                                    <option value="4">Fair</option>
+                                    <option value="3">Neutral</option>
+                                    <option value="2">Somewhat Unfair</option>
+                                    <option value="1">Unfair</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="mb-3">
-                            <label class="form-label"><strong>7. Would you recommend this program to other students?</strong></label>
-                            <select class="form-select" name="recommendation" required>
+                            <label class="form-label"><strong>11. Would you recommend this program to others?</strong></label>
+                            <select class="form-select" name="recommendation_intent" required>
                                 <option value="">Select answer...</option>
-                                <option value="yes">Yes, definitely</option>
-                                <option value="probably">Probably</option>
-                                <option value="maybe">Maybe</option>
-                                <option value="no">No</option>
+                                <option value="5">Definitely</option>
+                                <option value="4">Probably</option>
+                                <option value="3">Maybe</option>
+                                <option value="2">Unlikely</option>
+                                <option value="1">No</option>
                             </select>
                         </div>
                         
                         <div class="mb-3">
-                            <label class="form-label"><strong>8. How would you rate the difficulty level of the program?</strong></label>
+                            <label class="form-label"><strong>12. How would you rate the difficulty level of the program?</strong></label>
                             <select class="form-select" name="difficulty_level" required>
                                 <option value="">Select difficulty...</option>
                                 <option value="easy">Easy</option>
                                 <option value="medium">Medium</option>
                                 <option value="hard">Hard</option>
                             </select>
+                        </div>
+
+                        <!-- Optional suggestion (not required) -->
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Your suggestion to improve this program (optional)</strong></label>
+                            <textarea class="form-control" name="feedback" rows="3" placeholder="Share any ideas or suggestions..."></textarea>
                         </div>
                         
                         <div class="text-center">
@@ -158,6 +230,10 @@ document.getElementById('survey-form').addEventListener('submit', function(e) {
             // Hide form and show success message
             document.getElementById('survey-form').style.display = 'none';
             document.getElementById('success-section').style.display = 'block';
+            // After short delay, return to Module 6 with the Certificate drawer open
+            setTimeout(function(){
+                window.location.href = '/module/6?open=certificate';
+            }, 1200);
         } else {
             alert('Error submitting survey: ' + data.error);
         }

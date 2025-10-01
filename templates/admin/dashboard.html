@@ -222,7 +222,7 @@
 
     <div class="row">
         <!-- Users Module Reflections -->
-        <div class="col-md-12 mb-4">
+        <div class="col-md-6 mb-4">
             <div class="recent-activity">
                 <h5 class="mb-3">
                     <i class="fas fa-comments text-secondary"></i> Users Module Reflections
@@ -242,6 +242,56 @@
                         {% endfor %}
                     {% else %}
                         <p class="text-muted">No reflections found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Program Survey Responses (aggregated) -->
+        <div class="col-md-6 mb-4">
+            <div class="recent-activity">
+                <h5 class="mb-3">
+                    <i class="fas fa-poll text-success"></i> Program Survey Snapshot
+                </h5>
+                <div>
+                    {% if survey_summary %}
+                        <div class="mb-2 d-flex justify-content-between align-items-center">
+                            <span>Avg. Overall Quality</span>
+                            <span class="badge bg-success">{{ '%.1f'|format(survey_summary.avg_overall or 0) }}/5</span>
+                        </div>
+                        <div class="mb-2 d-flex justify-content-between align-items-center">
+                            <span>Avg. Relevance</span>
+                            <span class="badge bg-primary">{{ '%.1f'|format(survey_summary.avg_relevance or 0) }}/5</span>
+                        </div>
+                        <div class="mb-2 d-flex justify-content-between align-items-center">
+                            <span>Avg. Confidence</span>
+                            <span class="badge bg-info">{{ '%.1f'|format(survey_summary.avg_confidence or 0) }}/5</span>
+                        </div>
+                        <div class="mb-2 d-flex justify-content-between align-items-center">
+                            <span>Avg. UI Usability</span>
+                            <span class="badge bg-secondary">{{ '%.1f'|format(survey_summary.avg_usability or 0) }}/5</span>
+                        </div>
+                        <div class="mb-2 d-flex justify-content-between align-items-center">
+                            <span>Responses</span>
+                            <span class="badge bg-dark">{{ survey_summary.count }}</span>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No survey data yet.</p>
+                    {% endif %}
+                </div>
+
+                <hr>
+                <h6 class="mb-2"><i class="fas fa-lightbulb text-warning"></i> Latest Suggestions (optional)</h6>
+                <div style="max-height: 220px; overflow-y: auto;">
+                    {% if latest_suggestions %}
+                        {% for s in latest_suggestions %}
+                        <div class="activity-item">
+                            <div class="small text-muted">{{ s.created_at.strftime('%m/%d/%Y %I:%M %p') }}</div>
+                            <div>{{ s.feedback_text }}</div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">No suggestions submitted.</p>
                     {% endif %}
                 </div>
             </div>
