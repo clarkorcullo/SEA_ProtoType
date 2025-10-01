@@ -301,8 +301,8 @@ document.addEventListener('DOMContentLoaded', function(){
         if (!reflectionEl) reflectionEl = document.getElementById('content-reflection');
         if (reflectionEl) {
           var rfWrap = reflectionEl.querySelector('.content-wrapper') || reflectionEl;
-          rfWrap.innerHTML = '' +
-            '<div class="accordion-content">' +
+          var formHtml = '' +
+            '<div class="accordion-content" id="m2-reflection-form">' +
               '<h3>Module 2 Reflection</h3>' +
               '<p class="mb-2">Share your thoughts about phishing, pretexting, and baiting. 4–5 sentences is great.</p>' +
               '<textarea id="m2ReflectionText" class="form-control" rows="5" placeholder="Type your reflection here..."></textarea>' +
@@ -311,6 +311,16 @@ document.addEventListener('DOMContentLoaded', function(){
               '</div>' +
               '<div id="m2ReflectionStatus" class="mt-2 text-muted" style="min-height: 1.25rem;"></div>' +
             '</div>';
+
+          // Preserve any existing lesson text; append the form if content already exists
+          var existing = (rfWrap.innerHTML || '').trim();
+          if (existing) {
+            if (!rfWrap.querySelector('#m2-reflection-form')) {
+              rfWrap.insertAdjacentHTML('beforeend', formHtml);
+            }
+          } else {
+            rfWrap.innerHTML = formHtml;
+          }
 
           var btn = document.getElementById('m2ReflectionSubmit');
           if (btn) {
