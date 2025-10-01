@@ -232,4 +232,48 @@ CapstoneProject_ProtType_Backup/
 - Final Assessment: exactly 25 questions; pass at 80%.
 - Simulations: embedded inside module pages where applicable (no Quick Action buttons for 2–5, per requirements).
 
+---
+
+### Assessment policy (full details)
+
+Knowledge Check (Modules 1–5)
+- Purpose: quick check after learning per module
+- Question count per attempt: 5
+- Question selection:
+  - We maintain two question sets per module (Set 1 and Set 2) when available
+  - Attempts alternate sets: attempt 1 → Set 1, attempt 2 → Set 2, attempt 3 → Set 1, and so on
+  - If a set is missing, all available questions are used and shuffled; we then take the first 5
+- Passing score: 80% (4 out of 5)
+- Retakes: unlimited
+- State after submit:
+  - A record is saved in `AssessmentResult` (score, total, correct, passed, answers optional)
+  - `UserProgress.update_score(percentage)` is called; if ≥80%, module status becomes Completed
+  - Completion is sticky: later attempts below 80% do not downgrade the status
+- On module open (`/module/<id>`):
+  - We reconcile status. If your latest score was ≥80%, we ensure the badge shows Completed
+- Seeding:
+  - If a module has no questions, defaults can be seeded; Modules 4 and 5 include auto‑seed helpers
+
+Final Assessment (Cumulative)
+- Purpose: capstone evaluation across all modules
+- Question count per attempt: 25 (exactly; sampled and shuffled from the pool)
+- Passing score: 80%
+- Access control:
+  - Intended after completing all modules (admins bypass for review)
+  - The system checks completed module count before opening the final
+- State after submit:
+  - A `final_assessment` record is saved with score/answers
+  - Passing marks the learner qualified for certification (if enabled)
+- Retakes: allowed; previous passes remain recorded
+
+Module completion logic
+- A module is Completed when Knowledge Check score ≥80% (some modules may also include simulations in‑page; Quick Action simulation buttons were removed per requirement)
+- Completion does not regress on later attempts
+- Dashboard computes badges from `UserProgress` and validated completion using `UserService.is_module_fully_completed`
+
+Reflections
+- Each module contains a Reflection form
+- We display the latest 3 reflections on the module page
+- Admin Dashboard shows the latest 5 across all modules in a dedicated box (title fixed; content scrolls)
+
 
