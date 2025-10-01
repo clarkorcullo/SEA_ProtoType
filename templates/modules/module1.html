@@ -5,7 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
   if (!placeholder) return;
   var wrapper = placeholder.querySelector('#placeholder-sub1-1') || placeholder.querySelector('.content-wrapper') || placeholder;
   wrapper.innerHTML = '' +
-    '<h3>What is Social Engineering?</h3>' +
+    '<div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">' +
+      '<img src="' + (window.location.origin + '/learning_assets/Documents/Lesson11.png') + '" alt="Social engineering icon" style="width: 96px; height: 96px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); object-fit: cover; flex-shrink: 0;"/>' +
+      '<h3 style="margin: 0; flex: 1;">What is Social Engineering?</h3>' +
+    '</div>' +
     '<p>Welcome to our first lesson! We\'re starting with a simple but crucial concept: social engineering. It\'s the most common and dangerous cyber threat you\'ll face today. It doesn\'t rely on complex code or sophisticated technology; it relies on human psychology.</p>' +
     '<p>This short video will give you a quick overview of what social engineering is and why it\'s so effective. After watching, you\'ll have a clear understanding of what "human hacking" is all about.</p>' +
     '<div class="video-container"><div class="video-wrapper">' +
@@ -163,6 +166,28 @@ document.addEventListener('DOMContentLoaded', function() {
           '<em>IEEE:</em> SANS Institute, “What is social engineering?,” [Online]. Available: https://www.sans.org/blog/what-is-social-engineering/</li>' +
       '</ul>' +
       '<div class="alert alert-info">Tip: Bookmark these to build a personal reference library as you progress through later modules.</div>';
+  }
+  
+  // Ensure Lesson 1.2 drawer item TITLES are correct (fix duplicated labels from server-rendered HTML)
+  try {
+    var titleMap = {
+      'sub2-1': '1. The Psychology Behind the Deception',
+      'sub2-2': "2. The Manipulator's Toolkit",
+      'sub2-3': '3. Module 1 Conclusion: The Power of an Informed Mindset'
+    };
+    Object.keys(titleMap).forEach(function(key){
+      var header = document.querySelector('[onclick*="' + key + '"] .drawer-title h5');
+      if (header) {
+        header.textContent = titleMap[key];
+      }
+    });
+    // Also fix Lesson 1.1 subtopic 2 title by removing the unwanted prefix only
+    var l11s2 = document.querySelector('[onclick*="sub1-2"] .drawer-title h5');
+    if (l11s2 && l11s2.textContent.indexOf('Core Lesson Content: ') !== -1) {
+      l11s2.textContent = l11s2.textContent.replace('Core Lesson Content: ', '');
+    }
+  } catch (e) {
+    // no-op; avoid breaking page if structure changes
   }
 });
 </script>

@@ -260,9 +260,14 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <p class="card-text text-dark mb-0" style="font-size: 1.1rem; line-height: 1.6; text-align: justify;">
-                                To ensure the accuracy and relevance of this program, all content has been reviewed and validated by a certified cybersecurity professional. We extend our thanks to [Name of Expert], [Their Certification, e.g., CISSP], from [Their Company/Department], for providing their expertise and guidance.
+                            <p class="card-text text-dark mb-3" style="font-size: 1.1rem; line-height: 1.6; text-align: justify;">
+                                To ensure the accuracy and relevance of this program, all content has been reviewed and validated by a certified cybersecurity professional. We extend our thanks to <strong>Thea Tajonera</strong>, <strong>SANS GIAC GCFA</strong>, from <strong>ANZ</strong>, for providing their expertise and guidance.
                             </p>
+                            <div class="d-flex justify-content-start">
+                                <a href="/learning_assets/Documents/Validator_Certification_SocialEngineeringAwareness.pdf" target="_blank" rel="noopener" class="btn btn-outline-danger">
+                                    <i class="fas fa-file-pdf me-2"></i>View Content Validator’s Certification
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -670,47 +675,7 @@
         </div>
     </div>
 
-    <!-- Survey Section -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-clipboard-list"></i> Program Survey
-                    </h5>
-                </div>
-                <div class="card-body">
-                    {# Determine final_passed using context provided by backend #}
-                    {% set final_passed = (final_result is not none) %}
-                    
-                    {% if final_passed %}
-                        {% if survey_completed %}
-                            <div class="alert alert-success">
-                                <h6><i class="fas fa-check-circle"></i> Survey Completed!</h6>
-                                <p class="mb-2">Thank you for completing the program survey. You can now generate your certificate.</p>
-                                <a href="{{ url_for('certificate') }}" class="btn btn-success">
-                                    <i class="fas fa-certificate"></i> Generate Certificate
-                                </a>
-                            </div>
-                        {% else %}
-                            <div class="alert alert-warning">
-                                <h6><i class="fas fa-clipboard-list"></i> Survey Required</h6>
-                                <p class="mb-2">You have passed the Final Assessment! Please complete the program survey to generate your certificate.</p>
-                                <a href="{{ url_for('survey') }}" class="btn btn-primary">
-                                    <i class="fas fa-clipboard-list"></i> Complete Survey
-                                </a>
-                            </div>
-                        {% endif %}
-                    {% else %}
-                        <div class="alert alert-info">
-                            <h6><i class="fas fa-info-circle"></i> Survey Information</h6>
-                            <p class="mb-0">Complete the Final Assessment to unlock the program survey and certificate generation.</p>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
+    
 
     <!-- Recent Activity -->
     <div class="row">
@@ -757,8 +722,8 @@
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        <a href="{{ url_for('assessment', module_id=1) }}" class="btn btn-outline-primary">
-                            <i class="fas fa-clipboard-list"></i> Take Assessment
+                        <a href="{{ url_for('final_assessment') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-graduation-cap"></i> Take Final Assessment
                         </a>
                         <a href="{{ url_for('simulation', simulation_type='phishing') }}" class="btn btn-outline-warning">
                             <i class="fas fa-gamepad"></i> Start Simulation

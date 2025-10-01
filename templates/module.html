@@ -66,6 +66,14 @@
                 {# Module-specific runtime content injectors #}
                 {% if module.id == 1 %}
                     {% include 'modules/module1.html' %}
+                {% elif module.id == 2 %}
+                    {% include 'modules/module2.html' %}
+                {% elif module.id == 3 %}
+                    {% include 'modules/module3.html' %}
+                {% elif module.id == 4 %}
+                    {% include 'modules/module4.html' %}
+                {% elif module.id == 5 %}
+                    {% include 'modules/module5.html' %}
                 {% endif %}
             </div>
         </div>
@@ -117,24 +125,26 @@
                         <h5>Quick Actions</h5>
                     </div>
                     <div class="action-buttons">
-                        {% if module.has_simulation %}
-                            <a href="/simulation/{{ module.simulation_type }}" class="action-btn simulation-btn">
-                                <i class="fas fa-gamepad"></i>
-                                <span>Start Simulation</span>
-                            </a>
-                        {% endif %}
+                        {# Simulation quick action removed per requirement for Modules 2, 3, and 4 (and not shown for 5) #}
                         
                         {% if progress.status != 'completed' %}
-                            <a href="/assessment/{{ module.id }}" class="action-btn assessment-btn">
-                                <i class="fas fa-question-circle"></i>
-                                <span>
-                                    {% if knowledge_check_score >= 80 %}
-                                        Review Knowledge Check
-                                    {% else %}
-                                        Take Knowledge Check
-                                    {% endif %}
-                                </span>
-                            </a>
+                            {% if module.id == 6 %}
+                                <a href="/final_assessment" class="action-btn assessment-btn">
+                                    <i class="fas fa-graduation-cap"></i>
+                                    <span>Start Final Assessment</span>
+                                </a>
+                            {% else %}
+                                <a href="/assessment/{{ module.id }}" class="action-btn assessment-btn">
+                                    <i class="fas fa-question-circle"></i>
+                                    <span>
+                                        {% if knowledge_check_score >= 80 %}
+                                            Review Knowledge Check
+                                        {% else %}
+                                            Take Knowledge Check
+                                        {% endif %}
+                                    </span>
+                                </a>
+                            {% endif %}
                         {% endif %}
                         
                         <a href="/dashboard" class="action-btn dashboard-btn">
@@ -1195,6 +1205,100 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    
+    // Normalize Module 2 Knowledge Check rules to 3 items and add Start button
+    try {
+        var meta = document.getElementById('moduleMeta');
+        var modId = parseInt(meta && meta.getAttribute('data-module-id') || '0', 10);
+        if (modId === 2) {
+            // Module 2: Lesson 2.1 → 1. Phishing in Philippine adjustments
+            try {
+                // Locate the subtopic header
+                var subHeader = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+                  .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '1. phishing in philippine'; });
+                var subEl = null;
+                if (subHeader) {
+                    var subItem = subHeader.closest('.drawer-item');
+                    if (subItem) {
+                        var oc = subItem.getAttribute('onclick') || '';
+                        var m = oc.match(/toggleDrawer\('([^']+)'\)/);
+                        if (m && m[1]) subEl = document.getElementById('content-' + m[1]);
+                    }
+                }
+                // Fallback predictable id if present
+                if (!subEl) subEl = document.getElementById('content-sub2-1');
+                if (subEl) {
+                    var body = subEl.querySelector('.content-wrapper') || subEl;
+                    // 1) Remove the image before the video (if any)
+                    var firstVideo = body.querySelector('.video-container, iframe');
+                    if (firstVideo) {
+                        Array.from(body.querySelectorAll('img')).forEach(function(img){
+                            // Remove only images that appear BEFORE the first video element
+                            if (img.compareDocumentPosition(firstVideo) & Node.DOCUMENT_POSITION_FOLLOWING) {
+                                img.parentNode && img.parentNode.removeChild(img);
+                            }
+                        });
+                    }
+                    // 2) Add icons next to definitions of mail phishing, smishing, and vishing
+                    var targets = Array.from(body.querySelectorAll('p, li'));
+                    var terms = ['mail phishing', 'smishing', 'vishing'];
+                    targets.forEach(function(el){
+                        var text = (el.textContent || '').toLowerCase();
+                        var hasTerm = terms.some(function(t){ return text.indexOf(t) !== -1; });
+                        if (hasTerm && !el.getAttribute('data-iconized')) {
+                            el.style.display = 'flex';
+                            el.style.alignItems = 'center';
+                            el.style.gap = '12px';
+                            var icon = document.createElement('img');
+                            icon.src = window.location.origin + '/learning_assets/Documents/Lesson21.png';
+                            icon.alt = 'Phishing type icon';
+                            icon.style.width = '96px';
+                            icon.style.height = '96px';
+                            icon.style.borderRadius = '8px';
+                            icon.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
+                            icon.style.objectFit = 'cover';
+                            icon.style.flexShrink = '0';
+                            el.insertBefore(icon, el.firstChild);
+                            el.setAttribute('data-iconized', 'true');
+                        }
+                    });
+                }
+            } catch(e) { /* silent */ }
+
+            // Try to locate the knowledge check drawer body
+            var kcHeader = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+                .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'knowledge check'; });
+            var kcEl = null;
+            if (kcHeader) {
+                var kcItem = kcHeader.closest('.drawer-item');
+                if (kcItem) {
+                    var oc = kcItem.getAttribute('onclick') || '';
+                    var m = oc.match(/toggleDrawer\('([^']+)'\)/);
+                    if (m && m[1]) kcEl = document.getElementById('content-' + m[1]);
+                }
+            }
+            if (!kcEl) kcEl = document.getElementById('content-knowledge-check');
+            if (kcEl) {
+                var wrap = kcEl.querySelector('.content-wrapper') || kcEl;
+                wrap.innerHTML = ''+
+                    '<div class="accordion-content">'+
+                      '<h3 class="mb-3">Knowledge Check — Module 2</h3>'+
+                      '<div class="knowledge-check-rules" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px; border-radius: 12px; border-left: 5px solid #007bff;">'+
+                        '<ul style="font-size: 1.05rem; line-height: 1.7; margin: 0; color: #333;">'+
+                          '<li><strong>Unlimited attempts</strong></li>'+
+                          '<li><strong>5 questions per attempt</strong></li>'+
+                          '<li><strong>Passing score: 80%</strong></li>'+
+                        '</ul>'+
+                      '</div>'+
+                      '<div style="text-align:center; margin-top: 16px;">'+
+                        '<a href="/assessment/2" class="btn btn-primary btn-lg" style="padding: 12px 24px; font-weight: 600;">'+
+                          '<i class="fas fa-play me-2"></i>Start Knowledge Check'+
+                        '</a>'+
+                      '</div>'+
+                    '</div>';
+            }
+        }
+    } catch (e) { /* silent */ }
 });
 </script>
 {% endblock %}

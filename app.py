@@ -37,6 +37,7 @@ License: MIT
 import os
 import sys
 import logging
+from logging.handlers import TimedRotatingFileHandler
 from datetime import datetime, timedelta
 import random
 import json
@@ -89,8 +90,15 @@ def setup_logging():
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setFormatter(formatter)
     
-    # File handler with UTF-8 encoding
-    file_handler = logging.FileHandler(log_file, encoding='utf-8')
+    # Timed rotating file handler: rotate at midnight, keep last 3 days
+    file_handler = TimedRotatingFileHandler(
+        filename=log_file,
+        when='midnight',
+        interval=1,
+        backupCount=3,
+        encoding='utf-8',
+        utc=False
+    )
     file_handler.setFormatter(formatter)
     
     # Configure root logger
@@ -665,6 +673,378 @@ def seed_module1_kc_default() -> int:
         logger.error(f"Default Module 1 KC seeding failed: {e}")
         return 0
 
+def seed_module3_kc_default() -> int:
+    """Seed Module 3 Knowledge Check with curated questions if none exist.
+
+    Returns number of questions inserted.
+    """
+    try:
+        from data_models.content_models import KnowledgeCheckQuestion
+        # Ensure clean slate for module 3
+        KnowledgeCheckQuestion.query.filter_by(module_id=3).delete()
+        db.session.commit()
+
+        questions = [
+            {
+                'question_text': 'According to the lesson, what is the recommended minimum length for creating a strong, secure password?',
+                'option_a': '8 characters',
+                'option_b': '10 characters',
+                'option_c': '12 characters',
+                'option_d': '16 characters',
+                'correct_answer': 'c',
+                'explanation': 'Correct! Lesson 3.1 recommends at least 12 characters; 14+ is even better.'
+            },
+            {
+                'question_text': 'What is the primary purpose of Multi-Factor Authentication (MFA)?',
+                'option_a': 'To automatically create strong passwords for you.',
+                'option_b': 'To add a second layer of security, like a code from your phone, even if the password is known.',
+                'option_c': 'To scan your emails for phishing attempts.',
+                'option_d': 'To hide your personal information on social media.',
+                'correct_answer': 'b',
+                'explanation': "MFA is your 'double lock'—it adds a second verification step to block unauthorized access."
+            },
+            {
+                'question_text': 'The lesson describes a "digital footprint" as:',
+                'option_a': 'The antivirus software installed on your computer.',
+                'option_b': 'The trail of data you leave behind from online activities (posts, likes, comments).',
+                'option_c': 'A list of all your saved passwords in a password manager.',
+                'option_d': 'The physical location from which you access the internet.',
+                'correct_answer': 'b',
+                'explanation': 'Your digital footprint is the data trail left by your online activities.'
+            },
+            {
+                'question_text': 'The "Verification Toolkit" recommends hovering your mouse over a link before clicking to:',
+                'option_a': 'Make the link load faster when clicked.',
+                'option_b': 'Preview the actual destination URL to check if it is safe.',
+                'option_c': 'Automatically copy the link to your clipboard.',
+                'option_d': 'Report the link to IT.',
+                'correct_answer': 'b',
+                'explanation': 'Hovering reveals the true destination so you can spot suspicious or fake URLs safely.'
+            },
+            {
+                'question_text': 'Why is reusing the same password for multiple accounts a major security risk?',
+                'option_a': 'It can slow down your device when logging in.',
+                'option_b': 'Websites will block reused passwords.',
+                'option_c': 'If one site is breached, attackers can access your other accounts with the same password.',
+                'option_d': 'It makes it harder to remember which password to use.',
+                'correct_answer': 'c',
+                'explanation': 'Password reuse means a single breach can compromise many of your accounts.'
+            },
+            {
+                'question_text': 'Constantly posting your real-time location on social media significantly increases your risk of:',
+                'option_a': 'Your account being suspended for spam.',
+                'option_b': 'Cyberstalking and threats to your physical safety.',
+                'option_c': 'Your password being guessed more easily.',
+                'option_d': 'Your device getting a computer virus.',
+                'correct_answer': 'b',
+                'explanation': 'Real-time location tagging can enable cyberstalkers to track movements.'
+            },
+            {
+                'question_text': 'You receive an email from “MyCamu Admin,” but the sender is support@mycamu-login-portal.com. The biggest red flag is:',
+                'option_a': 'The display name is too simple.',
+                'option_b': 'The email domain is not the official one and is designed to look similar.',
+                'option_c': 'It was sent outside business hours.',
+                'option_d': 'The email contains no images.',
+                'correct_answer': 'b',
+                'explanation': 'A mismatched or fake domain is a primary phishing indicator.'
+            },
+            {
+                'question_text': 'According to the lesson’s privacy guidance, what is the safest initial setting for a new social media profile?',
+                'option_a': 'Public',
+                'option_b': 'Private',
+                'option_c': 'Friends of Friends',
+                'option_d': 'Customized for verified accounts only',
+                'correct_answer': 'b',
+                'explanation': 'Setting profiles to Private gives control over who sees your information.'
+            },
+            {
+                'question_text': 'What is the main benefit of using a password manager like Google Password Manager or iCloud Keychain?',
+                'option_a': 'Use the same simple password for everything.',
+                'option_b': 'Securely create and remember long, complex, unique passwords with one master password.',
+                'option_c': 'Receive alerts for every data breach on the internet.',
+                'option_d': 'Delete your digital footprint online.',
+                'correct_answer': 'b',
+                'explanation': 'Password managers generate and store unique, strong passwords for all accounts.'
+            },
+            {
+                'question_text': 'A text message claiming to be from GCash says your account will be locked unless you “verify” via a link. Safest action?',
+                'option_a': 'Click the link immediately to prevent lockout.',
+                'option_b': 'Reply and ask for more details.',
+                'option_c': 'Ignore the message and verify via the official GCash app or website.',
+                'option_d': 'Forward to a friend to check if it is real.',
+                'correct_answer': 'c',
+                'explanation': 'Always verify through official channels, not through the message itself.'
+            }
+        ]
+
+        for q in questions:
+            row = KnowledgeCheckQuestion(
+                question_text=q['question_text'],
+                option_a=q['option_a'],
+                option_b=q['option_b'],
+                option_c=q['option_c'],
+                option_d=q['option_d'],
+                correct_answer=q['correct_answer'],
+                explanation=q['explanation'],
+                module_id=3,
+                question_set=1
+            )
+            db.session.add(row)
+        db.session.commit()
+        return len(questions)
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Default Module 3 KC seeding failed: {e}")
+        return 0
+
+def seed_module4_kc_default() -> int:
+    """Seed Module 4 Knowledge Check with curated questions if none exist.
+
+    Returns number of questions inserted.
+    """
+    try:
+        from data_models.content_models import KnowledgeCheckQuestion
+        # Clear any existing Module 4 KC questions before seeding curated set
+        KnowledgeCheckQuestion.query.filter_by(module_id=4).delete()
+        db.session.commit()
+
+        questions = [
+            {
+                'question_text': 'According to the lesson, what is the very first and most critical step you should take if you suspect you\'ve clicked a malicious link or that your device is infected?',
+                'option_a': 'Immediately run an antivirus scan.',
+                'option_b': 'Disconnect your device from the internet (Wi-Fi and mobile data).',
+                'option_c': 'Change the password for your most important account.',
+                'option_d': 'Report the incident to the IT Helpdesk.',
+                'correct_answer': 'b',
+                'explanation': 'Correct! The first step is always containment. Disconnecting your device stops the immediate threat, just like the lesson "I-isolate Mo Muna ang Device Mo" explains.'
+            },
+            {
+                'question_text': 'The lesson introduces the concept of "Digital Bayanihan." What is the main idea behind this principle?',
+                'option_a': 'Keeping a security incident to yourself to avoid causing panic.',
+                'option_b': 'Only reporting an incident if you lose money.',
+                'option_c': 'The collective effort of reporting an incident to protect the entire community, not just yourself.',
+                'option_d': 'Asking friends for help to hack the scammer back.',
+                'correct_answer': 'c',
+                'explanation': '"Digital Bayanihan" means your report helps protect everyone in the MMDC community, reflecting the Filipino spirit of collective action.'
+            },
+            {
+                'question_text': 'If your account is compromised and you need to reset your password, what is the safest method?',
+                'option_a': 'Use the password reset link sent to you in a recent email.',
+                'option_b': 'Go directly to the official website or app and use their "Forgot Password" or recovery feature.',
+                'option_c': 'Call the customer service number you find in a text message.',
+                'option_d': 'Ask a friend to log in for you and change the password.',
+                'correct_answer': 'b',
+                'explanation': 'The "Recovery Toolkit" stresses using official recovery links by going directly to the website. Links in emails or texts are often phishing attempts.'
+            },
+            {
+                'question_text': 'You accidentally typed your password into a fake website. What is a crucial part of the immediate password change process?',
+                'option_a': 'Change the password using a different, secure device if possible.',
+                'option_b': 'Only change the password for that one account and no others.',
+                'option_c': 'Write the new password down on a sticky note so you don\'t forget it.',
+                'option_d': 'Wait 24 hours before changing the password to see if anything happens.',
+                'correct_answer': 'a',
+                'explanation': 'Use a clean device to ensure the attacker cannot capture your new password.'
+            },
+            {
+                'question_text': 'You receive a phishing email targeting MMDC student portal credentials. According to the MMDC Reporting Protocol, who is the primary contact for this technical issue?',
+                'option_a': 'The Faculty / Dean\'s Office',
+                'option_b': 'The Opisina ng Estudyante (Student Affairs Office)',
+                'option_c': 'The MMDC IT Helpdesk',
+                'option_d': 'The Philippine National Police (PNP) Anti-Cybercrime Group',
+                'correct_answer': 'c',
+                'explanation': 'The IT Helpdesk is the designated channel for technical issues like phishing, malware, and compromised accounts.'
+            },
+            {
+                'question_text': 'After you recover a compromised account, what is the single most effective step to fortify it against future attacks?',
+                'option_a': 'Change your profile picture.',
+                'option_b': 'Post a warning on your social media feed.',
+                'option_c': 'Enable Multi-Factor Authentication (MFA).',
+                'option_d': 'Delete all your old messages and emails.',
+                'correct_answer': 'c',
+                'explanation': 'Enabling MFA is the most effective security measure to lock down your account.'
+            },
+            {
+                'question_text': 'For serious incidents involving financial loss, the module advises reporting to the PNP Anti-Cybercrime Group. What key guidance is given?',
+                'option_a': 'Only report amounts larger than ₱10,000.',
+                'option_b': 'File the report within 24 hours or it won\'t be accepted.',
+                'option_c': 'Try contacting the scammer yourself first.',
+                'option_d': 'Do this with guidance from MMDC staff (IT or Student Affairs).',
+                'correct_answer': 'd',
+                'explanation': 'Seek guidance from MMDC staff to follow correct legal procedures safely.'
+            },
+            {
+                'question_text': 'After regaining access, the "Recovery Toolkit" advises reviewing recent activity and:',
+                'option_a': 'Block every person who has recently sent you a message.',
+                'option_b': 'Change your username and display name.',
+                'option_c': 'Remove any unfamiliar third-party apps or services that have access to your account.',
+                'option_d': 'Delete the account and create a new one.',
+                'correct_answer': 'c',
+                'explanation': 'Hackers may add third-party app access as a backdoor. Remove them.'
+            },
+            {
+                'question_text': 'What is the primary goal of immediate containment (disconnecting your device from the internet) when responding to an attack?',
+                'option_a': 'To save mobile data or battery life.',
+                'option_b': 'To stop the attack from getting worse by cutting off the scammer\'s access and preventing malware from spreading.',
+                'option_c': 'To reset your device\'s network settings automatically.',
+                'option_d': 'To make it easier to locate the source of the attack.',
+                'correct_answer': 'b',
+                'explanation': 'Containment limits damage by stopping data theft and malware communication.'
+            },
+            {
+                'question_text': 'A friend received a threatening message on school email. Which office handles harassment, threats, or cyberbullying under the MMDC Reporting Protocol?',
+                'option_a': 'The MMDC IT Helpdesk',
+                'option_b': 'Their specific course professor',
+                'option_c': 'The Opisina ng Estudyante (Student Affairs Office)',
+                'option_d': 'The campus security guards',
+                'correct_answer': 'c',
+                'explanation': 'Student Affairs is tasked with student welfare issues like threats and harassment.'
+            }
+        ]
+
+        for q in questions:
+            row = KnowledgeCheckQuestion(
+                question_text=q['question_text'],
+                option_a=q['option_a'],
+                option_b=q['option_b'],
+                option_c=q['option_c'],
+                option_d=q['option_d'],
+                correct_answer=q['correct_answer'],
+                explanation=q['explanation'],
+                module_id=4,
+                question_set=1
+            )
+            db.session.add(row)
+        db.session.commit()
+        return len(questions)
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Default Module 4 KC seeding failed: {e}")
+        return 0
+
+def seed_module5_kc_default() -> int:
+    """Seed Module 5 Knowledge Check with curated questions if none exist.
+
+    Returns number of questions inserted.
+    """
+    try:
+        from data_models.content_models import KnowledgeCheckQuestion
+        # Clear any existing Module 5 KC questions before seeding curated set
+        KnowledgeCheckQuestion.query.filter_by(module_id=5).delete()
+        db.session.commit()
+
+        questions = [
+            {
+                'question_text': 'According to Lesson 5.1, how have AI tools like Large Language Models (LLMs) made phishing attacks more dangerous?',
+                'option_a': 'AI adds viruses directly into the email text.',
+                'option_b': 'AI can write perfectly crafted, personalized emails without the usual red flags like bad grammar or spelling errors.',
+                'option_c': 'AI makes phishing emails blurry and hard to read.',
+                'option_d': 'AI can only create phishing emails in English.',
+                'correct_answer': 'b',
+                'explanation': 'AI allows scammers to create flawless, personalized phishing emails, making old detection methods like spotting typos less reliable.'
+            },
+            {
+                'question_text': 'The module discusses "deepfake" scams as a new frontier of social engineering. What is a deepfake?',
+                'option_a': 'A very detailed and convincing fake social media profile.',
+                'option_b': 'A type of computer virus that hides deep within a computer\'s files.',
+                'option_c': 'AI-generated video or audio that convincingly mimics a real person\'s appearance or voice to trick someone.',
+                'option_d': 'A phishing email that has no links or attachments.',
+                'correct_answer': 'c',
+                'explanation': 'A deepfake uses AI to create fake video or audio of a real person used for impersonation.'
+            },
+            {
+                'question_text': 'The lesson introduces a new threat called "Quishing." What does this term refer to?',
+                'option_a': 'A type of scam that asks you to answer a long series of personal questions.',
+                'option_b': 'An attack where scammers use malicious QR codes in public places to lead you to a fake website.',
+                'option_c': 'A very quick and aggressive phishing attack that happens in real-time.',
+                'option_d': 'A new type of antivirus software for mobile phones.',
+                'correct_answer': 'b',
+                'explanation': 'Quishing, or QR code phishing, uses malicious QR codes to lure victims to fake sites.'
+            },
+            {
+                'question_text': 'What is the most important takeaway and best defense against constantly evolving threats like AI phishing and deepfakes?',
+                'option_a': 'Only using one specific brand of antivirus software.',
+                'option_b': 'Never opening any email from a person you don\'t know.',
+                'option_c': 'Understanding that vigilance and continuous learning are essential because threats are always changing.',
+                'option_d': 'Disconnecting from the internet when you see a threat you don\'t recognize.',
+                'correct_answer': 'c',
+                'explanation': 'Your vigilance and commitment to continuous learning are the best defense against evolving threats.'
+            },
+            {
+                'question_text': 'Lesson 5.2 emphasizes building a "digital news habit." What is the main purpose of this habit?',
+                'option_a': 'To learn how to predict when a cyberattack will happen, just like a weather forecast.',
+                'option_b': 'To make cybersecurity a regular, lifelong practice of staying informed about new threats.',
+                'option_c': 'To get daily news updates from the MMDC IT Helpdesk.',
+                'option_d': 'To spend at least one hour every day reading about cybersecurity.',
+                'correct_answer': 'b',
+                'explanation': 'The goal is to make staying informed a regular, sustainable habit, not a one-time task.'
+            },
+            {
+                'question_text': 'Which official Philippine government agency is mentioned for providing advisories on data breaches and online scams?',
+                'option_a': 'The Hacker News',
+                'option_b': 'The National Privacy Commission (NPC)',
+                'option_c': 'The MMDC Student Affairs Office',
+                'option_d': 'The Philstar Tech Section',
+                'correct_answer': 'b',
+                'explanation': 'The NPC is highlighted as an official government resource for local advisories and warnings.'
+            },
+            {
+                'question_text': 'The program concludes by introducing "Digital Bayanihan." What does this mean?',
+                'option_a': 'A government program that provides free cybersecurity software to students.',
+                'option_b': 'A Filipino hacking group that targets scammers.',
+                'option_c': 'The idea that protecting the community is a shared responsibility, where every student\'s actions contribute to the safety of others.',
+                'option_d': 'A new social media platform exclusively for the MMDC community.',
+                'correct_answer': 'c',
+                'explanation': 'Digital Bayanihan is about shared, collective responsibility to protect each other online.'
+            },
+            {
+                'question_text': '"One security breach can spread incredibly fast... Parang sakit." What security principle does this illustrate?',
+                'option_a': 'That cybersecurity is only a personal responsibility.',
+                'option_b': 'The importance of having fast internet.',
+                'option_c': 'The collective impact, where one person\'s vulnerability can put the entire connected community at risk.',
+                'option_d': 'That only the IT department can stop the spread of a threat.',
+                'correct_answer': 'c',
+                'explanation': 'This illustrates collective impact: one weak point can endanger the whole community.'
+            },
+            {
+                'question_text': 'Which action best demonstrates the "Cyber Defender Mindset" taught in Lesson 5.3?',
+                'option_a': 'Keeping quiet after spotting a phishing email to avoid causing panic.',
+                'option_b': 'Blaming a classmate for falling for a scam.',
+                'option_c': 'Politely speaking up in a group chat to warn others about a suspicious link that was shared.',
+                'option_d': 'Assuming all QR codes in public places are safe to use.',
+                'correct_answer': 'c',
+                'explanation': 'A Cyber Defender takes proactive, responsible steps to protect others.'
+            },
+            {
+                'question_text': 'What is the final and most important message of the program regarding your role?',
+                'option_a': 'The best defense is to use the internet as little as possible.',
+                'option_b': 'All security matters should be left to the IT department.',
+                'option_c': 'Once you finish the program, you know everything you need to stay safe forever.',
+                'option_d': 'You are not just a user; you are a defender with a personal and collective responsibility to keep the community safe.',
+                'correct_answer': 'd',
+                'explanation': 'Core pledge: You are a defender with responsibility to yourself and your community.'
+            }
+        ]
+
+        for q in questions:
+            row = KnowledgeCheckQuestion(
+                question_text=q['question_text'],
+                option_a=q['option_a'],
+                option_b=q['option_b'],
+                option_c=q['option_c'],
+                option_d=q['option_d'],
+                correct_answer=q['correct_answer'],
+                explanation=q['explanation'],
+                module_id=5,
+                question_set=1
+            )
+            db.session.add(row)
+        db.session.commit()
+        return len(questions)
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Default Module 5 KC seeding failed: {e}")
+        return 0
+
 # =============================================================================
 # 10. ROUTE DEFINITIONS
 # =============================================================================
@@ -1116,8 +1496,22 @@ def dashboard():
         else:
             average_score = 0
         
-        # Calculate total time spent (estimate: 30 minutes per completed module)
-        total_time_spent = completed_modules * 30
+        # Calculate total time spent using real tracked minutes; fall back safely
+        total_time_spent = 0
+        try:
+            if user_stats:
+                # Prefer explicit aggregate minutes from service
+                total_time_spent = (
+                    user_stats.get('total_time_spent')
+                    or (user_stats.get('time_analytics', {}) or {}).get('total_time_spent_minutes')
+                    or 0
+                )
+            if not total_time_spent:
+                # Fallback: sum from in-memory progress list
+                total_time_spent = sum((p.time_spent or 0) for p in (user_progress or []))
+        except Exception:
+            # Last resort: retain previous estimate so UI never breaks
+            total_time_spent = completed_modules * 30
         
         # Ensure all variables are safe for template rendering
         safe_user_stats = user_stats or {}
@@ -1283,8 +1677,13 @@ def assessment(module_id):
         
         # Get questions from the determined set
         questions = KnowledgeCheckQuestion.get_by_module_and_set(module_id, question_set)
+        # If module 3 has no questions yet, seed defaults once
+        if module_id == 3 and not questions:
+            inserted = seed_module3_kc_default()
+            if inserted > 0:
+                questions = KnowledgeCheckQuestion.get_by_module_and_set(module_id, question_set)
         
-        # If no questions in this set, try all questions; if still none, auto-seed from learning_modules
+        # If no questions in this set, try all questions; if still none, auto-seed defaults for specific modules
         if not questions:
             questions = KnowledgeCheckQuestion.query.filter_by(module_id=module_id).all()
             if not questions:
@@ -1316,6 +1715,14 @@ def assessment(module_id):
                             inserted = seed_module1_kc_default()
                             if inserted > 0:
                                 questions = KnowledgeCheckQuestion.get_by_module_and_set(module_id, question_set)
+                    elif module_id == 4:
+                        inserted = seed_module4_kc_default()
+                        if inserted > 0:
+                            questions = KnowledgeCheckQuestion.get_by_module_and_set(module_id, question_set)
+                    elif module_id == 5:
+                        inserted = seed_module5_kc_default()
+                        if inserted > 0:
+                            questions = KnowledgeCheckQuestion.get_by_module_and_set(module_id, question_set)
                 except Exception as seed_err:
                     logger.error(f"Auto-seed questions failed for module {module_id}: {seed_err}")
             if not questions:
@@ -1548,15 +1955,16 @@ def final_assessment_questions():
         str: Rendered final assessment questions template
     """
     try:
-        # Get final assessment questions
-        questions = FinalAssessmentQuestion.query.all()
-        if not questions:
+        # Get final assessment questions — policy: show 25 questions per attempt
+        # Load all questions for the chosen set, then sample 25 consistently with utils
+        questions_all = FinalAssessmentQuestion.query.all()
+        if not questions_all:
             flash('No final assessment questions available.', 'error')
             return redirect(url_for('dashboard'))
-        
-        # Shuffle questions for variety
-        random.shuffle(questions)
-        
+        import random
+        random.shuffle(questions_all)
+        questions = questions_all[:25]
+        # Render 25 questions per policy
         return render_template('final_assessment_questions.html', questions=questions)
         
     except Exception as e:
@@ -1574,8 +1982,28 @@ def submit_final_assessment():
         str: Rendered result template or redirect
     """
     try:
-        # Get questions
-        questions = FinalAssessmentQuestion.query.all()
+        # Get questions — must match the 25 displayed
+        # If explicit question_ids posted, honor them
+        submitted_question_ids = request.form.get('question_ids')
+        if submitted_question_ids:
+            try:
+                id_list = [int(qid) for qid in submitted_question_ids.split(',') if qid.strip()]
+            except Exception:
+                id_list = []
+        else:
+            id_list = []
+
+        if id_list:
+            questions = FinalAssessmentQuestion.query.filter(FinalAssessmentQuestion.id.in_(id_list)).all()
+        else:
+            # Fallback: sample 25 consistently as in questions route
+            questions_all = FinalAssessmentQuestion.query.all()
+            if not questions_all:
+                flash('No final assessment questions available.', 'error')
+                return redirect(url_for('dashboard'))
+            import random
+            random.shuffle(questions_all)
+            questions = questions_all[:25]
         if not questions:
             flash('No final assessment questions available.', 'error')
             return redirect(url_for('dashboard'))
@@ -1596,8 +2024,8 @@ def submit_final_assessment():
         score = correct_answers
         percentage = int((correct_answers / total_questions) * 100) if total_questions and total_questions > 0 else 0
         
-        # Determine if passed (70% threshold for final assessment)
-        passed = percentage >= app.config.get('FINAL_ASSESSMENT_PASSING_SCORE', 70)
+        # Determine if passed (80% threshold for final assessment)
+        passed = percentage >= app.config.get('FINAL_ASSESSMENT_PASSING_SCORE', 80)
         
         # Create assessment result
         result = AssessmentResult(
@@ -1775,7 +2203,7 @@ def simulation(simulation_type):
         
         return render_template('simulation_simple.html', 
                              simulation_type=simulation_type,
-                             simulation_data=simulation_data)
+                             content=simulation_data)
     except Exception as e:
         flash(f'Error loading simulation: {e}', 'error')
         logger.error(f"Error loading simulation {simulation_type}: {e}")

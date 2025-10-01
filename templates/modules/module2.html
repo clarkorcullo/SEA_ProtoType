@@ -1,0 +1,367 @@
+<script>
+// Module 2 runtime injector — mirrors Module 1/3/4 style without altering server JSON
+document.addEventListener('DOMContentLoaded', function(){
+  try {
+    var meta = document.getElementById('moduleMeta');
+    var modId = parseInt(meta && meta.getAttribute('data-module-id') || '0', 10);
+    if (modId !== 2) return;
+
+    // 2.1 → 1. Phishing in Philippine (ensure cleaned header image and icons for definitions)
+    (function enhancePhishingIntro(){
+      var subHeader = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+        .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '1. phishing in philippine'; });
+      var subEl = null;
+      if (subHeader) {
+        var subItem = subHeader.closest('.drawer-item');
+        if (subItem) {
+          var oc = subItem.getAttribute('onclick') || '';
+          var m = oc.match(/toggleDrawer\('([^']+)'\)/);
+          if (m && m[1]) subEl = document.getElementById('content-' + m[1]);
+        }
+      }
+      if (!subEl) subEl = document.getElementById('content-sub2-1');
+      if (!subEl) return;
+      var body = subEl.querySelector('.content-wrapper') || subEl;
+      // Remove any leading images before the first video
+      var firstVideo = body.querySelector('.video-container, iframe');
+      if (firstVideo) {
+        Array.from(body.querySelectorAll('img')).forEach(function(img){
+          if (img.compareDocumentPosition(firstVideo) & Node.DOCUMENT_POSITION_FOLLOWING) {
+            img.parentNode && img.parentNode.removeChild(img);
+          }
+        });
+      }
+      // Add icons for mail phishing / smishing / vishing definitions
+      var targets = Array.from(body.querySelectorAll('p, li'));
+      var terms = ['mail phishing', 'smishing', 'vishing'];
+      targets.forEach(function(el){
+        var text = (el.textContent || '').toLowerCase();
+        var hasTerm = terms.some(function(t){ return text.indexOf(t) !== -1; });
+        if (hasTerm && !el.getAttribute('data-iconized')) {
+          el.style.display = 'flex';
+          el.style.alignItems = 'center';
+          el.style.gap = '12px';
+          var icon = document.createElement('img');
+          icon.src = window.location.origin + '/learning_assets/Documents/Lesson21.png';
+          icon.alt = 'Phishing type icon';
+          icon.style.width = '96px';
+          icon.style.height = '96px';
+          icon.style.borderRadius = '8px';
+          icon.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
+          icon.style.objectFit = 'cover';
+          icon.style.flexShrink = '0';
+          el.insertBefore(icon, el.firstChild);
+          el.setAttribute('data-iconized', 'true');
+        }
+      });
+    })();
+
+    // Knowledge Check drawer normalization (rules + Start button)
+    (function normalizeKC(){
+      var kcHeader = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+        .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'knowledge check'; });
+      var kcEl = null;
+      if (kcHeader) {
+        var kcItem = kcHeader.closest('.drawer-item');
+        if (kcItem) {
+          var oc = kcItem.getAttribute('onclick') || '';
+          var m = oc.match(/toggleDrawer\('([^']+)'\)/);
+          if (m && m[1]) kcEl = document.getElementById('content-' + m[1]);
+        }
+      }
+      if (!kcEl) kcEl = document.getElementById('content-knowledge-check');
+      if (!kcEl) return;
+      var wrap = kcEl.querySelector('.content-wrapper') || kcEl;
+      wrap.innerHTML = ''+
+        '<div class="accordion-content">'+
+          '<h3 class="mb-3">Knowledge Check — Module 2</h3>'+
+          '<div class="knowledge-check-rules" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px; border-radius: 12px; border-left: 5px solid #007bff;">'+
+            '<ul style="font-size: 1.05rem; line-height: 1.7; margin: 0; color: #333;">'+
+              '<li><strong>Unlimited attempts</strong></li>'+
+              '<li><strong>5 questions per attempt</strong></li>'+
+              '<li><strong>Passing score: 80%</strong></li>'+
+            '</ul>'+
+          '</div>'+
+          '<div style="text-align:center; margin-top: 16px;">'+
+            '<a href="/assessment/2" class="btn btn-primary btn-lg" style="padding: 12px 24px; font-weight: 600;">'+
+              '<i class="fas fa-play me-2"></i>Start Knowledge Check'+
+            '</a>'+
+          '</div>'+
+        '</div>';
+    })();
+
+    // Module 2 → Simulation (interactive, mirrors Module 3 approach)
+    (function initModule2Simulation(){
+      var simHeader = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+        .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'simulation'; });
+      var simEl = null;
+      if (simHeader) {
+        var itemSim = simHeader.closest('.drawer-item');
+        if (itemSim) {
+          var ocSim = itemSim.getAttribute('onclick') || '';
+          var mSim = ocSim.match(/toggleDrawer\('([^']+)'\)/);
+          if (mSim && mSim[1]) simEl = document.getElementById('content-' + mSim[1]);
+        }
+      }
+      if (!simEl) simEl = document.getElementById('content-simulation');
+      if (!simEl) {
+        var simTitle = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+          .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'simulation'; });
+        if (simTitle) {
+          var simItem = simTitle.closest('.drawer-item');
+          if (simItem && simItem.nextElementSibling && simItem.nextElementSibling.classList.contains('drawer-subcontent')) {
+            simEl = simItem.nextElementSibling;
+          }
+        }
+      }
+      if (!simEl) return;
+
+      function injectSimulation(intoEl){
+        var wrap = intoEl.querySelector('.content-wrapper') || intoEl;
+        wrap.innerHTML = ''+
+          '<div class="accordion-content">'+
+            '<h3>Module 2 Simulation: Spot the Scams</h3>'+
+            '<p>Practice recognizing and responding to phishing, pretexting, and baiting. Choose the best response and see instant feedback.</p>'+
+
+            '<div class="scenarios-container">'+
+
+              '<div class="scenario-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:24px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+                '<div class="scenario-header" style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'+
+                  '<div style="background:#007bff;color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">1</div>'+
+                  '<h4 style="margin:0;color:#007bff;">Scenario 1 – The Phishing Email</h4>'+
+                '</div>'+
+                '<div class="scenario-body" style="margin-bottom:12px;">'+
+                  '<div class="scenario-image" style="text-align:center;margin:10px 0 15px 0;">'+
+                    '<img src="' + (window.location.origin + '/learning_assets/Documents/Scenario1.png') + '" alt="Scenario 1" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);" />'+
+                  '</div>'+
+                  '<p class="mb-2">You receive an email from “MMDC Support” with the subject: “URGENT: Your MMDC Email Will Be Suspended.” The sender’s address looks suspicious.</p>'+
+                  '<p class="mb-0"><strong>Question:</strong> What is the best action?</p>'+
+                '</div>'+
+                '<div class="question-section">'+
+                  '<div class="option-item" data-option="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                    '<div style="display:flex;align-items:center;">'+
+                      '<input type="radio" name="m2scenario1" value="A" id="m2scenario1_A" style="margin-right:10px;">'+
+                      '<label for="m2scenario1_A" style="margin:0;cursor:pointer;"><strong>A)</strong> Click the link and sign in quickly.</label>'+
+                    '</div>'+
+                  '</div>'+
+                  '<div class="option-item" data-option="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                    '<div style="display:flex;align-items:center;">'+
+                      '<input type="radio" name="m2scenario1" value="B" id="m2scenario1_B" style="margin-right:10px;">'+
+                      '<label for="m2scenario1_B" style="margin:0;cursor:pointer;"><strong>B)</strong> Delete the email quietly.</label>'+
+                    '</div>'+
+                  '</div>'+
+                  '<div class="option-item" data-option="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                    '<div style="display:flex;align-items:center;">'+
+                      '<input type="radio" name="m2scenario1" value="C" id="m2scenario1_C" style="margin-right:10px;">'+
+                      '<label for="m2scenario1_C" style="margin:0;cursor:pointer;"><strong>C)</strong> Report the email to IT/security.</label>'+
+                    '</div>'+
+                  '</div>'+
+                  '<div class="option-item" data-option="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                    '<div style="display:flex;align-items:center;">'+
+                      '<input type="radio" name="m2scenario1" value="D" id="m2scenario1_D" style="margin-right:10px;">'+
+                      '<label for="m2scenario1_D" style="margin:0;cursor:pointer;"><strong>D)</strong> Reply to confirm if it’s real.</label>'+
+                    '</div>'+
+                  '</div>'+
+                '</div>'+
+                '<div id="m2feedback1" class="feedback-section" style="display:none;margin-top:15px;">'+
+                  '<div class="feedback-content" style="background:#f8f9fa;border-left:4px solid #007bff;padding:15px;border-radius:8px;">'+
+                    '<h6 style="margin:0 0 8px 0;font-weight:600;">Feedback</h6>'+
+                    '<div class="feedback-text"></div>'+
+                  '</div>'+
+                '</div>'+
+              '</div>'+
+
+              '<div class="scenario-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:24px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+                '<div class="scenario-header" style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'+
+                  '<div style="background:#28a745;color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">2</div>'+
+                  '<h4 style="margin:0;color:#28a745;">Scenario 2 – The Pretexting Call</h4>'+
+                '</div>'+
+                '<div class="scenario-body" style="margin-bottom:12px;">'+
+                  '<p class="mb-2">A caller says they’re from the Registrar’s Office. They know your name and program, and they ask for your student ID to “fix a problem.”</p>'+
+                  '<p class="mb-0"><strong>Question:</strong> What should you do?</p>'+
+                '</div>'+
+                '<div class="question-section">'+
+                  '<div class="option-item" data-option="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                    '<div style="display:flex;align-items:center;">'+
+                      '<input type="radio" name="m2scenario2" value="A" id="m2scenario2_A" style="margin-right:10px;">'+
+                      '<label for="m2scenario2_A" style="margin:0;cursor:pointer;"><strong>A)</strong> Give them your ID to avoid issues.</label>'+
+                    '</div>'+
+                  '</div>'+
+                  '<div class="option-item" data-option="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                    '<div style="display:flex;align-items:center;">'+
+                      '<input type="radio" name="m2scenario2" value="B" id="m2scenario2_B" style="margin-right:10px;">'+
+                      '<label for="m2scenario2_B" style="margin:0;cursor:pointer;"><strong>B)</strong> End the call and verify with the real Registrar’s Office.</label>'+
+                    '</div>'+
+                  '</div>'+
+                  '<div class="option-item" data-option="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                    '<div style="display:flex;align-items:center;">'+
+                      '<input type="radio" name="m2scenario2" value="C" id="m2scenario2_C" style="margin-right:10px;">'+
+                      '<label for="m2scenario2_C" style="margin:0;cursor:pointer;"><strong>C)</strong> Ask them to call back later.</label>'+
+                    '</div>'+
+                  '</div>'+
+                  '<div class="option-item" data-option="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                    '<div style="display:flex;align-items:center;">'+
+                      '<input type="radio" name="m2scenario2" value="D" id="m2scenario2_D" style="margin-right:10px;">'+
+                      '<label for="m2scenario2_D" style="margin:0;cursor:pointer;"><strong>D)</strong> Post on Facebook to ask if others got the same call.</label>'+
+                    '</div>'+
+                  '</div>'+
+                '</div>'+
+                '<div id="m2feedback2" class="feedback-section" style="display:none;margin-top:15px;">'+
+                  '<div class="feedback-content" style="background:#f8f9fa;border-left:4px solid #28a745;padding:15px;border-radius:8px;">'+
+                    '<h6 style="margin:0 0 8px 0;font-weight:600;">Feedback</h6>'+
+                    '<div class="feedback-text"></div>'+
+                  '</div>'+
+                '</div>'+
+              '</div>'+
+
+              '<div class="scenario-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:24px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+                '<div class="scenario-header" style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'+
+                  '<div style="background:#fd7e14;color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">3</div>'+
+                  '<h4 style="margin:0;color:#fd7e14;">Scenario 3 – The Baiting Post</h4>'+
+                '</div>'+
+                '<div class="scenario-body" style="margin-bottom:12px;">'+
+                  '<div class="scenario-image" style="text-align:center;margin:10px 0 15px 0;">'+
+                    '<img src="' + (window.location.origin + '/learning_assets/Documents/Secnario3.png') + '" alt="Scenario 3" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);" />'+
+                  '</div>'+
+                  '<p class="mb-2">On Facebook, you see a post claiming: “Win a FREE phone! Click here to join — limited time only!”</p>'+
+                  '<p class="mb-0"><strong>Question:</strong> What action should you take?</p>'+
+                '</div>'+
+                '<div class="question-section">'+
+                  '<div class="option-item" data-option="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                    '<div style="display:flex;align-items:center;">'+
+                      '<input type="radio" name="m2scenario3" value="A" id="m2scenario3_A" style="margin-right:10px;">'+
+                      '<label for="m2scenario3_A" style="margin:0;cursor:pointer;"><strong>A)</strong> Click the button and register.</label>'+
+                    '</div>'+
+                  '</div>'+
+                  '<div class="option-item" data-option="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                    '<div style="display:flex;align-items:center;">'+
+                      '<input type="radio" name="m2scenario3" value="B" id="m2scenario3_B" style="margin-right:10px;">'+
+                      '<label for="m2scenario3_B" style="margin:0;cursor:pointer;"><strong>B)</strong> Share the post with classmates.</label>'+
+                    '</div>'+
+                  '</div>'+
+                  '<div class="option-item" data-option="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                    '<div style="display:flex;align-items:center;">'+
+                      '<input type="radio" name="m2scenario3" value="C" id="m2scenario3_C" style="margin-right:10px;">'+
+                      '<label for="m2scenario3_C" style="margin:0;cursor:pointer;"><strong>C)</strong> Report it as suspicious or ignore it.</label>'+
+                    '</div>'+
+                  '</div>'+
+                  '<div class="option-item" data-option="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                    '<div style="display:flex;align-items:center;">'+
+                      '<input type="radio" name="m2scenario3" value="D" id="m2scenario3_D" style="margin-right:10px;">'+
+                      '<label for="m2scenario3_D" style="margin:0;cursor:pointer;"><strong>D)</strong> Comment to ask if it’s real.</label>'+
+                    '</div>'+
+                  '</div>'+
+                '</div>'+
+                '<div id="m2feedback3" class="feedback-section" style="display:none;margin-top:15px;">'+
+                  '<div class="feedback-content" style="background:#f8f9fa;border-left:4px solid #fd7e14;padding:15px;border-radius:8px;">'+
+                    '<h6 style="margin:0 0 8px 0;font-weight:600;">Feedback</h6>'+
+                    '<div class="feedback-text"></div>'+
+                  '</div>'+
+                '</div>'+
+              '</div>'+
+
+            '</div>'+
+
+            '<div id="m2FinalResults" class="final-results" style="display:none;background:linear-gradient(135deg,#d4edda 0%,#c3e6cb 100%);border:1px solid #c3e6cb;border-radius:12px;padding:25px;margin-top:20px;text-align:center;">'+
+              '<h4 style="color:#155724;margin:0 0 15px 0;">🎉 Well done!</h4>'+
+              '<p style="color:#155724;margin:0;font-size:1.1rem;line-height:1.6;">Great job! By making the right decisions, you avoided falling for phishing, pretexting, and baiting tactics.</p>'+
+            '</div>'+
+
+          '</div>';
+
+        setTimeout(initModule2SimHandlers, 0);
+      }
+
+      injectSimulation(simEl);
+      if (simHeader) {
+        var headerItem = simHeader.closest('.drawer-item');
+        if (headerItem) {
+          headerItem.addEventListener('click', function(){
+            var target = simEl || (headerItem.nextElementSibling && headerItem.nextElementSibling.classList.contains('drawer-subcontent') ? headerItem.nextElementSibling : null);
+            if (target) injectSimulation(target);
+          });
+        }
+      }
+    })();
+
+    function initModule2SimHandlers(){
+      try {
+        var feedbackData = {
+          scenario1: {
+            A: { correct: false, message: '❌ Careful! Clicking suspicious links often leads to fake login pages that steal your credentials.' },
+            B: { correct: false, message: '❌ Not enough. Deleting hides the problem but doesn’t help others. Reporting ensures IT can block the scam for everyone.' },
+            C: { correct: true,  message: '✅ Correct! Reporting protects both you and the whole school community from phishing.' },
+            D: { correct: false, message: '❌ Risky! Replying confirms your email is active and may lead to more targeted attacks.' }
+          },
+          scenario2: {
+            A: { correct: false, message: '❌ Dangerous! Attackers often use partial info to trick you into giving more sensitive details.' },
+            B: { correct: true,  message: '✅ Correct! Always verify through official numbers or in person before sharing personal info.' },
+            C: { correct: false, message: '❌ This only delays the scam. Without verification, it’s still unsafe.' },
+            D: { correct: false, message: '❌ Not a secure solution. Scammers may adjust their strategy if they see people talking online.' }
+          },
+          scenario3: {
+            A: { correct: false, message: '❌ That’s a trap! Baiting often leads to malware or scams that steal data.' },
+            B: { correct: false, message: '❌ Sharing spreads the scam further, making more students vulnerable.' },
+            C: { correct: true,  message: '✅ Correct! Avoid interacting with baiting posts and report them to keep others safe.' },
+            D: { correct: false, message: '❌ Engagement still boosts scam visibility. Don’t give scammers attention.' }
+          }
+        };
+
+        // Wire radio change events
+        document.querySelectorAll('input[type="radio"][name^="m2scenario"]').forEach(function(r){
+          r.addEventListener('change', function(){
+            var scenarioNum = this.name.replace('m2scenario','');
+            var option = this.value;
+            var feedbackDiv = document.getElementById('m2feedback' + scenarioNum);
+            if (!feedbackDiv) return;
+            var feedbackText = feedbackDiv.querySelector('.feedback-text');
+            var meta = (feedbackData['scenario' + scenarioNum] || {})[option];
+            if (!meta) return;
+
+            feedbackDiv.style.display = 'block';
+            feedbackText.innerHTML = meta.message;
+
+            var contentBox = feedbackDiv.querySelector('.feedback-content');
+            var header = feedbackDiv.querySelector('h6');
+            if (contentBox && header) {
+              if (meta.correct) {
+                contentBox.style.borderLeftColor = '#28a745';
+                header.style.color = '#28a745';
+              } else {
+                contentBox.style.borderLeftColor = '#dc3545';
+                header.style.color = '#dc3545';
+              }
+            }
+
+            checkM2AllCompleted();
+          });
+        });
+
+        // Click on container selects the radio
+        document.querySelectorAll('.scenarios-container .scenario-card .option-item').forEach(function(item){
+          item.addEventListener('click', function(){
+            var radio = this.querySelector('input[type="radio"]');
+            if (radio) {
+              radio.checked = true;
+              radio.dispatchEvent(new Event('change'));
+            }
+          });
+        });
+
+        function checkM2AllCompleted(){
+          var checked = document.querySelectorAll('input[type="radio"][name^="m2scenario"]:checked');
+          var names = new Set();
+          checked.forEach(function(c){ names.add(c.name); });
+          if (names.size >= 3) {
+            var final = document.getElementById('m2FinalResults');
+            if (final) final.style.display = 'block';
+          }
+        }
+      } catch(e) { /* silent */ }
+    }
+
+  } catch(e) { /* silent */ }
+});
+</script>
+
+

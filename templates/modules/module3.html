@@ -1,0 +1,857 @@
+<style>
+.module3-scope p { text-align: justify; }
+</style>
+<script>
+// Module 3 content injector – matches Module 2 styling and behavior
+document.addEventListener('DOMContentLoaded', function() {
+  // Find the exact subtopic under Lesson 3.1 titled "Password Power"
+  var targetHeader = Array.from(document.querySelectorAll(".drawer-item .drawer-title h5"))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '1. password power'; });
+
+  var contentEl = null;
+  if (targetHeader) {
+    var item = targetHeader.closest('.drawer-item');
+    if (item) {
+      var oc = item.getAttribute('onclick') || '';
+      var m = oc.match(/toggleDrawer\('([^']+)'\)/);
+      if (m && m[1]) {
+        var subId = m[1]; // e.g., sub3-1
+        contentEl = document.getElementById('content-' + subId);
+      }
+    }
+  }
+
+  // Fallback to id-based container if header-based targeting fails
+  if (!contentEl) {
+    contentEl = document.getElementById('content-sub3-1');
+  }
+
+  // As a last resort, create the container so content is not lost
+  if (!contentEl) {
+    var drawers = document.querySelector('.content-drawers');
+    if (drawers) {
+      contentEl = document.createElement('div');
+      contentEl.className = 'drawer-subcontent';
+      contentEl.id = 'content-sub3-1';
+      var cw = document.createElement('div');
+      cw.className = 'content-wrapper';
+      contentEl.appendChild(cw);
+      drawers.appendChild(contentEl);
+    }
+  }
+
+  if (contentEl) {
+    var wrap = contentEl.querySelector('.content-wrapper') || contentEl;
+    wrap.innerHTML = '' +
+      '<div class="module3-scope">' +
+      '<div class="lesson-intro">' +
+        '<h2>The Foundation of Your Digital Life</h2>' +
+        '<p>Your password is the first line of defense for your digital identity, but a single, weak password can put all your accounts at risk. In the Philippines, this isn\'t just a hypothetical problem. In 2024 alone, the country was hit by over 4.1 million "guess the password" IT attacks. Many of these attacks target educational institutions, and compromised student portals often begin with reused passwords. The San Beda University hack is a perfect example of how sensitive data, including passwords and student information, can be compromised in a single attack. This lesson will show you how to link strong passwords and security controls to the protection of your digital life.</p>' +
+      '</div>' +
+      '</div>';
+  }
+
+  // Lesson 3.1 → 2. Strong Password
+  var headerStrong = Array.from(document.querySelectorAll(".drawer-item .drawer-title h5"))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '2. strong password'; });
+
+  var strongEl = null;
+  if (headerStrong) {
+    var item2 = headerStrong.closest('.drawer-item');
+    if (item2) {
+      var oc2 = item2.getAttribute('onclick') || '';
+      var m2 = oc2.match(/toggleDrawer\('([^']+)'\)/);
+      if (m2 && m2[1]) {
+        strongEl = document.getElementById('content-' + m2[1]); // e.g., content-sub3-2
+      }
+    }
+  }
+  if (!strongEl) {
+    strongEl = document.getElementById('content-sub3-2');
+  }
+  if (strongEl) {
+    var sWrap = strongEl.querySelector('.content-wrapper') || strongEl;
+    sWrap.innerHTML = '' +
+      '<div class="module3-scope"><div class="accordion-content">' +
+        '<h3>The Power of Strong Passwords</h3>' +
+        '<p>A weak password is the easiest way for a scammer to get in, but building a strong defense is easy—and you\'ve got the toolkit to do it right now.</p>' +
+        '<div class="d-flex align-items-center mb-3" style="gap: 1rem;">' +
+          '<img src="' + (window.location.origin + '/learning_assets/Visual_Aid/Lesson31_StrongPassword.png') + '" alt="Lock Icon" style="width: 96px; height: 96px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.12); object-fit: cover;"/>' +
+          '<h4 class="mb-0" style="line-height: 1.2;">Strong Password Guidelines</h4>' +
+        '</div>' +
+        '<ul>' +
+          '<li><strong>Make it Long:</strong> At least 12 characters (14+ is even better). Reports such as Fortinet\'s show longer passwords are far harder to guess.</li>' +
+          '<li><strong>Make it Complex:</strong> Mix uppercase, lowercase, numbers, and symbols. Avoid predictable patterns or dictionary words.</li>' +
+          '<li><strong>Make it Unique:</strong> Never reuse a password. If one site is breached (e.g., high-profile PH breaches), reuse lets attackers try it everywhere else.</li>' +
+        '</ul>' +
+        '<h4>What about Password Managers?</h4>' +
+        '<p>A password manager is a secure digital vault that creates and remembers strong, unique passwords for all your accounts so you don\'t have to. You only need to remember one strong master password to unlock the rest. Your phone even has one built in—<strong>iCloud Keychain</strong> on iPhone or <strong>Google Password Manager</strong> on Android. Using them is one of the best ways to practice good cyber hygiene.</p>' +
+      '</div></div>';
+  }
+
+  // Lesson 3.1 → 3. Enabling MFA
+  var headerMfa = Array.from(document.querySelectorAll(".drawer-item .drawer-title h5"))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '3. enabling mfa'; });
+  var mfaEl = null;
+  if (headerMfa) {
+    var item3 = headerMfa.closest('.drawer-item');
+    if (item3) {
+      var oc3 = item3.getAttribute('onclick') || '';
+      var m3 = oc3.match(/toggleDrawer\('([^']+)'\)/);
+      if (m3 && m3[1]) {
+        mfaEl = document.getElementById('content-' + m3[1]); // e.g., content-sub3-3
+      }
+    }
+  }
+  if (!mfaEl) {
+    mfaEl = document.getElementById('content-sub3-3');
+  }
+  if (mfaEl) {
+    var mfaWrap = mfaEl.querySelector('.content-wrapper') || mfaEl;
+    mfaWrap.innerHTML = '' +
+      '<div class="module3-scope"><div class="accordion-content">' +
+        '<h3>A Quick Guide to MFA</h3>' +
+        '<p>In our last lesson, we gave you the tools to create a strong password. Now, let\'s add a second lock to your accounts. This video will walk you through a powerful security upgrade called Multi-Factor Authentication (MFA) and show you how to enable it on your most important accounts.</p>' +
+        '<div class="video-container"><div class="video-wrapper">' +
+          '<iframe src="https://www.youtube.com/embed/tHSJ8896ZuI" title="Module 3 - Lesson 3.1 Part C: Enabling Multi Factor Authentication (MFA)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>' +
+        '</div><div class="video-caption">Module 3 Lesson 3.1 Part C — Enabling Multi‑Factor Authentication (MFA)</div></div>' +
+      '</div></div>';
+  }
+
+  // Lesson 3.1 → 4. Lesson Conclusion & Link to Next Steps
+  var headerL31C = Array.from(document.querySelectorAll(".drawer-item .drawer-title h5"))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '4. lesson conclusion & link to next steps'; });
+  var l31cEl = null;
+  if (headerL31C) {
+    var item4 = headerL31C.closest('.drawer-item');
+    if (item4) {
+      var oc4 = item4.getAttribute('onclick') || '';
+      var m4 = oc4.match(/toggleDrawer\('([^']+)'\)/);
+      if (m4 && m4[1]) {
+        l31cEl = document.getElementById('content-' + m4[1]); // e.g., content-sub3-4
+      }
+    }
+  }
+  if (!l31cEl) {
+    l31cEl = document.getElementById('content-sub3-4');
+  }
+  if (l31cEl) {
+    var l31cWrap = l31cEl.querySelector('.content-wrapper') || l31cEl;
+    l31cWrap.innerHTML = '' +
+      '<div class="module3-scope"><div class="accordion-content">' +
+        '<h3>Lesson Conclusion & Link to Next Steps</h3>' +
+        '<p>Congratulations! You\'ve just completed our lesson on fortifying your accounts. This is the single most important step you can take to protect your digital identity. You\'ve learned that a strong password isn\'t just a suggestion—it\'s the foundation of your online safety.</p>' +
+        '<h4>Remember these key takeaways:</h4>' +
+        '<ul>' +
+          '<li><strong>Your password is your first line of defense.</strong> Weak or reused passwords make you an easy target for hackers.</li>' +
+          '<li><strong>Password managers are your best friend.</strong> They create and remember unique passwords for all your accounts so you don\'t have to.</li>' +
+          '<li><strong>MFA is a must-have.</strong> This simple step adds a critical second lock to your accounts, making you far less likely to be hacked.</li>' +
+        '</ul>' +
+        '<p>By adopting these simple habits, you\'re not just protecting your school data; you\'re safeguarding your finances, your identity, and your future.</p>' +
+        '<p><strong>Next up:</strong> Lesson 3.2 will help you manage what others can see about you online—and teach you to protect your digital footprint on social media.</p>' +
+        '<div class="resources-section">' +
+          '<h4>Resources & For More Info</h4>' +
+          '<ul class="resource-list">' +
+            '<li><strong>Read More:</strong> CISA — Use Strong Passwords. ' +
+              '<a class="resource-link" href="https://www.cisa.gov/secure-our-world/use-strong-passwords" target="_blank" rel="noopener">Open guide</a></li>' +
+            '<li><strong>Watch Again:</strong> How to set up Two‑factor authentication (2FA) for your Google Account. ' +
+              '<a class="resource-link" href="https://youtu.be/rPxr2y7PH-M?feature=shared" target="_blank" rel="noopener">Watch tutorial</a></li>' +
+            '<li><strong>Local Context:</strong> San Beda University student portal hack (Rappler). ' +
+              '<a class="resource-link" href="https://www.rappler.com/philippines/263117-san-beda-university-student-portal-hacked-personal-data-stolen/" target="_blank" rel="noopener">Read article</a></li>' +
+          '</ul>' +
+        '</div>' +
+        '<div class="next-steps">' +
+          '<h4>Your Next Steps</h4>' +
+          '<p>Proceed to <strong>Lesson 3.2: Social Media & Information Sharing Smarts</strong>.</p>' +
+        '</div>' +
+      '</div></div>';
+  }
+
+  // Lesson 3.2 → 1. Digitals Footprint
+  var headerDF = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '1. digitals footprint'; });
+  var dfEl = null;
+  if (headerDF) {
+    var itemDF = headerDF.closest('.drawer-item');
+    if (itemDF) {
+      var ocDF = itemDF.getAttribute('onclick') || '';
+      var mDF = ocDF.match(/toggleDrawer\('([^']+)'\)/);
+      if (mDF && mDF[1]) {
+        dfEl = document.getElementById('content-' + mDF[1]);
+      }
+    }
+  }
+  if (!dfEl) {
+    // Conservative fallback in case the exact drawer id is unknown
+    dfEl = document.getElementById('content-sub3-5');
+  }
+  if (dfEl) {
+    var dfWrap = dfEl.querySelector('.content-wrapper') || dfEl;
+    dfWrap.innerHTML = '' +
+      '<div class="module3-scope">' +
+      '<div class="lesson-intro">' +
+        '<div class="d-flex align-items-center mb-3" style="gap: 1rem;">' +
+          '<img src="' + (window.location.origin + '/learning_assets/Documents/Lesson32SocialMediaInformationSharingSmarts.png') + '" alt="Digital Footprint Icon" style="width: 96px; height: 96px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.12); object-fit: cover;"/>' +
+          '<h2 class="mb-0" style="line-height: 1.2;">The Digital Footprint</h2>' +
+        '</div>' +
+        '<p>Welcome to this lesson! You\'ve learned how to secure your accounts with a strong password. But what about all the information you\'ve already shared online? This video will show you what a digital footprint is and why oversharing is a major security risk, especially here in the Philippines.</p>' +
+      '</div>' +
+      '<div class="video-container"><div class="video-wrapper">' +
+        '<iframe src="https://www.youtube.com/embed/ic4LW1uUtDw" title="Module 3 - Lesson 3.2 Part A: The Digital Footprint" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>' +
+      '</div><div class="video-caption">Module 3 Lesson 3.2 Part A — The Digital Footprint</div></div>';
+  }
+
+  // Lesson 3.2 → 2. Privacy & Oversharing
+  var headerPO = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '2. privacy & oversharing'; });
+  var poEl = null;
+  if (headerPO) {
+    var itemPO = headerPO.closest('.drawer-item');
+    if (itemPO) {
+      var ocPO = itemPO.getAttribute('onclick') || '';
+      var mPO = ocPO.match(/toggleDrawer\('([^']+)'\)/);
+      if (mPO && mPO[1]) {
+        poEl = document.getElementById('content-' + mPO[1]);
+      }
+    }
+  }
+  if (!poEl) {
+    poEl = document.getElementById('content-sub3-6');
+  }
+  if (poEl) {
+    var poWrap = poEl.querySelector('.content-wrapper') || poEl;
+    poWrap.innerHTML = '' +
+      '<div class="module3-scope"><div class="accordion-content">' +
+        '<div class="d-flex align-items-center mb-3" style="gap: 1rem;">' +
+          '<img src="' + (window.location.origin + '/learning_assets/Visual_Aid/Lesson33.png') + '" alt="Shield Icon" style="width: 96px; height: 96px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.12); object-fit: cover;"/>' +
+          '<h3 class="mb-0" style="line-height: 1.2;">The Privacy Settings & The Oversharing Trap</h3>' +
+        '</div>' +
+        '<p>Your online activities—from a single photo to a quick comment—all leave a digital footprint. This is the trail of data you leave behind, and it can be used by scammers and hackers to target you. The good news is, you can take control of your footprint by managing your social media habits.</p>' +
+        '<p>This is especially true here in the Philippines, where scammers are known to use fake offers to trick students. According to a legal guide, common scams that target students often include fake “Scholarship or Grant Scams” and “Job Placement Scams” on social media (Respicio & Co., 2025). The attackers use the personal information you\'ve overshared to make these scams seem legitimate.</p>' +
+        '<h4 class="d-flex align-items-center" style="gap: 0.5rem;">' +
+        '  <img src="' + (window.location.origin + '/learning_assets/Documents/KeyRisksofOversharing.png') + '" alt="Shield Icon" style="width: 32px; height: 32px; border-radius: 4px; object-fit: cover;"/>' +
+        '  Key Risks of Oversharing' +
+        '</h4>' +
+        '<p>Oversharing is when you post too much personal information online, especially when it\'s visible to people you don\'t know. The risks are very real:</p>' +
+        '<ul>' +
+          '<li><strong>Identity Theft:</strong> Posting your full name, birthday, and hometown publicly can give a scammer enough information to steal your identity or even perform a SIM card fraud attack.</li>' +
+          '<li><strong>Cyberstalking:</strong> Frequently tagging your location or posting about your daily routines can make you a target for cyberstalkers, who can track your movements and put your physical safety at risk.</li>' +
+          '<li><strong>Job/School Impact:</strong> What you post online can be seen by future employers or college admissions officers. A careless post could damage your reputation and impact your future opportunities.</li>' +
+        '</ul>' +
+      '</div></div>';
+  }
+
+  // Lesson 3.2 → 3. Conclusion: Protecting Your Digital Footprint
+  var headerDFConclusion = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '3. conclusion: protecting your digital footprint'; });
+  var dfcEl = null;
+  if (headerDFConclusion) {
+    var itemDFC = headerDFConclusion.closest('.drawer-item');
+    if (itemDFC) {
+      var ocDFC = itemDFC.getAttribute('onclick') || '';
+      var mDFC = ocDFC.match(/toggleDrawer\('([^']+)'\)/);
+      if (mDFC && mDFC[1]) {
+        dfcEl = document.getElementById('content-' + mDFC[1]);
+      }
+    }
+  }
+  if (!dfcEl) {
+    dfcEl = document.getElementById('content-sub3-7');
+  }
+  if (dfcEl) {
+    var dfcWrap = dfcEl.querySelector('.content-wrapper') || dfcEl;
+    dfcWrap.innerHTML = '' +
+      '<div class="module3-scope"><div class="accordion-content">' +
+        '<h3>Lesson 3.2 Conclusion: Protecting Your Digital Footprint</h3>' +
+        '<p>Congratulations on completing this lesson! You\'ve learned that your digital footprint isn\'t something to fear; it\'s something you can control. The goal isn\'t to stay offline, but to be smart about what you share.</p>' +
+        '<p>Oversharing personal information might seem harmless, but it\'s often the first step attackers use to build a detailed profile of you. This is how they create convincing scams—like a fake scholarship offer—that are tailored specifically to trick you. By being mindful of your privacy settings and thinking before you post, you are building a strong first line of defense for your online identity.</p>' +
+        '<p>Now that you know how to protect your own information, the next lesson will show you how to be a digital detective. Let\'s explore how to spot fake emails and suspicious messages in <strong>Lesson 3.3 – Verifying Online Communications</strong>.</p>' +
+        '<div class="resources-section">' +
+          '<h4>Resources & Next Steps</h4>' +
+          '<ul class="resource-list">' +
+            '<li><strong>Read More:</strong> Keeper Security — How Oversharing on Social Media Affects Your Privacy. ' +
+              '<a class="resource-link" href="https://www.keepersecurity.com/blog/2022/12/23/how-oversharing-on-social-media-affects-your-privacy/" target="_blank" rel="noopener">Open article</a></li>' +
+            '<li><strong>Local Context:</strong> PNA — CHED warns scholarship grant seekers vs. fake online accounts. ' +
+              '<a class="resource-link" href="https://www.pna.gov.ph/articles/1191584" target="_blank" rel="noopener">Read advisory</a></li>' +
+            '<li><strong>Watch Again:</strong> What is a Digital Footprint? ' +
+              '<a class="resource-link" href="https://www.youtube.com/watch?v=ottnH427Fr8" target="_blank" rel="noopener">Watch video</a></li>' +
+          '</ul>' +
+        '</div>' +
+        '<div class="next-steps">' +
+          '<h4>Your Next Steps</h4>' +
+          '<p>Proceed to <strong>Lesson 3.3: Verifying Online Communications</strong>.</p>' +
+        '</div>' +
+      '</div></div>';
+  }
+
+  // Lesson 3.3 → 1. Spotting Phishing Scams
+  var headerL33A = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === "1. spotting phishing scams"; });
+  var l33aEl = null;
+  if (headerL33A) {
+    var itemL33A = headerL33A.closest('.drawer-item');
+    if (itemL33A) {
+      var ocL33A = itemL33A.getAttribute('onclick') || '';
+      var mL33A = ocL33A.match(/toggleDrawer\('([^']+)'\)/);
+      if (mL33A && mL33A[1]) {
+        l33aEl = document.getElementById('content-' + mL33A[1]);
+      }
+    }
+  }
+  if (!l33aEl) {
+    l33aEl = document.getElementById('content-sub3-8');
+  }
+  if (l33aEl) {
+    var l33aWrap = l33aEl.querySelector('.content-wrapper') || l33aEl;
+    l33aWrap.innerHTML = '' +
+      '<div class="module3-scope"><div class="accordion-content">' +
+        '<h3>Don\'t Take the Bait: Spotting Phishing Scams</h3>' +
+        '<p>Welcome back! In our last lesson, you learned how to protect your digital footprint from oversharing. Now, it\'s time for your final defense. This video will introduce you to verification, a simple but crucial skill that helps you analyze messages and links to see if they\'re real or if they’re just another scam designed to make you take the bait.</p>' +
+        '<div class="video-container"><div class="video-wrapper">' +
+          '<iframe src="https://www.youtube.com/embed/Bvyx4tDmtCg" title="Module 3 - Lesson 3.3 Part A: Don\'t Take the Bait — Spotting Phishing Scams" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>' +
+        '</div><div class="video-caption">Module 3 Lesson 3.3 Part A — Don\'t Take the Bait: Spotting Phishing Scams</div></div>' +
+      '</div></div>';
+  }
+
+  // Lesson 3.3 → 2. The Verification(s) Toolkit
+  var headerL33B = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+    .find(function(h){
+      var t = (h.textContent || '').trim().toLowerCase();
+      return t === '2. the verifications toolkit' || t === '2. the verification toolkit';
+    });
+  var l33bEl = null;
+  if (headerL33B) {
+    var itemL33B = headerL33B.closest('.drawer-item');
+    if (itemL33B) {
+      var ocL33B = itemL33B.getAttribute('onclick') || '';
+      var mL33B = ocL33B.match(/toggleDrawer\('([^']+)'\)/);
+      if (mL33B && mL33B[1]) {
+        l33bEl = document.getElementById('content-' + mL33B[1]);
+      }
+    }
+  }
+  if (!l33bEl) {
+    l33bEl = document.getElementById('content-sub3-9');
+  }
+  if (l33bEl) {
+    var l33bWrap = l33bEl.querySelector('.content-wrapper') || l33bEl;
+    l33bWrap.innerHTML = '' +
+      '<div class="module3-scope"><div class="accordion-content">' +
+        '<h3>The Verification Toolkit: Your Guide to Online Safety 🛡️</h3>' +
+        '<p>Welcome to Part B of our lesson! You\'ve learned how to spot the common red flags of a phishing attack. Now, let\'s empower you with the Verification Toolkit—a set of skills to confirm if a message or link is legitimate before you interact with it. Being able to verify is your best defense!</p>' +
+        '<div class="d-flex align-items-center mb-2" style="gap: 0.75rem;">' +
+          '<img src="' + (window.location.origin + '/learning_assets/Documents/Lesson33VerifyingOnlineCommunications.png') + '" alt="Verify Icon" style="width: 96px; height: 96px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.12); object-fit: cover;"/>' +
+          '<h4 class="mb-0" style="line-height: 1.2;">What Does "Verify" Mean?</h4>' +
+        '</div>' +
+        '<p>To verify means to confirm that something is real and trustworthy before you act on it. Think of it like checking if your jeepney driver is really your suki before you hop in! In the digital world, it means making sure that email, SMS, or link is truly from who it claims to be.</p>' +
+        '<h4>Four Core Verification Skills</h4>' +
+        '<p>Here are four essential skills to add to your online safety toolkit:</p>' +
+        '<ol>' +
+          '<li><strong>Check the Sender 🕵️‍♀️</strong> Don\'t just trust the name you see! Scammers often use familiar display names, but their actual email addresses are usually giveaways. Always click or hover over the sender\'s name to reveal the full email address. Is it from support@your_school.edu.ph or support@scam.co? A genuine sender will have a proper domain. <em>(IT Governance, 2025)</em></li>' +
+          '<li><strong>Hover Before You Click 🖱️</strong> This is super important! Before you click on any link, hover your mouse cursor over it (or long-press on mobile) to see the actual website address it leads to. Look closely! Scammers often use tricky URLs with small typos (e.g., mycamu.phishing.com instead of mycamu.ph). If it looks suspicious, don\'t click!</li>' +
+          '<li><strong>Inspect the Website URL 🔒</strong> Once you click a link (after verifying it\'s safe to do so!), always check the website address. <strong>HTTPS</strong>: look for https:// at the beginning. <strong>Padlock Icon</strong>: ensure there\'s a padlock next to the URL. <strong>Domain Typos</strong>: watch for misspellings (e.g., facebo0k.com). While many phishing sites now use HTTPS, these other clues remain vital! <em>(Hoxhunt, 2024)</em></li>' +
+          '<li><strong>Verify the Request 🗣️</strong> If a message demands urgent action—“Click now to unblock your account!”—confirm via a trusted channel. Call the official number (not the one in the message) or use the official app/site. Don\'t let urgency force a mistake! <em>(Hoxhunt, 2024)</em></li>' +
+        '</ol>' +
+        '<p>By practicing these skills, you\'ll become much more confident in navigating the digital world safely. Remember, a little extra checking goes a long way in protecting your personal information!</p>' +
+        '<div class="infographic-container">' +
+          '<img src="' + (window.location.origin + '/learning_assets/Documents/lesson33TheVerificationToolkit.png') + '" alt="The Verification Toolkit Infographic" />' +
+          '<div class="video-caption">The Verification Toolkit — quick reference to core checks</div>' +
+        '</div>' +
+      '</div></div>';
+  }
+  // Lesson 3.3 → 3. Lesson Conclusion: The Verification Toolkit
+  var headerL33C = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '3. lesson conclusion: the verification toolkit'; });
+  var l33cEl = null;
+  if (headerL33C) {
+    var itemL33C = headerL33C.closest('.drawer-item');
+    if (itemL33C) {
+      var ocL33C = itemL33C.getAttribute('onclick') || '';
+      var mL33C = ocL33C.match(/toggleDrawer\('([^']+)'\)/);
+      if (mL33C && mL33C[1]) {
+        l33cEl = document.getElementById('content-' + mL33C[1]);
+      }
+    }
+  }
+  if (!l33cEl) {
+    l33cEl = document.getElementById('content-sub3-10');
+  }
+  if (l33cEl) {
+    var l33cWrap = l33cEl.querySelector('.content-wrapper') || l33cEl;
+    l33cWrap.innerHTML = '' +
+      '<div class="module3-scope"><div class="accordion-content">' +
+        '<h3>Lesson Conclusion: The Verification Toolkit</h3>' +
+        '<p>Congratulations! You\'ve just completed our lesson on verifying online communications. You\'ve now learned that verifying before you click, reply, or trust is one of the most powerful habits you can build online.</p>' +
+        '<p>Every suspicious email, text, or link is a test—and now, you have the tools to pass it. You know how to check a sender\'s email, inspect a website\'s URL for red flags, and verify urgent requests through another channel. This simple, proactive habit is your final defense against digital deception.</p>' +
+        '<p>You\'ve now completed the entire Social Engineering Defense module! It\'s time to put all your new knowledge to the test.</p>' +
+        '<div class="resources-section">' +
+          '<h4>Resources & Next Steps</h4>' +
+          '<ul class="resource-list">' +
+            '<li><strong>Read More:</strong> IT Governance — How to Spot a Phishing Email in 2025. ' +
+              '<a class="resource-link" href="https://www.itgovernance.co.uk/blog/5-ways-to-detect-a-phishing-email" target="_blank" rel="noopener">Open article</a></li>' +
+            '<li><strong>Local Context:</strong> ABS‑CBN — GCash warns public vs spoofing scams. ' +
+              '<a class="resource-link" href="https://www.abs-cbn.com/news/business/2024/12/11/gcash-warns-public-vs-spoofing-scams-1316" target="_blank" rel="noopener">Read news</a></li>' +
+            '<li><strong>Watch Again:</strong> Red flags in phishing emails (animated). ' +
+              '<a class="resource-link" href="https://www.youtube.com/watch?v=iHetr8xTWIU" target="_blank" rel="noopener">Watch video</a></li>' +
+          '</ul>' +
+        '</div>' +
+        '<div class="next-steps">' +
+          '<h4>Your Next Steps</h4>' +
+          '<p>Proceed to the <strong>Module 3 Quiz</strong>, complete the <strong>Reflection</strong>, and try the <strong>Simulation</strong> to earn your cybersecurity badge.</p>' +
+        '</div>' +
+      '</div></div>';
+  }
+
+  // Module 3 → Simulation (interactive, similar approach to Module 2)
+  (function initModule3Simulation(){
+    var simHeader = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+      .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'simulation'; });
+    var simEl = null;
+    if (simHeader) {
+      var itemSim = simHeader.closest('.drawer-item');
+      if (itemSim) {
+        var ocSim = itemSim.getAttribute('onclick') || '';
+        var mSim = ocSim.match(/toggleDrawer\('([^']+)'\)/);
+        if (mSim && mSim[1]) {
+          simEl = document.getElementById('content-' + mSim[1]);
+        }
+      }
+    }
+    if (!simEl) simEl = document.getElementById('content-simulation');
+    // Try common pattern: body is the next sibling subcontent after the header
+    if (!simEl) {
+      var simTitle = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+        .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'simulation'; });
+      if (simTitle) {
+        var simItem = simTitle.closest('.drawer-item');
+        if (simItem && simItem.nextElementSibling && simItem.nextElementSibling.classList.contains('drawer-subcontent')) {
+          simEl = simItem.nextElementSibling;
+        }
+      }
+    }
+    // If still not found, create a Simulation drawer consistent with existing drawers
+    if (!simEl) {
+      var drawersRoot = document.querySelector('.content-drawers');
+      if (drawersRoot) {
+        var drawerItem = document.createElement('div');
+        drawerItem.className = 'drawer-item';
+        drawerItem.setAttribute('onclick', "toggleDrawer('simulation3')");
+        drawerItem.innerHTML = '<div class="drawer-content">\
+            <div class="drawer-icon"><i class="fas fa-gamepad"></i></div>\
+            <div class="drawer-title"><h5>Simulation</h5></div>\
+            <div class="drawer-arrow"><i class="fas fa-chevron-down"></i></div>\
+          </div>';
+
+        var drawerSub = document.createElement('div');
+        drawerSub.className = 'drawer-subcontent';
+        drawerSub.id = 'content-simulation3';
+        var cw = document.createElement('div');
+        cw.className = 'content-wrapper';
+        drawerSub.appendChild(cw);
+
+        drawersRoot.appendChild(drawerItem);
+        drawersRoot.appendChild(drawerSub);
+        simEl = drawerSub;
+      }
+    }
+    if (!simEl) return;
+
+    function injectSimulation(intoEl){
+      var wrap = intoEl.querySelector('.content-wrapper') || intoEl;
+      wrap.innerHTML = ''+
+        '<div class="module3-scope"><div class="accordion-content">'+
+          '<h3>Module 3 Simulation: The Proactive Defender</h3>'+
+          '<p>Practice real‑world decisions for passwords, privacy, and verification. Choose the best response in each scenario and see instant feedback.</p>'+
+
+          '<div class="scenarios-container">'+
+
+            '<div class="scenario-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:24px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+              '<div class="scenario-header" style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'+
+                '<div style="background:#dc3545;color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">1</div>'+
+                '<h4 style="margin:0;color:#dc3545;">Scenario 1 – Passwords & MFA</h4>'+
+              '</div>'+
+              '<div class="scenario-body" style="margin-bottom:12px;">'+
+                '<p class="mb-2">Your password was leaked in a data breach. The system now asks for your MFA code.</p>'+
+                '<p class="mb-0"><strong>Question:</strong> What is the best action?</p>'+
+              '</div>'+
+              '<div class="question-section">'+
+                '<div class="option-item" data-option="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario1" value="A" id="scenario1_A" style="margin-right:10px;">'+
+                    '<label for="scenario1_A" style="margin:0;cursor:pointer;"><strong>A)</strong> Do nothing since you still have access.</label>'+
+                  '</div>'+
+                '</div>'+
+                '<div class="option-item" data-option="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario1" value="B" id="scenario1_B" style="margin-right:10px;">'+
+                    '<label for="scenario1_B" style="margin:0;cursor:pointer;"><strong>B)</strong> Rely on MFA and also change your password immediately.</label>'+
+                  '</div>'+
+                '</div>'+
+                '<div class="option-item" data-option="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario1" value="C" id="scenario1_C" style="margin-right:10px;">'+
+                    '<label for="scenario1_C" style="margin:0;cursor:pointer;"><strong>C)</strong> Post on social media that your account was hacked.</label>'+
+                  '</div>'+
+                '</div>'+
+                '<div class="option-item" data-option="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario1" value="D" id="scenario1_D" style="margin-right:10px;">'+
+                    '<label for="scenario1_D" style="margin:0;cursor:pointer;"><strong>D)</strong> Keep using the same password.</label>'+
+                  '</div>'+
+                '</div>'+
+              '</div>'+
+              '<div class="feedback-section" id="feedback1" style="display:none;margin-top:12px;">'+
+                '<div class="feedback-content" style="padding:14px;border-radius:8px;border-left:4px solid #28a745;background:#f8f9fa;">'+
+                  '<h6 style="margin:0 0 6px 0;color:#28a745;">Feedback:</h6>'+
+                  '<div class="feedback-text"></div>'+
+                '</div>'+
+              '</div>'+
+            '</div>'+
+
+            '<div class="scenario-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:24px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+              '<div class="scenario-header" style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'+
+                '<div style="background:#dc3545;color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">2</div>'+
+                '<h4 style="margin:0;color:#dc3545;">Scenario 2 – Social Media Privacy</h4>'+
+              '</div>'+
+              '<div class="scenario-body" style="margin-bottom:12px;">'+
+                '<p class="mb-2">You post on Instagram, but your student ID is visible in the background, and your account is public.</p>'+
+                '<div style="text-align:center;margin:12px 0;">'+
+                  '<img src="' + (window.location.origin + '/learning_assets/Documents/module3scenario2.png') + '" alt="Module 3 Scenario 2" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);" />'+
+                '</div>'+
+                '<p class="mb-0"><strong>Question:</strong> What should you do?</p>'+
+              '</div>'+
+              '<div class="question-section">'+
+                '<div class="option-item" data-option="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario2" value="A" id="scenario2_A" style="margin-right:10px;">'+
+                    '<label for="scenario2_A" style="margin:0;cursor:pointer;"><strong>A)</strong> Leave it as is, it’s harmless.</label>'+
+                  '</div>'+
+                '</div>'+
+                '<div class="option-item" data-option="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario2" value="B" id="scenario2_B" style="margin-right:10px;">'+
+                    '<label for="scenario2_B" style="margin:0;cursor:pointer;"><strong>B)</strong> Delete/blur the ID and set your profile to private.</label>'+
+                  '</div>'+
+                '</div>'+
+                '<div class="option-item" data-option="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario2" value="C" id="scenario2_C" style="margin-right:10px;">'+
+                    '<label for="scenario2_C" style="margin:0;cursor:pointer;"><strong>C)</strong> Share the photo on more platforms.</label>'+
+                  '</div>'+
+                '</div>'+
+                '<div class="option-item" data-option="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario2" value="D" id="scenario2_D" style="margin-right:10px;">'+
+                    '<label for="scenario2_D" style="margin:0;cursor:pointer;"><strong>D)</strong> Tag the school to show your achievement.</label>'+
+                  '</div>'+
+                '</div>'+
+              '</div>'+
+              '<div class="feedback-section" id="feedback2" style="display:none;margin-top:12px;">'+
+                '<div class="feedback-content" style="padding:14px;border-radius:8px;border-left:4px solid #28a745;background:#f8f9fa;">'+
+                  '<h6 style="margin:0 0 6px 0;color:#28a745;">Feedback:</h6>'+
+                  '<div class="feedback-text"></div>'+
+                '</div>'+
+              '</div>'+
+            '</div>'+
+
+            '<div class="scenario-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:24px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+              '<div class="scenario-header" style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'+
+                '<div style="background:#dc3545;color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">3</div>'+
+                '<h4 style="margin:0;color:#dc3545;">Scenario 3 – Verification Check</h4>'+
+              '</div>'+
+              '<div class="scenario-body" style="margin-bottom:12px;">'+
+                '<p class="mb-2">You get a text message that looks like it’s from GCash: “Click here to verify your account.”</p>'+
+                '<div style="text-align:center;margin:12px 0;">'+
+                  '<img src="' + (window.location.origin + '/learning_assets/Documents/module3scenario3.png') + '" alt="Module 3 Scenario 3" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);" />'+
+                '</div>'+
+                '<p class="mb-0"><strong>Question:</strong> What should you do?</p>'+
+              '</div>'+
+              '<div class="question-section">'+
+                '<div class="option-item" data-option="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario3" value="A" id="scenario3_A" style="margin-right:10px;">'+
+                    '<label for="scenario3_A" style="margin:0;cursor:pointer;"><strong>A)</strong> Click the link quickly to avoid losing access.</label>'+
+                  '</div>'+
+                '</div>'+
+                '<div class="option-item" data-option="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario3" value="B" id="scenario3_B" style="margin-right:10px;">'+
+                    '<label for="scenario3_B" style="margin:0;cursor:pointer;"><strong>B)</strong> Call the official GCash hotline to confirm first.</label>'+
+                  '</div>'+
+                '</div>'+
+                '<div class="option-item" data-option="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario3" value="C" id="scenario3_C" style="margin-right:10px;">'+
+                    '<label for="scenario3_C" style="margin:0;cursor:pointer;"><strong>C)</strong> Reply with your account details.</label>'+
+                  '</div>'+
+                '</div>'+
+                '<div class="option-item" data-option="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario3" value="D" id="scenario3_D" style="margin-right:10px;">'+
+                    '<label for="scenario3_D" style="margin:0;cursor:pointer;"><strong>D)</strong> Ignore and hope it goes away.</label>'+
+                  '</div>'+
+                '</div>'+
+              '</div>'+
+              '<div class="feedback-section" id="feedback3" style="display:none;margin-top:12px;">'+
+                '<div class="feedback-content" style="padding:14px;border-radius:8px;border-left:4px solid #28a745;background:#f8f9fa;">'+
+                  '<h6 style="margin:0 0 6px 0;color:#28a745;">Feedback:</h6>'+
+                  '<div class="feedback-text"></div>'+
+                '</div>'+
+              '</div>'+
+            '</div>'+
+
+          '</div>'+
+
+          '<div class="final-results" id="m3FinalResults" style="display:none;background:linear-gradient(135deg,#d4edda 0%,#c3e6cb 100%);padding:20px;border-radius:12px;border-left:5px solid #28a745;margin-top:10px;">'+
+            '<h4 style="color:#155724;margin:0 0 8px 0;"><i class="fas fa-trophy" style="margin-right:8px;"></i>Great job!</h4>'+
+            '<p style="color:#155724;margin:0;">Awesome! You applied strong proactive habits — changing passwords, protecting personal info, and verifying messages properly.</p>'+
+          '</div>'+
+
+        '</div></div>';
+
+      setTimeout(initModule3SimHandlers, 0);
+    }
+
+    // Inject now if visible, and also bind to header click to ensure injection after expansion
+    injectSimulation(simEl);
+    if (simHeader) {
+      var headerItem = simHeader.closest('.drawer-item');
+      if (headerItem) {
+        headerItem.addEventListener('click', function(){
+          // After expansion, ensure content is injected/replaced (handles lazy creation)
+          var target = simEl || (headerItem.nextElementSibling && headerItem.nextElementSibling.classList.contains('drawer-subcontent') ? headerItem.nextElementSibling : null);
+          if (target) injectSimulation(target);
+        });
+      }
+    }
+  })();
+
+  // Module 3 → Knowledge Check (only show requested 3 rules)
+  (function initModule3KnowledgeCheck(){
+    try {
+      var kcHeader = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+        .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'knowledge check'; });
+      var kcEl = null;
+      if (kcHeader) {
+        var kcItem = kcHeader.closest('.drawer-item');
+        if (kcItem) {
+          var oc = kcItem.getAttribute('onclick') || '';
+          var m = oc.match(/toggleDrawer\('([^']+)'\)/);
+          if (m && m[1]) kcEl = document.getElementById('content-' + m[1]);
+        }
+      }
+      if (!kcEl) kcEl = document.getElementById('content-knowledge-check');
+      if (!kcEl) return;
+
+      var wrap = kcEl.querySelector('.content-wrapper') || kcEl;
+      wrap.innerHTML = ''+
+        '<div class="module3-scope"><div class="accordion-content">'+
+          '<h3 class="mb-3">Knowledge Check — Module 3</h3>'+
+          '<div class="knowledge-check-rules" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px; border-radius: 12px; border-left: 5px solid #007bff;">'+
+            '<ul style="font-size: 1.05rem; line-height: 1.7; margin: 0; color: #333;">'+
+              '<li><strong>Unlimited attempts</strong></li>'+
+              '<li><strong>5 questions per attempt</strong></li>'+
+              '<li><strong>Passing score: 80%</strong></li>'+
+            '</ul>'+
+          '</div>'+
+          '<div style="text-align:center; margin-top: 16px;">'+
+            '<a href="/assessment/3" class="btn btn-primary btn-lg" style="padding: 12px 24px; font-weight: 600;"><i class="fas fa-play me-2"></i>Start Knowledge Check</a>'+
+          '</div>'+
+        '</div></div>';
+    } catch(e) { /* silent */ }
+  })();
+
+  // Module 3 → References (Drawer): compile APA 7 citations from module content
+  (function initModule3References(){
+    try {
+      var refHeader = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+        .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'references'; });
+      var refEl = null;
+      if (refHeader) {
+        var refItem = refHeader.closest('.drawer-item');
+        if (refItem) {
+          var oc = refItem.getAttribute('onclick') || '';
+          var m = oc.match(/toggleDrawer\('([^']+)'\)/);
+          if (m && m[1]) refEl = document.getElementById('content-' + m[1]);
+        }
+      }
+      if (!refEl) refEl = document.getElementById('content-references');
+      if (!refEl) return;
+
+      var wrap = refEl.querySelector('.content-wrapper') || refEl;
+      wrap.innerHTML = ''+
+        '<div class="module3-scope"><div class="accordion-content">'+
+          '<h3>References (APA 7th)</h3>'+
+          '<ul class="resource-list">'+
+            '<li>Cybersecurity and Infrastructure Security Agency. (n.d.). <em>Use strong passwords</em>. https://www.cisa.gov/secure-our-world/use-strong-passwords</li>'+
+            '<li>Rappler. (n.d.). <em>San Beda University student portal hacked, personal data stolen</em>. https://www.rappler.com/philippines/263117-san-beda-university-student-portal-hacked-personal-data-stolen/</li>'+
+            '<li>Keeper Security. (2022, December 23). <em>How oversharing on social media affects your privacy</em>. https://www.keepersecurity.com/blog/2022/12/23/how-oversharing-on-social-media-affects-your-privacy/</li>'+
+            '<li>Philippine News Agency. (n.d.). <em>CHED warns scholarship grant seekers vs. fake online accounts</em>. https://www.pna.gov.ph/articles/1191584</li>'+
+            '<li>IT Governance. (2025). <em>How to spot a phishing email</em>. https://www.itgovernance.co.uk/blog/5-ways-to-detect-a-phishing-email</li>'+
+            '<li>ABS-CBN News. (2024, December 11). <em>GCash warns public vs spoofing scams</em>. https://www.abs-cbn.com/news/business/2024/12/11/gcash-warns-public-vs-spoofing-scams-1316</li>'+
+            '<li>YouTube. (n.d.). <em>Module 3 – Lesson 3.1 Part C: Enabling Multi‑Factor Authentication (MFA) [Video]</em>. https://www.youtube.com/watch?v=tHSJ8896ZuI</li>'+
+            '<li>YouTube. (n.d.). <em>The Digital Footprint [Video]</em>. https://www.youtube.com/watch?v=ic4LW1uUtDw</li>'+
+            '<li>YouTube. (n.d.). <em>Don’t take the bait: Spotting phishing scams [Video]</em>. https://www.youtube.com/watch?v=Bvyx4tDmtCg</li>'+
+            '<li>YouTube. (n.d.). <em>Red flags in phishing emails (animated) [Video]</em>. https://www.youtube.com/watch?v=iHetr8xTWIU</li>'+
+          '</ul>'+
+        '</div></div>';
+    } catch(e) { /* silent */ }
+  })();
+
+  // Handlers for Module 3 interactive simulation (mirrors Module 2 behavior)
+  function initModule3SimHandlers(){
+    try {
+      var feedbackData = {
+        scenario1: {
+          A: { correct: false, message: '❌ Ignoring the breach leaves your account at risk. Hackers could still log in.' },
+          B: { correct: true,  message: '✅ Correct! MFA blocks unauthorized access, and updating your password ensures better security.' },
+          C: { correct: false, message: '❌ Alerting others is fine later, but first secure your account.' },
+          D: { correct: false, message: '❌ Never reuse a compromised password. Hackers test it across multiple sites.' }
+        },
+        scenario2: {
+          A: { correct: false, message: '❌ Not safe! IDs can be misused for impersonation and identity theft.' },
+          B: { correct: true,  message: '✅ Correct! Protecting personal info and limiting access reduces risk of social engineering.' },
+          C: { correct: false, message: '❌ That exposes sensitive data to even more strangers.' },
+          D: { correct: false, message: '❌ Proud moments are fine — but never with private data visible.' }
+        },
+        scenario3: {
+          A: { correct: false, message: '❌ That’s how phishing works. Scammers want you to panic and act fast.' },
+          B: { correct: true,  message: '✅ Correct! Always verify suspicious requests through official channels.' },
+          C: { correct: false, message: '❌ Never send sensitive details through SMS. It’s insecure.' },
+          D: { correct: false, message: '❌ Ignoring doesn’t solve the problem. Always verify to stay safe.' }
+        }
+      };
+
+      // Wire radio change events
+      document.querySelectorAll('input[type="radio"][name^="scenario"]').forEach(function(r){
+        r.addEventListener('change', function(){
+          var scenarioNum = this.name.replace('scenario','');
+          var option = this.value;
+          var feedbackDiv = document.getElementById('feedback' + scenarioNum);
+          if (!feedbackDiv) return;
+          var feedbackText = feedbackDiv.querySelector('.feedback-text');
+          var meta = (feedbackData['scenario' + scenarioNum] || {})[option];
+          if (!meta) return;
+
+          feedbackDiv.style.display = 'block';
+          feedbackText.innerHTML = meta.message;
+
+          var contentBox = feedbackDiv.querySelector('.feedback-content');
+          var header = feedbackDiv.querySelector('h6');
+          if (contentBox && header) {
+            if (meta.correct) {
+              contentBox.style.borderLeftColor = '#28a745';
+              header.style.color = '#28a745';
+            } else {
+              contentBox.style.borderLeftColor = '#dc3545';
+              header.style.color = '#dc3545';
+            }
+          }
+
+          checkM3AllCompleted();
+        });
+      });
+
+      // Click on container selects the radio
+      document.querySelectorAll('.module3-scope .scenario-card .option-item').forEach(function(item){
+        item.addEventListener('click', function(){
+          var radio = this.querySelector('input[type="radio"]');
+          if (radio) {
+            radio.checked = true;
+            radio.dispatchEvent(new Event('change'));
+          }
+        });
+      });
+
+      function checkM3AllCompleted(){
+        var checked = document.querySelectorAll('input[type="radio"][name^="scenario"]:checked');
+        var names = new Set();
+        checked.forEach(function(c){ names.add(c.name); });
+        if (names.size >= 3) {
+          var final = document.getElementById('m3FinalResults');
+          if (final) final.style.display = 'block';
+        }
+      }
+    } catch(e) {
+      // fail silently to avoid breaking the page
+    }
+  }
+
+  // Module 3 → Reflection (Drawer) with submission, consistent with Modules 1 & 2
+  var headerRefl = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'reflection'; });
+  var reflEl = null;
+  if (headerRefl) {
+    var itemRefl = headerRefl.closest('.drawer-item');
+    if (itemRefl) {
+      var ocRefl = itemRefl.getAttribute('onclick') || '';
+      var mRefl = ocRefl.match(/toggleDrawer\('([^']+)'\)/);
+      if (mRefl && mRefl[1]) {
+        reflEl = document.getElementById('content-' + mRefl[1]);
+      }
+    }
+  }
+  if (!reflEl) {
+    // Fallback container id if reflection drawer uses a predictable id
+    reflEl = document.getElementById('content-reflection');
+  }
+  if (reflEl) {
+    var rWrap = reflEl.querySelector('.content-wrapper') || reflEl;
+    rWrap.innerHTML = '' +
+      '<div class="module3-scope"><div class="accordion-content">' +
+        '<h3>Module 3 Reflection: "Your Defense, Your Decision"</h3>' +
+        '<p>Congratulations on completing Module 3! You’ve learned that your online security is in your hands, and you now have the tools to be proactive. This reflection is a chance to think about what you\'ve learned and how you\'ll apply it in your daily digital life.</p>' +
+        '<h4>Reflection</h4>' +
+        '<ol>' +
+          '<li><strong>What is one online habit you plan to change</strong> after learning about password security, oversharing, and verification? <em>(Halimbawa: Maglalagay na ako ng mas secure na password sa lahat ng account ko.)</em></li>' +
+          '<li><strong>Which lesson or tip surprised you the most—why?</strong> <em>(Halimbawa: Di ko alam na madali palang makita kung scam ang email sa pamamagitan ng pag-hover sa link.)</em></li>' +
+          '<li><strong>Imagine advising a friend</strong> who doesn’t know about MFA or oversharing—what would you tell them?</li>' +
+        '</ol>' +
+        '<div class="resources-section" style="margin-top: 1rem;">' +
+          '<h4>Your Reflection</h4>' +
+          '<p class="mb-2">Share your thoughts below. This helps reinforce your learning and commit to action.</p>' +
+          '<textarea id="m3ReflectionText" class="form-control" rows="5" placeholder="Type your reflection here..."></textarea>' +
+          '<div class="d-flex justify-content-end" style="margin-top: 0.75rem;">' +
+            '<button id="m3ReflectionSubmit" class="btn btn-primary">Submit Reflection</button>' +
+          '</div>' +
+          '<div id="m3ReflectionStatus" class="mt-2 text-muted" style="min-height: 1.25rem;"></div>' +
+        '</div>' +
+      '</div></div>';
+
+    // Hook up submission
+    var btn = document.getElementById('m3ReflectionSubmit');
+    if (btn) {
+      btn.addEventListener('click', function(){
+        var txt = document.getElementById('m3ReflectionText');
+        var status = document.getElementById('m3ReflectionStatus');
+        var payload = { module_id: 3, reflection_text: (txt && txt.value || '').trim() };
+        if (!payload.reflection_text) {
+          status.textContent = 'Please enter your reflection before submitting.';
+          status.className = 'mt-2 text-danger';
+          return;
+        }
+        status.textContent = 'Submitting...';
+        status.className = 'mt-2 text-muted';
+        fetch('/submit_reflection', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).then(function(r){ return r.json(); }).then(function(res){
+          if (res && res.success) {
+            status.textContent = 'Reflection submitted successfully!';
+            status.className = 'mt-2 text-success';
+            if (txt) txt.value = '';
+          } else {
+            status.textContent = (res && res.error) || 'Submission failed.';
+            status.className = 'mt-2 text-danger';
+          }
+        }).catch(function(){
+          status.textContent = 'Network error. Please try again.';
+          status.className = 'mt-2 text-danger';
+        });
+      });
+    }
+  }
+});
+</script>
+

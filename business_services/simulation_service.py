@@ -29,6 +29,26 @@ class SimulationService:
         """Create a pretexting simulation scenario"""
         # Temporarily disabled - simulation classes cleared
         return {"error": "Simulation content being rebuilt"}
+
+    @staticmethod
+    def create_baiting_simulation() -> Dict[str, Any]:
+        """Create a baiting simulation scenario (placeholder)"""
+        return {
+            "title": "Baiting Simulation (Coming Soon)",
+            "description": "Practice recognizing baiting attempts such as free USBs or downloads that entice clicks.",
+            "questions": [],
+            "error": "Simulation content being rebuilt"
+        }
+
+    @staticmethod
+    def create_quid_pro_quo_simulation() -> Dict[str, Any]:
+        """Create a quid pro quo simulation scenario (placeholder)"""
+        return {
+            "title": "Quid Pro Quo Simulation (Coming Soon)",
+            "description": "Learn to identify offers that request access or data in exchange for services.",
+            "questions": [],
+            "error": "Simulation content being rebuilt"
+        }
     
     @staticmethod
     def grade_simulation(simulation_data: Dict[str, Any], user_answers: Dict[str, str]) -> Dict[str, Any]:
@@ -142,11 +162,9 @@ class SimulationService:
             elif simulation_type == SimulationType.PRETEXTING.value:
                 return SimulationService.create_pretexting_simulation()
             elif simulation_type == SimulationType.BAITING.value:
-                baiting_sim = BaitingSimulation()
-                return baiting_sim.get_random_scenario()
+                return SimulationService.create_baiting_simulation()
             elif simulation_type == SimulationType.QUID_PRO_QUO.value:
-                quid_pro_quo_sim = QuidProQuoSimulation()
-                return quid_pro_quo_sim.get_random_scenario()
+                return SimulationService.create_quid_pro_quo_simulation()
             else:
                 raise ValueError(f"Unsupported simulation type: {simulation_type}")
                 
@@ -189,4 +207,62 @@ class SimulationService:
         except Exception as e:
             print(f"Error getting simulation content: {e}")
             return {}
+
+    # ---------------------------------------------------------------------
+    # Compatibility helpers expected by route handlers in app.py
+    # ---------------------------------------------------------------------
+    @staticmethod
+    def get_simulation_data(simulation_type: str) -> Optional[Dict[str, Any]]:
+        """
+        Backwards-compatible alias used by routes to fetch simulation data.
+        """
+        try:
+            return SimulationService.get_simulation_content(simulation_type)
+        except Exception as e:
+            print(f"Error getting simulation data: {e}")
+            return None
+
+    @staticmethod
+    def evaluate_simulation(user_id: int, simulation_type: str, responses: Dict[str, Any]) -> Optional[SimulationResult]:
+        """
+        Evaluate a simulation attempt, persist the result, and return the record.
+        This wraps grading and saving to match the expectations in app.py.
+        """
+        try:
+            # Fetch scenario for consistency when saving results
+            scenario = SimulationService.get_simulation_by_type(simulation_type) or {}
+
+            # Grade the attempt (lenient fallback if content is being rebuilt)
+            grading = SimulationService.grade_simulation(scenario, responses) or {}
+            score = int(grading.get('score', 0))
+
+            # Derive total questions conservatively
+            questions = scenario.get('questions') if isinstance(scenario, dict) else None
+            total_questions = len(questions) if isinstance(questions, list) else max(len(responses or {}), grading.get('total_questions', 0) or 0)
+
+            # Normalize decisions_made structure for persistence
+            decisions_made = []
+            if isinstance(responses, dict):
+                for qid, answer in responses.items():
+                    decisions_made.append({
+                        'question_id': str(qid),
+                        'selected_option': str(answer)
+                    })
+
+            # Persist result (module_id optional and omitted here)
+            saved = SimulationService.save_simulation_result(
+                user_id=user_id,
+                simulation_type=simulation_type,
+                score=score,
+                total_questions=total_questions,
+                decisions_made=decisions_made,
+                scenario_data=scenario,
+                time_taken=0,
+                module_id=None
+            )
+
+            return saved
+        except Exception as e:
+            print(f"Error evaluating simulation: {e}")
+            return None
 

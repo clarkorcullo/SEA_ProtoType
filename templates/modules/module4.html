@@ -1,0 +1,1555 @@
+<style>
+.module4-scope p { text-align: justify; }
+</style>
+<script>
+// Module 4 content injector – matches Module 3 styling and behavior
+document.addEventListener('DOMContentLoaded', function() {
+  // Find the exact subtopic under Lesson 4.1 titled "The First 60 Seconds"
+  var targetHeader = Array.from(document.querySelectorAll(".drawer-item .drawer-title h5"))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '1. the first 60 seconds'; });
+
+  var contentEl = null;
+  if (targetHeader) {
+    var item = targetHeader.closest('.drawer-item');
+    if (item) {
+      var oc = item.getAttribute('onclick') || '';
+      var m = oc.match(/toggleDrawer\('([^']+)'\)/);
+      if (m && m[1]) {
+        var subId = m[1]; // e.g., sub4-1
+        contentEl = document.getElementById('content-' + subId);
+      }
+    }
+  }
+
+  // Fallback to id-based container if header-based targeting fails
+  if (!contentEl) {
+    contentEl = document.getElementById('content-sub4-1');
+  }
+
+  // As a last resort, create the container so content is not lost
+  if (!contentEl) {
+    var drawers = document.querySelector('.content-drawers');
+    if (drawers) {
+      contentEl = document.createElement('div');
+      contentEl.className = 'drawer-subcontent';
+      contentEl.id = 'content-sub4-1';
+      var cw = document.createElement('div');
+      cw.className = 'content-wrapper';
+      contentEl.appendChild(cw);
+      drawers.appendChild(contentEl);
+    }
+  }
+
+  if (contentEl) {
+    var wrap = contentEl.querySelector('.content-wrapper') || contentEl;
+    wrap.innerHTML = '' +
+      '<div class="module4-scope">' +
+      '<div class="lesson-intro">' +
+        '<h2>Immediate Action After a Suspected Attack</h2>' +
+        '<p>Welcome to Module 4! So far, you\'ve learned to spot a scam before it can trick you. But what happens if you make a mistake? This video will be your most important guide yet. It will walk you through the immediate, first steps you need to take to contain an attack and protect your digital life.</p>' +
+      '</div>' +
+      '<div class="video-container"><div class="video-wrapper">' +
+        '<iframe src="https://www.youtube.com/embed/kOCGao9TX-A" title="Module 4 - Lesson 4.1 Part A: Immediate Action After a Suspected Attack" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>' +
+      '</div><div class="video-caption">Module 4 Lesson 4.1 Part A — Immediate Action After a Suspected Attack</div></div>' +
+      '</div>';
+  }
+
+  // Lesson 4.1 → 2. Your Action Plan
+  var headerActionPlan = Array.from(document.querySelectorAll(".drawer-item .drawer-title h5"))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '2. your action plan'; });
+
+  var actionPlanEl = null;
+  if (headerActionPlan) {
+    var item2 = headerActionPlan.closest('.drawer-item');
+    if (item2) {
+      var oc2 = item2.getAttribute('onclick') || '';
+      var m2 = oc2.match(/toggleDrawer\('([^']+)'\)/);
+      if (m2 && m2[1]) {
+        actionPlanEl = document.getElementById('content-' + m2[1]); // e.g., content-sub4-2
+      }
+    }
+  }
+  if (!actionPlanEl) {
+    actionPlanEl = document.getElementById('content-sub4-2');
+  }
+  if (actionPlanEl) {
+    var apWrap = actionPlanEl.querySelector('.content-wrapper') || actionPlanEl;
+    apWrap.innerHTML = '' +
+      '<div class="module4-scope"><div class="accordion-content">' +
+        '<h3>Your Immediate Response Plan</h3>' +
+        '<p>You\'ve learned to spot a scam, but what happens if you make a mistake? Panic is normal, but action is your best defense. This guide will walk you through what to do right away to contain the damage and protect yourself and your community.</p>' +
+        
+        '<div class="d-flex align-items-center mb-3" style="gap: 1rem;">' +
+          '<img src="' + (window.location.origin + '/learning_assets/Documents/Lesson41.png') + '" alt="Disconnect Icon" style="width: 96px; height: 96px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.12); object-fit: cover;"/>' +
+          '<h4 class="mb-0" style="line-height: 1.2;">Basic Containment: "I-isolate Mo Muna ang Device Mo"</h4>' +
+        '</div>' +
+        '<p>The first and most critical step is containment. In cybersecurity, containment means stopping an attack from getting worse. The simplest way to do this is to disconnect your device from the internet.</p>' +
+        '<p><strong>I-isolate mo muna ang device mo — \'wag ka muna mag-connect sa WiFi habang nag-aayos.</strong> This cuts off the scammer\'s access to your device and your network. This simple, immediate action can prevent malware from spreading or stop a hacker from stealing more of your data.</p>' +
+        
+        '<h4>Your Immediate Response Flowchart</h4>' +
+        '<p>This is a plan for your interactive flowchart to be created in Canva. The flowchart should follow these three scenarios:</p>' +
+        '<div class="scenario-cards" style="display: grid; gap: 20px; margin: 20px 0;">' +
+          '<div class="scenario-card" style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 12px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">' +
+            '<h5 style="color: #856404; margin-bottom: 15px; display: flex; align-items: center;">' +
+              '<span style="font-size: 1.5rem; margin-right: 10px;">⚠️</span>' +
+              'If you clicked a suspicious link' +
+            '</h5>' +
+            '<p style="margin: 0; color: #856404;"><strong>Your first action is to immediately disconnect your internet.</strong> This contains the threat and prevents any malware from downloading or a hacker from accessing your device.</p>' +
+          '</div>' +
+          '<div class="scenario-card" style="background: #f8d7da; border: 1px solid #dc3545; border-radius: 12px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">' +
+            '<h5 style="color: #721c24; margin-bottom: 15px; display: flex; align-items: center;">' +
+              '<span style="font-size: 1.5rem; margin-right: 10px;">❌</span>' +
+              'If you typed your password into a fake site' +
+            '</h5>' +
+            '<p style="margin: 0; color: #721c24;"><strong>Your first action is to change your password from a clean device.</strong> Use a different computer or a friend\'s phone to change the password on all your affected accounts.</p>' +
+          '</div>' +
+          '<div class="scenario-card" style="background: #f8d7da; border: 1px solid #dc3545; border-radius: 12px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">' +
+            '<h5 style="color: #721c24; margin-bottom: 15px; display: flex; align-items: center;">' +
+              '<span style="font-size: 1.5rem; margin-right: 10px;">❌</span>' +
+              'If you shared info with a suspicious person' +
+            '</h5>' +
+            '<p style="margin: 0; color: #721c24;"><strong>Your first action is to stop all contact and report the incident.</strong> Block the person and inform your trusted contacts to be careful.</p>' +
+          '</div>' +
+        '</div>' +
+        
+        '<h4>Notification Guidelines</h4>' +
+        '<p>You\'re not alone in facing these threats. Here\'s who to notify after a security incident.</p>' +
+        '<div class="notification-guidelines" style="background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 5px solid #007bff; margin: 20px 0;">' +
+          '<div class="guideline-item" style="margin-bottom: 20px;">' +
+            '<h5 style="color: #007bff; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-graduation-cap" style="margin-right: 8px;"></i>' +
+              'For school accounts' +
+            '</h5>' +
+            '<p style="margin: 0;">Report it to the <strong>MMDC IT Helpdesk</strong>. They have the tools and expertise to stop a threat and help you recover your data.</p>' +
+          '</div>' +
+          '<div class="guideline-item" style="margin-bottom: 20px;">' +
+            '<h5 style="color: #28a745; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-users" style="margin-right: 8px;"></i>' +
+              'For personal accounts' +
+            '</h5>' +
+            '<p style="margin: 0;">Inform your <strong>trusted contacts</strong> if their information may have been affected. This is your "Digital Bayanihan" in action, protecting your friends and family from the same scam.</p>' +
+          '</div>' +
+          '<div class="guideline-item">' +
+            '<h5 style="color: #dc3545; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-shield-alt" style="margin-right: 8px;"></i>' +
+              'For serious incidents' +
+            '</h5>' +
+            '<p style="margin: 0;">For incidents involving identity theft or financial loss, you should report it to the <strong>PNP Anti-Cybercrime Group (PNP ACG)</strong>. But always do this with the guidance of the MMDC IT Helpdesk.</p>' +
+          '</div>' +
+        '</div>' +
+      '</div></div>';
+  }
+
+  // Lesson 4.1 → 3. Lesson Conclusion: The First Few Seconds
+  var headerConclusion = Array.from(document.querySelectorAll(".drawer-item .drawer-title h5"))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '3. lesson conclusion: the first few seconds'; });
+
+  var conclusionEl = null;
+  if (headerConclusion) {
+    var item3 = headerConclusion.closest('.drawer-item');
+    if (item3) {
+      var oc3 = item3.getAttribute('onclick') || '';
+      var m3 = oc3.match(/toggleDrawer\('([^']+)'\)/);
+      if (m3 && m3[1]) {
+        conclusionEl = document.getElementById('content-' + m3[1]); // e.g., content-sub4-3
+      }
+    }
+  }
+  if (!conclusionEl) {
+    conclusionEl = document.getElementById('content-sub4-3');
+  }
+  if (conclusionEl) {
+    var cWrap = conclusionEl.querySelector('.content-wrapper') || conclusionEl;
+    cWrap.innerHTML = '' +
+      '<div class="module4-scope"><div class="accordion-content">' +
+        '<h3>Lesson Conclusion: The First Few Seconds</h3>' +
+        '<div class="congratulations-section" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); padding: 25px; border-radius: 12px; border-left: 5px solid #28a745; margin-bottom: 25px;">' +
+          '<h4 style="color: #155724; margin-bottom: 15px; display: flex; align-items: center;">' +
+            '<i class="fas fa-trophy" style="margin-right: 8px;"></i>' +
+            'Great job on completing this lesson!' +
+          '</h4>' +
+          '<p style="font-size: 1.1rem; line-height: 1.6; margin: 0; color: #155724;">You now have a crucial skill that most people don\'t: the ability to act fast and confidently when a cyberattack hits.</p>' +
+        '</div>' +
+        
+        '<div class="key-takeaways" style="background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 5px solid #007bff; margin-bottom: 25px;">' +
+          '<h4 style="color: #007bff; margin-bottom: 15px; display: flex; align-items: center;">' +
+            '<i class="fas fa-lightbulb" style="margin-right: 8px;"></i>' +
+            'Remember' +
+          '</h4>' +
+          '<p style="font-size: 1.1rem; line-height: 1.6; margin: 0 0 15px 0; color: #333;"><strong>Speed matters.</strong> When you suspect a cyberattack, your first move is to act quickly to contain the threat. This means you need to disconnect your device from the internet, change your passwords from a safe device, and report the incident right away.</p>' +
+          '<p style="font-size: 1.1rem; line-height: 1.6; margin: 0; color: #333;">Knowing these steps helps you protect your digital life from a minor scare from becoming a major problem.</p>' +
+        '</div>' +
+        
+        '<div class="achievement-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 12px; text-align: center; margin-bottom: 25px;">' +
+          '<h4 style="margin: 0 0 10px 0; font-size: 1.3rem;">🎯 You are now a true first responder in the digital world.</h4>' +
+        '</div>' +
+        
+        '<div class="resources-section">' +
+          '<h4 style="color: #dc3545; margin-bottom: 20px; display: flex; align-items: center;">' +
+            '<i class="fas fa-book" style="margin-right: 8px;"></i>' +
+            'Resources & Next Steps' +
+          '</h4>' +
+          
+          '<div class="resource-item" style="background: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">' +
+            '<h5 style="color: #dc3545; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-newspaper" style="margin-right: 8px;"></i>' +
+              'Read More' +
+            '</h5>' +
+            '<p style="margin-bottom: 10px; line-height: 1.6;">For a deeper dive into what to do after a phishing attack, check out this article from Proofpoint, which provides a step-by-step guide to mitigate the damage.</p>' +
+            '<div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">' +
+              '<strong>Link:</strong> <a href="https://www.proofpoint.com/us/blog/email-and-cloud-threats/what-do-after-responding-phishing-email" target="_blank" rel="noopener" style="color: #007bff; text-decoration: none;">https://www.proofpoint.com/us/blog/email-and-cloud-threats/what-do-after-responding-phishing-email</a>' +
+            '</div>' +
+          '</div>' +
+          
+          '<div class="resource-item" style="background: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">' +
+            '<h5 style="color: #dc3545; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-refresh" style="margin-right: 8px;"></i>' +
+              'Refresher' +
+            '</h5>' +
+            '<p style="margin-bottom: 10px; line-height: 1.6;">For a quick review of how to spot different kinds of scams and what to do if you are a victim, check out the resources from the Bureau of Customs.</p>' +
+            '<div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">' +
+              '<strong>Link:</strong> <a href="https://customs.gov.ph/online-love-scam/" target="_blank" rel="noopener" style="color: #007bff; text-decoration: none;">https://customs.gov.ph/online-love-scam/</a>' +
+            '</div>' +
+          '</div>' +
+          
+          '<div class="resource-item" style="background: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">' +
+            '<h5 style="color: #dc3545; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-forward" style="margin-right: 8px;"></i>' +
+              'Next Lesson' +
+            '</h5>' +
+            '<p style="margin-bottom: 10px; line-height: 1.6;">You will now move on to <strong>Lesson 4.2: Reporting & Seeking Help at MMDC</strong>, where we\'ll guide you through the process of reporting the incident properly to MMDC and to the authorities.</p>' +
+          '</div>' +
+        '</div>' +
+      '</div></div>';
+  }
+
+  // Lesson 4.2 → 1. Digital Bayanihan
+  var headerDigitalBayanihan = Array.from(document.querySelectorAll(".drawer-item .drawer-title h5"))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '1. digital bayanihan'; });
+
+  var digitalBayanihanEl = null;
+  if (headerDigitalBayanihan) {
+    var item4 = headerDigitalBayanihan.closest('.drawer-item');
+    if (item4) {
+      var oc4 = item4.getAttribute('onclick') || '';
+      var m4 = oc4.match(/toggleDrawer\('([^']+)'\)/);
+      if (m4 && m4[1]) {
+        digitalBayanihanEl = document.getElementById('content-' + m4[1]); // e.g., content-sub4-4
+      }
+    }
+  }
+  if (!digitalBayanihanEl) {
+    digitalBayanihanEl = document.getElementById('content-sub4-4');
+  }
+  if (digitalBayanihanEl) {
+    var dbWrap = digitalBayanihanEl.querySelector('.content-wrapper') || digitalBayanihanEl;
+    dbWrap.innerHTML = '' +
+      '<div class="module4-scope"><div class="accordion-content">' +
+        '<h3>Reporting is Your Next Shield</h3>' +
+        
+        '<div class="lesson-intro">' +
+          '<p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px;">Welcome back! In our last lesson, you learned how to take immediate action after a security incident. But your defense doesn\'t end there. This video will show you the power of <strong>Digital Bayanihan</strong>—how your single act of reporting a scam protects not just you, but our entire MMDC community.</p>' +
+        '</div>' +
+        
+        '<div class="video-container"><div class="video-wrapper">' +
+          '<iframe src="https://www.youtube.com/embed/LAdRq_jXgAU" title="Module 4 - Lesson 4.2 Part A: Digital Bayanihan" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>' +
+        '</div><div class="video-caption">Module 4 Lesson 4.2 Part A — Digital Bayanihan</div></div>' +
+        '</div></div>';
+  }
+
+  // Lesson 4.2 → 2. Reporting Protocols
+  var headerReportingProtocols = Array.from(document.querySelectorAll(".drawer-item .drawer-title h5"))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '2. reporting protocols'; });
+
+  var reportingProtocolsEl = null;
+  if (headerReportingProtocols) {
+    var item5 = headerReportingProtocols.closest('.drawer-item');
+    if (item5) {
+      var oc5 = item5.getAttribute('onclick') || '';
+      var m5 = oc5.match(/toggleDrawer\('([^']+)'\)/);
+      if (m5 && m5[1]) {
+        reportingProtocolsEl = document.getElementById('content-' + m5[1]); // e.g., content-sub4-5
+      }
+    }
+  }
+  if (!reportingProtocolsEl) {
+    reportingProtocolsEl = document.getElementById('content-sub4-5');
+  }
+  if (reportingProtocolsEl) {
+    var rpWrap = reportingProtocolsEl.querySelector('.content-wrapper') || reportingProtocolsEl;
+    rpWrap.innerHTML = '' +
+      '<div class="module4-scope"><div class="accordion-content">' +
+        '<h3>The MMDC Reporting Protocol</h3>' +
+        '<p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px;">Now, let\'s talk about your next crucial step: reporting. Remember our talk about bayanihan? When you report a scam, you\'re not just protecting yourself—you\'re protecting our entire MMDC community from being the next target.</p>' +
+        '<p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px;">This guide will walk you through who to report to and how to ensure your report helps everyone.</p>' +
+        
+        '<h4>MMDC Reporting Channels</h4>' +
+        '<p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px;">Reporting is about getting the right information to the right person at the right time. Here are the official channels you should use:</p>' +
+        
+        '<div class="reporting-table" style="background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 30px;">' +
+          '<div style="background: #007bff; color: white; padding: 15px; font-weight: 600;">' +
+            '<div style="display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 20px; align-items: center;">' +
+              '<div><strong>Contact</strong></div>' +
+              '<div><strong>Purpose</strong></div>' +
+              '<div><strong>How to Contact</strong></div>' +
+            '</div>' +
+          '</div>' +
+          '<div style="padding: 0;">' +
+            '<div style="display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 20px; padding: 20px; border-bottom: 1px solid #dee2e6; align-items: center;">' +
+              '<div style="display: flex; align-items: center; gap: 10px;">' +
+                '<img src="' + (window.location.origin + '/learning_assets/Documents/Lesson42.png') + '" alt="IT Helpdesk Icon" style="width: 96px; height: 96px; border-radius: 8px; object-fit: cover;"/>' +
+                '<strong>MMDC IT Helpdesk</strong>' +
+              '</div>' +
+              '<div>All technical issues: phishing, malware, compromised accounts.</div>' +
+              '<div>Email: <a href="mailto:iaservices@mmdc.mcl.edu.ph" style="color: #007bff; text-decoration: none;">iaservices@mmdc.mcl.edu.ph</a></div>' +
+            '</div>' +
+            '<div style="display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 20px; padding: 20px; align-items: center;">' +
+              '<div><strong>Faculty / Dean</strong></div>' +
+              '<div>Class-related incidents (e.g., a phishing email affecting your class).</div>' +
+              '<div>Notify your mentor or department head.</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        
+        '<h4>MMDC Reporting Flow</h4>' +
+        '<p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px;">In our last lesson, you learned that reporting a security incident is an act of Digital Bayanihan. This infographic is your quick-reference guide to the official reporting process at MMDC. It breaks down the three simple steps you should follow to protect yourself and your community.</p>' +
+        
+        '<div class="infographic-container" style="text-align: center; margin: 30px 0;">' +
+          '<img src="' + (window.location.origin + '/learning_assets/Documents/Lesson42Infographic.png') + '" alt="MMDC Reporting Flow Infographic" style="max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"/>' +
+        '</div>' +
+      '</div></div>';
+  }
+
+  // Lesson 4.2 → 3. Lesson Conclusion: The Power of Reporting
+  var headerPowerReporting = Array.from(document.querySelectorAll(".drawer-item .drawer-title h5"))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '3. lesson conclusion: the power of reporting'; });
+
+  var powerReportingEl = null;
+  if (headerPowerReporting) {
+    var item6 = headerPowerReporting.closest('.drawer-item');
+    if (item6) {
+      var oc6 = item6.getAttribute('onclick') || '';
+      var m6 = oc6.match(/toggleDrawer\('([^']+)'\)/);
+      if (m6 && m6[1]) {
+        powerReportingEl = document.getElementById('content-' + m6[1]); // e.g., content-sub4-6
+      }
+    }
+  }
+  if (!powerReportingEl) {
+    powerReportingEl = document.getElementById('content-sub4-6');
+  }
+  if (powerReportingEl) {
+    var prWrap = powerReportingEl.querySelector('.content-wrapper') || powerReportingEl;
+    prWrap.innerHTML = '' +
+      '<div class="module4-scope"><div class="accordion-content">' +
+        '<h3>Lesson Conclusion: The Power of Reporting</h3>' +
+        '<div class="lesson-summary" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); padding: 25px; border-radius: 12px; border-left: 5px solid #28a745; margin-bottom: 25px;">' +
+          '<p style="font-size: 1.1rem; line-height: 1.6; margin: 0; color: #155724;">You\'ve learned that the reporting process at MMDC isn\'t just a formality—it\'s power. Reporting helps MMDC IT professionals stop threats early, recover your data, and prevent the same attack from hurting others.</p>' +
+        '</div>' +
+        
+        '<div class="achievement-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 12px; text-align: center; margin-bottom: 25px;">' +
+          '<p style="font-size: 1.1rem; line-height: 1.6; margin: 0;">Whether it\'s a phishing email or something more serious, you now know who to talk to, what to share, and how to act. <strong>You are now an active part of our campus\'s digital defense.</strong></p>' +
+        '</div>' +
+        
+        '<div class="resources-section">' +
+          '<h4 style="color: #dc3545; margin-bottom: 20px; display: flex; align-items: center;">' +
+            '<i class="fas fa-book" style="margin-right: 8px;"></i>' +
+            'Resources & For More Info' +
+          '</h4>' +
+          
+          '<div class="resource-item" style="background: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">' +
+            '<h5 style="color: #dc3545; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-newspaper" style="margin-right: 8px;"></i>' +
+              'Read More' +
+            '</h5>' +
+            '<p style="margin-bottom: 10px; line-height: 1.6;">For a deeper look into the importance of reporting, check out the article "Why Reporting Phishing Emails is so Important" from Proofpoint. It explains how your report helps protect the entire organization.</p>' +
+            '<div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">' +
+              '<strong>Link:</strong> <a href="https://www.proofpoint.com/us/blog/email-and-cloud-threats/how-phishing-reporting-benefits-email-security" target="_blank" rel="noopener" style="color: #007bff; text-decoration: none;">How Phishing Reporting Benefits Email Security | Proofpoint US</a>' +
+            '</div>' +
+          '</div>' +
+          
+          '<div class="resource-item" style="background: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">' +
+            '<h5 style="color: #dc3545; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-globe" style="margin-right: 8px;"></i>' +
+              'Local Context' +
+            '</h5>' +
+            '<p style="margin-bottom: 10px; line-height: 1.6;">To learn more about "Digital Bayanihan" in the Philippines, read the article "Digital thumbprint program pushed amid ICT month celebration" from the Daily Tribune.</p>' +
+            '<div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">' +
+              '<strong>Link:</strong> <a href="https://tribune.net.ph/2025/06/22/digital-thumbprint-program-pushed-amid-ict-month-celebration" target="_blank" rel="noopener" style="color: #007bff; text-decoration: none;">https://tribune.net.ph/2025/06/22/digital-thumbprint-program-pushed-amid-ict-month-celebration</a>' +
+            '</div>' +
+          '</div>' +
+          
+          '<div class="resource-item" style="background: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">' +
+            '<h5 style="color: #dc3545; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-forward" style="margin-right: 8px;"></i>' +
+              'Next Lesson' +
+            '</h5>' +
+            '<p style="margin-bottom: 10px; line-height: 1.6;">You will now move on to <strong>Lesson 4.3: Basic Account Recovery & Beyond</strong>.</p>' +
+          '</div>' +
+        '</div>' +
+      '</div></div>';
+  }
+
+  // Lesson 4.3 → 1. Account Recovery
+  var headerAccountRecovery = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '1. account recovery'; });
+
+  var accountRecoveryEl = null;
+  if (headerAccountRecovery) {
+    var item7 = headerAccountRecovery.closest('.drawer-item');
+    if (item7) {
+      var oc7 = item7.getAttribute('onclick') || '';
+      var m7 = oc7.match(/toggleDrawer\('([^']+)'\)/);
+      if (m7 && m7[1]) {
+        accountRecoveryEl = document.getElementById('content-' + m7[1]);
+      }
+    }
+  }
+  if (!accountRecoveryEl) {
+    accountRecoveryEl = document.getElementById('content-sub4-7');
+  }
+  if (accountRecoveryEl) {
+    var arWrap = accountRecoveryEl.querySelector('.content-wrapper') || accountRecoveryEl;
+    arWrap.innerHTML = '' +
+      '<div class="module4-scope"><div class="accordion-content">' +
+        '<h3>The Recovery Toolkit</h3>' +
+        '<p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px;">Welcome! In our last lesson, you learned that reporting a cyber incident is your Digital Bayanihan in action. But what if you\'re the one whose account was compromised? This video will be your guide. We\'ll walk you through a step-by-step process to regain control of your accounts and fortify them against future attacks.</p>' +
+
+        '<div class="video-container"><div class="video-wrapper" style="background: #f0f2f5; display: flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px dashed #adb5bd; min-height: 360px;">' +
+          '<div style="text-align: center; color: #6c757d;">' +
+            '<i class="fas fa-video" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>' +
+            '<div style="font-weight: 600;">Video Placeholder</div>' +
+            '<div style="font-size: 0.95rem;">Link not yet available</div>' +
+          '</div>' +
+        '</div><div class="video-caption">Module 4 Lesson 4.3 Part A — Account Recovery</div></div>' +
+        '</div></div>';
+  }
+
+  // Lesson 4.3 → 2. Your Action Plan 2
+  var headerActionPlan2 = Array.from(document.querySelectorAll(".drawer-item .drawer-title h5"))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '2. your action plan 2'; });
+
+  var actionPlan2El = null;
+  if (headerActionPlan2) {
+    var item8 = headerActionPlan2.closest('.drawer-item');
+    if (item8) {
+      var oc8 = item8.getAttribute('onclick') || '';
+      var m8 = oc8.match(/toggleDrawer\('([^']+)'\)/);
+      if (m8 && m8[1]) {
+        actionPlan2El = document.getElementById('content-' + m8[1]); // e.g., content-sub4-8
+      }
+    }
+  }
+  if (!actionPlan2El) {
+    actionPlan2El = document.getElementById('content-sub4-8');
+  }
+  if (actionPlan2El) {
+    var ap2Wrap = actionPlan2El.querySelector('.content-wrapper') || actionPlan2El;
+    ap2Wrap.innerHTML = '' +
+      '<div class="module4-scope"><div class="accordion-content">' +
+        '<h3>Universal Recovery Steps</h3>' +
+        '<p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px;">A compromised account is a stressful experience, but it\'s not the end of the world. Now that you\'ve taken immediate action, it\'s time to use your recovery toolkit to get your digital life back on track. This guide will walk you through the universal steps to get your account back and make it stronger than before.</p>' +
+        
+        '<div class="d-flex align-items-center mb-3" style="gap: 1rem; margin-bottom: 25px;">' +
+          '<img src="' + (window.location.origin + '/learning_assets/Documents/Lesson43.png') + '" alt="Recovery Icon" style="width: 96px; height: 96px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.12); object-fit: cover;"/>' +
+          '<h4 class="mb-0" style="line-height: 1.2;">Universal Recovery Steps</h4>' +
+        '</div>' +
+        
+        '<p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px;">If your account has been compromised, you need to follow a secure process to verify your identity and regain access. Here\'s what you need to do:</p>' +
+        
+        '<div class="recovery-steps" style="background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 5px solid #007bff; margin-bottom: 25px;">' +
+          '<div class="step-item" style="margin-bottom: 20px;">' +
+            '<h5 style="color: #007bff; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-link" style="margin-right: 8px;"></i>' +
+              'Use Official Recovery Links Only' +
+            '</h5>' +
+            '<p style="margin: 0; line-height: 1.6;">Never trust a password reset or account recovery link sent to you via email or text. Scammers can send these messages to hijack your account. Always go directly to the official website and use the "Forgot Password" link from there.</p>' +
+          '</div>' +
+          '<div class="step-item" style="margin-bottom: 20px;">' +
+            '<h5 style="color: #007bff; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-check-circle" style="margin-right: 8px;"></i>' +
+              'Provide Verified Information' +
+            '</h5>' +
+            '<p style="margin: 0; line-height: 1.6;">The official process will ask you to verify your identity using a recovery email, phone number, or security question you have already set up.</p>' +
+          '</div>' +
+          '<div class="step-item" style="margin-bottom: 20px;">' +
+            '<h5 style="color: #007bff; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-shield-alt" style="margin-right: 8px;"></i>' +
+              'Use a Clean Device' +
+            '</h5>' +
+            '<p style="margin: 0; line-height: 1.6;">Before you do anything, ensure the device you are using is free of viruses or malware. Use a different computer or a friend\'s phone if you need to.</p>' +
+          '</div>' +
+          '<div class="step-item">' +
+            '<h5 style="color: #007bff; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-key" style="margin-right: 8px;"></i>' +
+              'Create a Strong, Unique Password' +
+            '</h5>' +
+            '<p style="margin: 0; line-height: 1.6;">Once you\'ve regained access, create a new password that is unique to that account. Never reuse a password from another account.</p>' +
+          '</div>' +
+        '</div>' +
+        
+        '<h4>Securing the Recovered Account</h4>' +
+        '<p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px;">Getting your account back is just the first step. To ensure it doesn\'t happen again, you need to fortify it right away.</p>' +
+        
+        '<div class="security-steps" style="background: #fff3cd; padding: 25px; border-radius: 12px; border-left: 5px solid #ffc107; margin-bottom: 25px;">' +
+          '<div class="security-item" style="margin-bottom: 20px;">' +
+            '<h5 style="color: #856404; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-lock" style="margin-right: 8px;"></i>' +
+              'Turn on Multi-Factor Authentication (MFA)' +
+            '</h5>' +
+            '<p style="margin: 0; line-height: 1.6; color: #856404;">This is the single most effective security measure you can take. MFA requires more than just a password to log in—like a one-time code sent to your phone.</p>' +
+          '</div>' +
+          '<div class="security-item" style="margin-bottom: 20px;">' +
+            '<h5 style="color: #856404; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-history" style="margin-right: 8px;"></i>' +
+              'Review Recent Activity' +
+            '</h5>' +
+            '<p style="margin: 0; line-height: 1.6; color: #856404;">Check your account\'s login history, sent emails, and recent activity logs for any suspicious actions. This will help you identify what the hacker did while they had access.</p>' +
+          '</div>' +
+          '<div class="security-item">' +
+            '<h5 style="color: #856404; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-unlink" style="margin-right: 8px;"></i>' +
+              'Remove Third-Party Access' +
+            '</h5>' +
+            '<p style="margin: 0; line-height: 1.6; color: #856404;">Disconnect any unfamiliar apps, websites, or services that have access to your account. This is a crucial step to prevent the hacker from regaining access.</p>' +
+          '</div>' +
+        '</div>' +
+        
+        '<div class="empowerment-section" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); padding: 25px; border-radius: 12px; border-left: 5px solid #28a745; margin-bottom: 25px;">' +
+          '<p style="font-size: 1.1rem; line-height: 1.6; margin: 0; color: #155724;">By following these steps, you can not only recover your account but also make it more secure than it was before the attack. <strong>You have the power to protect your digital identity.</strong></p>' +
+        '</div>' +
+        
+        '<h4>Your Recovery Toolkit</h4>' +
+        '<p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px;">You\'ve learned that a compromised account is stressful, but it\'s not the end of the world. This infographic is your quick-reference guide to the three universal steps of account recovery. Use this toolkit to get your digital life back on track and make your accounts stronger than ever.</p>' +
+        
+        '<div class="infographic-container" style="text-align: center; margin: 30px 0;">' +
+          '<img src="' + (window.location.origin + '/learning_assets/Documents/Lesson43Infographic.png') + '" alt="Your Recovery Toolkit Infographic" style="max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"/>' +
+        '</div>' +
+        '</div></div>';
+  }
+
+  // Lesson 4.3 → 3. Lesson Conclusion: Your Recovery Toolkit
+  var headerRecoveryToolkit = Array.from(document.querySelectorAll(".drawer-item .drawer-title h5"))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '3. lesson conclusion: your recovery toolkit'; });
+
+  var recoveryToolkitEl = null;
+  if (headerRecoveryToolkit) {
+    var item9 = headerRecoveryToolkit.closest('.drawer-item');
+    if (item9) {
+      var oc9 = item9.getAttribute('onclick') || '';
+      var m9 = oc9.match(/toggleDrawer\('([^']+)'\)/);
+      if (m9 && m9[1]) {
+        recoveryToolkitEl = document.getElementById('content-' + m9[1]); // e.g., content-sub4-9
+      }
+    }
+  }
+  if (!recoveryToolkitEl) {
+    recoveryToolkitEl = document.getElementById('content-sub4-9');
+  }
+  if (recoveryToolkitEl) {
+    var rtWrap = recoveryToolkitEl.querySelector('.content-wrapper') || recoveryToolkitEl;
+    rtWrap.innerHTML = '' +
+      '<div class="module4-scope"><div class="accordion-content">' +
+        '<h3>Lesson Conclusion: Your Recovery Toolkit</h3>' +
+        '<div class="congratulations-section" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); padding: 25px; border-radius: 12px; border-left: 5px solid #28a745; margin-bottom: 25px;">' +
+          '<h4 style="color: #155724; margin-bottom: 15px; display: flex; align-items: center;">' +
+            '<i class="fas fa-trophy" style="margin-right: 8px;"></i>' +
+            'Congratulations!' +
+          '</h4>' +
+          '<p style="font-size: 1.1rem; line-height: 1.6; margin: 0; color: #155724;">You\'ve just completed our lesson on account recovery. Even if you fall for a social engineering trick, recovery is possible. What matters most is knowing how to take action and not to panic.</p>' +
+        '</div>' +
+        
+        '<div class="toolkit-summary" style="background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 5px solid #007bff; margin-bottom: 25px;">' +
+          '<h4 style="color: #007bff; margin-bottom: 15px; display: flex; align-items: center;">' +
+            '<i class="fas fa-toolbox" style="margin-right: 8px;"></i>' +
+            'You now have a powerful toolkit for getting your digital life back on track:' +
+          '</h4>' +
+          '<ul style="margin: 0; padding-left: 20px; color: #333;">' +
+            '<li style="margin-bottom: 10px; line-height: 1.6;"><strong>Use official recovery links only:</strong> Never trust links in an email or text.</li>' +
+            '<li style="margin-bottom: 10px; line-height: 1.6;"><strong>Change your password from a clean device.</strong></li>' +
+            '<li style="margin-bottom: 10px; line-height: 1.6;"><strong>Turn on 2FA to lock down your accounts.</strong></li>' +
+            '<li style="margin-bottom: 0; line-height: 1.6;"><strong>Remove unwanted third-party access that a hacker might have added.</strong></li>' +
+          '</ul>' +
+        '</div>' +
+        
+        '<div class="module-completion" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 12px; text-align: center; margin-bottom: 25px;">' +
+          '<p style="font-size: 1.1rem; line-height: 1.6; margin: 0;">You\'ve now completed all the lessons in this module! It\'s time to put your skills to the test through our interactive quiz and a real-world simulation scenario.</p>' +
+        '</div>' +
+        
+        '<div class="resources-section">' +
+          '<h4 style="color: #dc3545; margin-bottom: 20px; display: flex; align-items: center;">' +
+            '<i class="fas fa-book" style="margin-right: 8px;"></i>' +
+            'Resources & For More Info' +
+          '</h4>' +
+          
+          '<div class="resource-item" style="background: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">' +
+            '<h5 style="color: #dc3545; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-newspaper" style="margin-right: 8px;"></i>' +
+              'Read More' +
+            '</h5>' +
+            '<p style="margin-bottom: 10px; line-height: 1.6;">For a step-by-step guide on how to recover a hacked account, check out the official guide from NCSC.GOV.UK on "Recovering a hacked account."</p>' +
+            '<div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">' +
+              '<strong>Link:</strong> <a href="https://www.ncsc.gov.uk/guidance/recovering-a-hacked-account" target="_blank" rel="noopener" style="color: #007bff; text-decoration: none;">https://www.ncsc.gov.uk/guidance/recovering-a-hacked-account</a>' +
+            '</div>' +
+          '</div>' +
+          
+          '<div class="resource-item" style="background: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">' +
+            '<h5 style="color: #dc3545; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-play-circle" style="margin-right: 8px;"></i>' +
+              'Watch Again' +
+            '</h5>' +
+            '<p style="margin-bottom: 10px; line-height: 1.6;">For a visual tutorial on how to protect your social media, watch this video on "How to set up Two-factor authentication (2FA) on Facebook."</p>' +
+            '<div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">' +
+              '<strong>Link:</strong> <a href="https://youtu.be/sCLYhoKEqqk?feature=shared" target="_blank" rel="noopener" style="color: #007bff; text-decoration: none;">https://youtu.be/sCLYhoKEqqk?feature=shared</a>' +
+            '</div>' +
+          '</div>' +
+          
+          '<div class="resource-item" style="background: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">' +
+            '<h5 style="color: #dc3545; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-globe" style="margin-right: 8px;"></i>' +
+              'Local Context' +
+            '</h5>' +
+            '<p style="margin-bottom: 10px; line-height: 1.6;">For a comprehensive guide on what to do if you fall victim to a scam in the Philippines, read the legal guide "Scam Money Recovery for College Students in the Philippines."</p>' +
+            '<div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">' +
+              '<strong>Link:</strong> <a href="https://www.respicio.ph/commentaries/scam-money-recovery-for-college-student" target="_blank" rel="noopener" style="color: #007bff; text-decoration: none;">https://www.respicio.ph/commentaries/scam-money-recovery-for-college-student</a>' +
+            '</div>' +
+          '</div>' +
+          
+          '<div class="resource-item" style="background: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">' +
+            '<h5 style="color: #dc3545; margin-bottom: 10px; display: flex; align-items: center;">' +
+              '<i class="fas fa-forward" style="margin-right: 8px;"></i>' +
+              'Next Lesson' +
+            '</h5>' +
+            '<p style="margin-bottom: 10px; line-height: 1.6;">You will now move on to the <strong>Module 4 Reflection Activity and Final Quiz & Simulation</strong>.</p>' +
+          '</div>' +
+        '</div>' +
+        '</div></div>';
+  }
+
+  // Module 4 → Reflection
+  var headerReflection = Array.from(document.querySelectorAll(".drawer-item .drawer-title h5"))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'reflection'; });
+
+  var reflectionEl = null;
+  if (headerReflection) {
+    var item10 = headerReflection.closest('.drawer-item');
+    if (item10) {
+      var oc10 = item10.getAttribute('onclick') || '';
+      var m10 = oc10.match(/toggleDrawer\('([^']+)'\)/);
+      if (m10 && m10[1]) {
+        reflectionEl = document.getElementById('content-' + m10[1]); // e.g., content-sub4-10
+      }
+    }
+  }
+  if (!reflectionEl) {
+    reflectionEl = document.getElementById('content-sub4-10');
+  }
+  if (reflectionEl) {
+    var rfWrap = reflectionEl.querySelector('.content-wrapper') || reflectionEl;
+    rfWrap.innerHTML = '' +
+      '<div class="module4-scope"><div class="accordion-content">' +
+        '<h3>Module 4 Reflection: Respond, Report, Recover</h3>' +
+        '<div class="reflection-intro" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); padding: 25px; border-radius: 12px; border-left: 5px solid #28a745; margin-bottom: 25px;">' +
+          '<p style="font-size: 1.1rem; line-height: 1.6; margin: 0; color: #155724;">Welcome to your reflection for Module 4! You\'ve made it through the most intense part of our program—great job! You now have a complete plan for what to do in a security incident. This is your chance to think about how you can use these skills to feel confident and in control of your digital life.</p>' +
+        '</div>' +
+        
+        '<div class="reflection-prompts" style="background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 5px solid #007bff; margin-bottom: 25px;">' +
+          '<h4 style="color: #007bff; margin-bottom: 20px; display: flex; align-items: center;">' +
+            '<i class="fas fa-lightbulb" style="margin-right: 8px;"></i>' +
+            'Reflection Prompts' +
+          '</h4>' +
+          '<div class="prompt-list" style="color: #333;">' +
+            '<div class="prompt-item" style="margin-bottom: 15px; padding: 15px; background: #fff; border-radius: 8px; border-left: 3px solid #007bff;">' +
+              '<strong style="color: #007bff;">1.</strong> What would your first steps be if you suspect your school account was hacked?' +
+            '</div>' +
+            '<div class="prompt-item" style="margin-bottom: 15px; padding: 15px; background: #fff; border-radius: 8px; border-left: 3px solid #007bff;">' +
+              '<strong style="color: #007bff;">2.</strong> Who would you report to first at MMDC, and why?' +
+            '</div>' +
+            '<div class="prompt-item" style="margin-bottom: 15px; padding: 15px; background: #fff; border-radius: 8px; border-left: 3px solid #007bff;">' +
+              '<strong style="color: #007bff;">3.</strong> What\'s one thing from this module you\'d want to teach a classmate or sibling?' +
+            '</div>' +
+            '<div class="prompt-item" style="margin-bottom: 0; padding: 15px; background: #fff; border-radius: 8px; border-left: 3px solid #007bff;">' +
+              '<strong style="color: #007bff;">4.</strong> What steps will you take to avoid being tricked again?' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        
+        '<div class="empowerment-message" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 12px; text-align: center; margin-bottom: 25px;">' +
+          '<p style="font-size: 1.1rem; line-height: 1.6; margin: 0;">Remember, every student has the power to stop an attack from getting worse. By reflecting on these steps, you are preparing yourself to be a true <strong>Cyber Defender</strong>.</p>' +
+        '</div>' +
+        
+        '<div class="reflection-submission" style="background: #fff; border: 1px solid #dee2e6; border-radius: 12px; padding: 25px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">' +
+          '<h4 style="color: #dc3545; margin-bottom: 20px; display: flex; align-items: center;">' +
+            '<i class="fas fa-edit" style="margin-right: 8px;"></i>' +
+            'Share Your Reflection' +
+          '</h4>' +
+          '<p style="margin-bottom: 20px; color: #333;">Take a moment to reflect on the questions above and share your thoughts. Your insights can help you and your classmates become better cyber defenders.</p>' +
+          '<form id="module4-reflection-form" class="reflection-form">' +
+            '<div class="form-group" style="margin-bottom: 20px;">' +
+              '<label for="reflection-text" style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Your Reflection:</label>' +
+              '<textarea id="reflection-text" name="reflection" rows="6" style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 8px; font-family: inherit; font-size: 1rem; line-height: 1.5; resize: vertical;" placeholder="Share your thoughts on the reflection prompts above..."></textarea>' +
+            '</div>' +
+            '<div class="form-actions" style="display: flex; gap: 15px; align-items: center;">' +
+              '<button type="submit" class="btn btn-primary" style="background: #007bff; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s;">Submit Reflection</button>' +
+              '<button type="button" class="btn btn-secondary" onclick="document.getElementById(\'reflection-text\').value=\'\'" style="background: #6c757d; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s;">Clear</button>' +
+            '</div>' +
+          '</form>' +
+          '<div id="reflection-feedback" style="margin-top: 15px; padding: 12px; border-radius: 8px; display: none;"></div>' +
+        '</div>' +
+      '</div></div>';
+  }
+
+  // Module 4 → Reflection (Drawer) with submission, consistent with Modules 1, 2 & 3
+  var headerRefl = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+    .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'reflection'; });
+  var reflEl = null;
+  if (headerRefl) {
+    var itemRefl = headerRefl.closest('.drawer-item');
+    if (itemRefl) {
+      var ocRefl = itemRefl.getAttribute('onclick') || '';
+      var mRefl = ocRefl.match(/toggleDrawer\('([^']+)'\)/);
+      if (mRefl && mRefl[1]) {
+        reflEl = document.getElementById('content-' + mRefl[1]);
+      }
+    }
+  }
+  if (!reflEl) {
+    // Fallback container id if reflection drawer uses a predictable id
+    reflEl = document.getElementById('content-reflection');
+  }
+  if (reflEl) {
+    var rWrap = reflEl.querySelector('.content-wrapper') || reflEl;
+    rWrap.innerHTML = '' +
+      '<div class="module4-scope"><div class="accordion-content">' +
+        '<h3>Module 4 Reflection: Respond, Report, Recover</h3>' +
+        '<div class="reflection-intro" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); padding: 25px; border-radius: 12px; border-left: 5px solid #28a745; margin-bottom: 25px;">' +
+          '<p style="font-size: 1.1rem; line-height: 1.6; margin: 0; color: #155724;">Welcome to your reflection for Module 4! You\'ve made it through the most intense part of our program—great job! You now have a complete plan for what to do in a security incident. This is your chance to think about how you can use these skills to feel confident and in control of your digital life.</p>' +
+        '</div>' +
+        
+        '<div class="reflection-prompts" style="background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 5px solid #007bff; margin-bottom: 25px;">' +
+          '<h4 style="color: #007bff; margin-bottom: 20px; display: flex; align-items: center;">' +
+            '<i class="fas fa-lightbulb" style="margin-right: 8px;"></i>' +
+            'Reflection Prompts' +
+          '</h4>' +
+          '<div class="prompt-list" style="color: #333;">' +
+            '<div class="prompt-item" style="margin-bottom: 15px; padding: 15px; background: #fff; border-radius: 8px; border-left: 3px solid #007bff;">' +
+              '<strong style="color: #007bff;">1.</strong> What would your first steps be if you suspect your school account was hacked?' +
+            '</div>' +
+            '<div class="prompt-item" style="margin-bottom: 15px; padding: 15px; background: #fff; border-radius: 8px; border-left: 3px solid #007bff;">' +
+              '<strong style="color: #007bff;">2.</strong> Who would you report to first at MMDC, and why?' +
+            '</div>' +
+            '<div class="prompt-item" style="margin-bottom: 15px; padding: 15px; background: #fff; border-radius: 8px; border-left: 3px solid #007bff;">' +
+              '<strong style="color: #007bff;">3.</strong> What\'s one thing from this module you\'d want to teach a classmate or sibling?' +
+            '</div>' +
+            '<div class="prompt-item" style="margin-bottom: 0; padding: 15px; background: #fff; border-radius: 8px; border-left: 3px solid #007bff;">' +
+              '<strong style="color: #007bff;">4.</strong> What steps will you take to avoid being tricked again?' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        
+        '<div class="empowerment-message" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 12px; text-align: center; margin-bottom: 25px;">' +
+          '<p style="font-size: 1.1rem; line-height: 1.6; margin: 0;">Remember, every student has the power to stop an attack from getting worse. By reflecting on these steps, you are preparing yourself to be a true <strong>Cyber Defender</strong>.</p>' +
+        '</div>' +
+        
+        '<div class="resources-section" style="margin-top: 1rem;">' +
+          '<h4>Your Reflection</h4>' +
+          '<p class="mb-2">Share your thoughts below. This helps reinforce your learning and commit to action.</p>' +
+          '<textarea id="m4ReflectionText" class="form-control" rows="5" placeholder="Type your reflection here..."></textarea>' +
+          '<div class="d-flex justify-content-end" style="margin-top: 0.75rem;">' +
+            '<button id="m4ReflectionSubmit" class="btn btn-primary">Submit Reflection</button>' +
+          '</div>' +
+          '<div id="m4ReflectionStatus" class="mt-2 text-muted" style="min-height: 1.25rem;"></div>' +
+        '</div>' +
+      '</div></div>';
+
+    // Hook up submission
+    var btn = document.getElementById('m4ReflectionSubmit');
+    if (btn) {
+      btn.addEventListener('click', function(){
+        var txt = document.getElementById('m4ReflectionText');
+        var status = document.getElementById('m4ReflectionStatus');
+        var payload = { module_id: 4, reflection_text: (txt && txt.value || '').trim() };
+        if (!payload.reflection_text) {
+          status.textContent = 'Please enter your reflection before submitting.';
+          status.className = 'mt-2 text-danger';
+          return;
+        }
+        status.textContent = 'Submitting...';
+        status.className = 'mt-2 text-muted';
+        fetch('/submit_reflection', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).then(function(r){ return r.json(); }).then(function(res){
+          if (res && res.success) {
+            status.textContent = 'Reflection submitted successfully!';
+            status.className = 'mt-2 text-success';
+            if (txt) txt.value = '';
+          } else {
+            status.textContent = (res && res.error) || 'Submission failed.';
+            status.className = 'mt-2 text-danger';
+          }
+        }).catch(function(){
+          status.textContent = 'Network error. Please try again.';
+          status.className = 'mt-2 text-danger';
+        });
+      });
+    }
+  }
+
+  // Module 4 → Simulation (interactive, similar approach to Module 3)
+  (function initModule4Simulation(){
+    var simHeader = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+      .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'simulation'; });
+    var simEl = null;
+    if (simHeader) {
+      var itemSim = simHeader.closest('.drawer-item');
+      if (itemSim) {
+        var ocSim = itemSim.getAttribute('onclick') || '';
+        var mSim = ocSim.match(/toggleDrawer\('([^']+)'\)/);
+        if (mSim && mSim[1]) {
+          simEl = document.getElementById('content-' + mSim[1]);
+        }
+      }
+    }
+    if (!simEl) simEl = document.getElementById('content-simulation');
+    // Try common pattern: body is the next sibling subcontent after the header
+    if (!simEl) {
+      var simTitle = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+        .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'simulation'; });
+      if (simTitle) {
+        var simItem = simTitle.closest('.drawer-item');
+        if (simItem && simItem.nextElementSibling && simItem.nextElementSibling.classList.contains('drawer-subcontent')) {
+          simEl = simItem.nextElementSibling;
+        }
+      }
+    }
+    // If still not found, create a Simulation drawer consistent with existing drawers
+    if (!simEl) {
+      var drawersRoot = document.querySelector('.content-drawers');
+      if (drawersRoot) {
+        var drawerItem = document.createElement('div');
+        drawerItem.className = 'drawer-item';
+        drawerItem.setAttribute('onclick', "toggleDrawer('simulation4')");
+        drawerItem.innerHTML = '<div class="drawer-content">\
+            <div class="drawer-icon"><i class="fas fa-gamepad"></i></div>\
+            <div class="drawer-title"><h5>Simulation</h5></div>\
+            <div class="drawer-arrow"><i class="fas fa-chevron-down"></i></div>\
+          </div>';
+
+        var drawerSub = document.createElement('div');
+        drawerSub.className = 'drawer-subcontent';
+        drawerSub.id = 'content-simulation4';
+        var cw = document.createElement('div');
+        cw.className = 'content-wrapper';
+        drawerSub.appendChild(cw);
+
+        drawersRoot.appendChild(drawerItem);
+        drawersRoot.appendChild(drawerSub);
+        simEl = drawerSub;
+      }
+    }
+    if (!simEl) return;
+
+    function injectSimulation(intoEl){
+      var wrap = intoEl.querySelector('.content-wrapper') || intoEl;
+      wrap.innerHTML = ''+
+        '<div class="module4-scope"><div class="accordion-content">'+
+          '<h3>Module 4 Simulation: Incident Response in Action</h3>'+
+          '<p>Practice real‑world incident response decisions. Choose the best response in each scenario and see instant feedback.</p>'+
+
+          '<div class="scenarios-container">'+
+
+            '<div class="scenario-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:24px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+              '<div class="scenario-header" style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'+
+                '<div style="background:#dc3545;color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">1</div>'+
+                '<h4 style="margin:0;color:#dc3545;">Scenario 1 – Immediate Action</h4>'+
+              '</div>'+
+              '<div class="scenario-body" style="margin-bottom:12px;">'+
+                '<p class="mb-2">You clicked a phishing link and suspect your account is compromised.</p>'+
+                '<div class="scenario-image" style="text-align:center;margin:15px 0;">'+
+                  '<img src="' + (window.location.origin + '/learning_assets/Documents/Module4Scenario1.png') + '" alt="Scenario 1 - Immediate Action" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);"/>'+
+                '</div>'+
+                '<p class="mb-0"><strong>Question:</strong> What is the FIRST step?</p>'+
+              '</div>'+
+              '<div class="question-section">'+
+                '<div class="option-item" data-option="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario1" value="A" id="scenario1_A" style="margin-right:10px;">'+
+                    '<label for="scenario1_A" style="margin:0;cursor:pointer;"><strong>A)</strong> Disconnect your device from the internet.</label>'+
+                  '</div>'+
+                '</div>'+
+                '<div class="option-item" data-option="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario1" value="B" id="scenario1_B" style="margin-right:10px;">'+
+                    '<label for="scenario1_B" style="margin:0;cursor:pointer;"><strong>B)</strong> Post on Facebook to warn friends.</label>'+
+                  '</div>'+
+                '</div>'+
+                '<div class="option-item" data-option="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario1" value="C" id="scenario1_C" style="margin-right:10px;">'+
+                    '<label for="scenario1_C" style="margin:0;cursor:pointer;"><strong>C)</strong> Change your password later at home.</label>'+
+                  '</div>'+
+                '</div>'+
+                '<div class="option-item" data-option="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario1" value="D" id="scenario1_D" style="margin-right:10px;">'+
+                    '<label for="scenario1_D" style="margin:0;cursor:pointer;"><strong>D)</strong> Ignore it and hope nothing happens.</label>'+
+                  '</div>'+
+                '</div>'+
+              '</div>'+
+              '<div id="feedback1" class="feedback-section" style="display:none;margin-top:15px;">'+
+                '<div class="feedback-content" style="background:#f8f9fa;border-left:4px solid #007bff;padding:15px;border-radius:8px;">'+
+                  '<h6 style="margin:0 0 8px 0;font-weight:600;">Feedback</h6>'+
+                  '<div class="feedback-text"></div>'+
+                '</div>'+
+              '</div>'+
+            '</div>'+
+
+            '<div class="scenario-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:24px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+              '<div class="scenario-header" style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'+
+                '<div style="background:#ffc107;color:#000;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">2</div>'+
+                '<h4 style="margin:0;color:#ffc107;">Scenario 2 – Reporting</h4>'+
+              '</div>'+
+              '<div class="scenario-body" style="margin-bottom:12px;">'+
+                '<p class="mb-2">After disconnecting, you must report the incident.</p>'+
+                '<p class="mb-0"><strong>Question:</strong> What should you do?</p>'+
+              '</div>'+
+              '<div class="question-section">'+
+                '<div class="option-item" data-option="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario2" value="A" id="scenario2_A" style="margin-right:10px;">'+
+                    '<label for="scenario2_A" style="margin:0;cursor:pointer;"><strong>A)</strong> Report directly to MMDC IT Helpdesk.</label>'+
+                  '</div>'+
+                '</div>'+
+                '<div class="option-item" data-option="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario2" value="B" id="scenario2_B" style="margin-right:10px;">'+
+                    '<label for="scenario2_B" style="margin:0;cursor:pointer;"><strong>B)</strong> Post about the hack on social media.</label>'+
+                  '</div>'+
+                '</div>'+
+                '<div class="option-item" data-option="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario2" value="C" id="scenario2_C" style="margin-right:10px;">'+
+                    '<label for="scenario2_C" style="margin:0;cursor:pointer;"><strong>C)</strong> Email your friends to warn them.</label>'+
+                  '</div>'+
+                '</div>'+
+                '<div class="option-item" data-option="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario2" value="D" id="scenario2_D" style="margin-right:10px;">'+
+                    '<label for="scenario2_D" style="margin:0;cursor:pointer;"><strong>D)</strong> Do nothing since you fixed it yourself.</label>'+
+                  '</div>'+
+                '</div>'+
+              '</div>'+
+              '<div id="feedback2" class="feedback-section" style="display:none;margin-top:15px;">'+
+                '<div class="feedback-content" style="background:#f8f9fa;border-left:4px solid #007bff;padding:15px;border-radius:8px;">'+
+                  '<h6 style="margin:0 0 8px 0;font-weight:600;">Feedback</h6>'+
+                  '<div class="feedback-text"></div>'+
+                '</div>'+
+              '</div>'+
+            '</div>'+
+
+            '<div class="scenario-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:24px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+              '<div class="scenario-header" style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'+
+                '<div style="background:#28a745;color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">3</div>'+
+                '<h4 style="margin:0;color:#28a745;">Scenario 3 – Recovery</h4>'+
+              '</div>'+
+              '<div class="scenario-body" style="margin-bottom:12px;">'+
+                '<p class="mb-2">You regain access to your account.</p>'+
+                '<p class="mb-0"><strong>Question:</strong> What is the MOST important step now?</p>'+
+              '</div>'+
+              '<div class="question-section">'+
+                '<div class="option-item" data-option="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario3" value="A" id="scenario3_A" style="margin-right:10px;">'+
+                    '<label for="scenario3_A" style="margin:0;cursor:pointer;"><strong>A)</strong> Enable Multi-Factor Authentication (MFA).</label>'+
+                  '</div>'+
+                '</div>'+
+                '<div class="option-item" data-option="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario3" value="B" id="scenario3_B" style="margin-right:10px;">'+
+                    '<label for="scenario3_B" style="margin:0;cursor:pointer;"><strong>B)</strong> Use a simple password for convenience.</label>'+
+                  '</div>'+
+                '</div>'+
+                '<div class="option-item" data-option="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario3" value="C" id="scenario3_C" style="margin-right:10px;">'+
+                    '<label for="scenario3_C" style="margin:0;cursor:pointer;"><strong>C)</strong> Keep using your old password.</label>'+
+                  '</div>'+
+                '</div>'+
+                '<div class="option-item" data-option="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:10px;cursor:pointer;">'+
+                  '<div style="display:flex;align-items:center;">'+
+                    '<input type="radio" name="scenario3" value="D" id="scenario3_D" style="margin-right:10px;">'+
+                    '<label for="scenario3_D" style="margin:0;cursor:pointer;"><strong>D)</strong> Share your story online to warn others.</label>'+
+                  '</div>'+
+                '</div>'+
+              '</div>'+
+              '<div id="feedback3" class="feedback-section" style="display:none;margin-top:15px;">'+
+                '<div class="feedback-content" style="background:#f8f9fa;border-left:4px solid #007bff;padding:15px;border-radius:8px;">'+
+                  '<h6 style="margin:0 0 8px 0;font-weight:600;">Feedback</h6>'+
+                  '<div class="feedback-text"></div>'+
+                '</div>'+
+              '</div>'+
+            '</div>'+
+
+          '</div>'+
+
+          '<div id="m4FinalResults" class="final-results" style="display:none;background:linear-gradient(135deg,#d4edda 0%,#c3e6cb 100%);border:1px solid #c3e6cb;border-radius:12px;padding:25px;margin-top:20px;text-align:center;">'+
+            '<h4 style="color:#155724;margin:0 0 15px 0;">🎉 Well done!</h4>'+
+            '<p style="color:#155724;margin:0;font-size:1.1rem;line-height:1.6;">You acted quickly, reported correctly, and secured your account. You are now prepared to handle real incidents responsibly.</p>'+
+          '</div>'+
+
+        '</div></div>';
+
+      setTimeout(initModule4SimHandlers, 0);
+    }
+
+    // Inject now if visible, and also bind to header click to ensure injection after expansion
+    injectSimulation(simEl);
+    if (simHeader) {
+      var headerItem = simHeader.closest('.drawer-item');
+      if (headerItem) {
+        headerItem.addEventListener('click', function(){
+          // After expansion, ensure content is injected/replaced (handles lazy creation)
+          var target = simEl || (headerItem.nextElementSibling && headerItem.nextElementSibling.classList.contains('drawer-subcontent') ? headerItem.nextElementSibling : null);
+          if (target) injectSimulation(target);
+        });
+      }
+    }
+  })();
+
+  // Handlers for Module 4 interactive simulation (mirrors Module 3 behavior)
+  function initModule4SimHandlers(){
+    try {
+      var feedbackData = {
+        scenario1: {
+          A: { correct: true,  message: '✅ Correct! This stops the hacker\'s live access immediately.' },
+          B: { correct: false, message: '❌ Not urgent enough. Secure your system first before alerting others.' },
+          C: { correct: false, message: '❌ Waiting gives hackers more time to exploit your account.' },
+          D: { correct: false, message: '❌ Ignoring makes things worse. Immediate action is critical.' }
+        },
+        scenario2: {
+          A: { correct: true,  message: '✅ Correct! Always report to the official IT team so they can investigate and help.' },
+          B: { correct: false, message: '❌ That doesn\'t fix the issue — and may make you a bigger target.' },
+          C: { correct: false, message: '❌ Helpful, but it\'s not the official channel. Always report to IT first.' },
+          D: { correct: false, message: '❌ Incidents must still be reported so IT can prevent wider damage.' }
+        },
+        scenario3: {
+          A: { correct: true,  message: '✅ Correct! MFA adds a second barrier even if your password is stolen.' },
+          B: { correct: false, message: '❌ Convenience = vulnerability. Simple passwords are easy to crack.' },
+          C: { correct: false, message: '❌ Old passwords are already compromised. Always create a new one.' },
+          D: { correct: false, message: '❌ Awareness helps, but securing your account must come first.' }
+        }
+      };
+
+      // Wire radio change events
+      document.querySelectorAll('input[type="radio"][name^="scenario"]').forEach(function(r){
+        r.addEventListener('change', function(){
+          var scenarioNum = this.name.replace('scenario','');
+          var option = this.value;
+          var feedbackDiv = document.getElementById('feedback' + scenarioNum);
+          if (!feedbackDiv) return;
+          var feedbackText = feedbackDiv.querySelector('.feedback-text');
+          var meta = (feedbackData['scenario' + scenarioNum] || {})[option];
+          if (!meta) return;
+
+          feedbackDiv.style.display = 'block';
+          feedbackText.innerHTML = meta.message;
+
+          var contentBox = feedbackDiv.querySelector('.feedback-content');
+          var header = feedbackDiv.querySelector('h6');
+          if (contentBox && header) {
+            if (meta.correct) {
+              contentBox.style.borderLeftColor = '#28a745';
+              header.style.color = '#28a745';
+            } else {
+              contentBox.style.borderLeftColor = '#dc3545';
+              header.style.color = '#dc3545';
+            }
+          }
+
+          checkM4AllCompleted();
+        });
+      });
+
+      // Click on container selects the radio
+      document.querySelectorAll('.module4-scope .scenario-card .option-item').forEach(function(item){
+        item.addEventListener('click', function(){
+          var radio = this.querySelector('input[type="radio"]');
+          if (radio) {
+            radio.checked = true;
+            radio.dispatchEvent(new Event('change'));
+          }
+        });
+      });
+
+      function checkM4AllCompleted(){
+        var checked = document.querySelectorAll('input[type="radio"][name^="scenario"]:checked');
+        var names = new Set();
+        checked.forEach(function(c){ names.add(c.name); });
+        if (names.size >= 3) {
+          var final = document.getElementById('m4FinalResults');
+          if (final) final.style.display = 'block';
+        }
+      }
+    } catch(e) {
+      // fail silently to avoid breaking the page
+    }
+  }
+
+  // Module 4 → Knowledge Check (inline quiz format)
+  (function initModule4KnowledgeCheck(){
+    try {
+      var kcHeader = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+        .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'knowledge check'; });
+      var kcEl = null;
+      if (kcHeader) {
+        var kcItem = kcHeader.closest('.drawer-item');
+        if (kcItem) {
+          var oc = kcItem.getAttribute('onclick') || '';
+          var m = oc.match(/toggleDrawer\('([^']+)'\)/);
+          if (m && m[1]) kcEl = document.getElementById('content-' + m[1]);
+        }
+      }
+      if (!kcEl) kcEl = document.getElementById('content-knowledge-check');
+      if (!kcEl) return;
+
+      var wrap = kcEl.querySelector('.content-wrapper') || kcEl;
+      wrap.innerHTML = ''+
+        '<div class="module4-scope"><div class="accordion-content">'+
+          '<h3 class="mb-3">Knowledge Check — Module 4</h3>'+
+          '<div class="knowledge-check-rules" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px; border-radius: 12px; border-left: 5px solid #007bff; margin-bottom: 25px;">'+
+            '<ul style="font-size: 1.05rem; line-height: 1.7; margin: 0; color: #333;">'+
+              '<li><strong>10 questions covering all Module 4 topics</strong></li>'+
+              '<li><strong>Immediate feedback for each answer</strong></li>'+
+              '<li><strong>Passing score: 80% (8/10 correct)</strong></li>'+
+            '</ul>'+
+          '</div>'+
+
+          '<div class="quiz-container">'+
+            '<div class="question-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+              '<div class="question-header" style="display:flex;align-items:center;gap:10px;margin-bottom:15px;">'+
+                '<div style="background:#dc3545;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">1</div>'+
+                '<h5 style="margin:0;color:#dc3545;">Immediate Action</h5>'+
+              '</div>'+
+              '<p style="font-weight:600;margin-bottom:15px;">According to the lesson, what is the very first and most critical step you should take if you suspect you\'ve clicked a malicious link or that your device is infected?</p>'+
+              '<div class="options">'+
+                '<div class="option" data-answer="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>A)</strong> Immediately run an antivirus scan.'+
+                '</div>'+
+                '<div class="option" data-answer="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>B)</strong> Disconnect your device from the internet (Wi-Fi and mobile data).'+
+                '</div>'+
+                '<div class="option" data-answer="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>C)</strong> Change the password for your most important account.'+
+                '</div>'+
+                '<div class="option" data-answer="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>D)</strong> Report the incident to the IT Helpdesk.'+
+                '</div>'+
+              '</div>'+
+              '<div class="feedback" style="display:none;margin-top:15px;padding:15px;border-radius:8px;"></div>'+
+            '</div>'+
+
+            '<div class="question-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+              '<div class="question-header" style="display:flex;align-items:center;gap:10px;margin-bottom:15px;">'+
+                '<div style="background:#ffc107;color:#000;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">2</div>'+
+                '<h5 style="margin:0;color:#ffc107;">Reporting Concept</h5>'+
+              '</div>'+
+              '<p style="font-weight:600;margin-bottom:15px;">The lesson introduces the concept of "Digital Bayanihan." What is the main idea behind this principle?</p>'+
+              '<div class="options">'+
+                '<div class="option" data-answer="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>A)</strong> Keeping a security incident to yourself to avoid causing panic.'+
+                '</div>'+
+                '<div class="option" data-answer="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>B)</strong> Only reporting an incident if you lose money.'+
+                '</div>'+
+                '<div class="option" data-answer="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>C)</strong> The collective effort of reporting an incident to protect the entire community, not just yourself.'+
+                '</div>'+
+                '<div class="option" data-answer="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>D)</strong> Asking friends for help to hack the scammer back.'+
+                '</div>'+
+              '</div>'+
+              '<div class="feedback" style="display:none;margin-top:15px;padding:15px;border-radius:8px;"></div>'+
+            '</div>'+
+
+            '<div class="question-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+              '<div class="question-header" style="display:flex;align-items:center;gap:10px;margin-bottom:15px;">'+
+                '<div style="background:#28a745;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">3</div>'+
+                '<h5 style="margin:0;color:#28a745;">Recovery Skill</h5>'+
+              '</div>'+
+              '<p style="font-weight:600;margin-bottom:15px;">If your account is compromised and you need to reset your password, what is the safest method?</p>'+
+              '<div class="options">'+
+                '<div class="option" data-answer="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>A)</strong> Use the password reset link sent to you in a recent email.'+
+                '</div>'+
+                '<div class="option" data-answer="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>B)</strong> Go directly to the official website or app and use their "Forgot Password" or recovery feature.'+
+                '</div>'+
+                '<div class="option" data-answer="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>C)</strong> Call the customer service number you find in a text message.'+
+                '</div>'+
+                '<div class="option" data-answer="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>D)</strong> Ask a friend to log in for you and change the password.'+
+                '</div>'+
+              '</div>'+
+              '<div class="feedback" style="display:none;margin-top:15px;padding:15px;border-radius:8px;"></div>'+
+            '</div>'+
+
+            '<div class="question-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+              '<div class="question-header" style="display:flex;align-items:center;gap:10px;margin-bottom:15px;">'+
+                '<div style="background:#6f42c1;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">4</div>'+
+                '<h5 style="margin:0;color:#6f42c1;">Password Change Procedure</h5>'+
+              '</div>'+
+              '<p style="font-weight:600;margin-bottom:15px;">You realize you accidentally typed your password into a fake website. The lesson advises you to change your password immediately. What is a crucial part of this process?</p>'+
+              '<div class="options">'+
+                '<div class="option" data-answer="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>A)</strong> Change the password using a different, secure device if possible.'+
+                '</div>'+
+                '<div class="option" data-answer="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>B)</strong> Only change the password for that one account and no others.'+
+                '</div>'+
+                '<div class="option" data-answer="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>C)</strong> Write the new password down on a sticky note so you don\'t forget it.'+
+                '</div>'+
+                '<div class="option" data-answer="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>D)</strong> Wait 24 hours before changing the password to see if anything happens.'+
+                '</div>'+
+              '</div>'+
+              '<div class="feedback" style="display:none;margin-top:15px;padding:15px;border-radius:8px;"></div>'+
+            '</div>'+
+
+            '<div class="question-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+              '<div class="question-header" style="display:flex;align-items:center;gap:10px;margin-bottom:15px;">'+
+                '<div style="background:#17a2b8;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">5</div>'+
+                '<h5 style="margin:0;color:#17a2b8;">Reporting Channel</h5>'+
+              '</div>'+
+              '<p style="font-weight:600;margin-bottom:15px;">You receive a phishing email designed to steal MMDC student portal credentials. According to the MMDC Reporting Protocol, which office is the primary contact for this technical issue?</p>'+
+              '<div class="options">'+
+                '<div class="option" data-answer="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>A)</strong> The Faculty / Dean\'s Office'+
+                '</div>'+
+                '<div class="option" data-answer="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>B)</strong> The Opisina ng Estudyante (Student Affairs Office)'+
+                '</div>'+
+                '<div class="option" data-answer="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>C)</strong> The MMDC IT Helpdesk'+
+                '</div>'+
+                '<div class="option" data-answer="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>D)</strong> The Philippine National Police (PNP) Anti-Cybercrime Group'+
+                '</div>'+
+              '</div>'+
+              '<div class="feedback" style="display:none;margin-top:15px;padding:15px;border-radius:8px;"></div>'+
+            '</div>'+
+
+            '<div class="question-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+              '<div class="question-header" style="display:flex;align-items:center;gap:10px;margin-bottom:15px;">'+
+                '<div style="background:#fd7e14;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">6</div>'+
+                '<h5 style="margin:0;color:#fd7e14;">Post-Recovery Security</h5>'+
+              '</div>'+
+              '<p style="font-weight:600;margin-bottom:15px;">After you have successfully recovered a compromised account, what is the single most effective step you can take to fortify it against future attacks?</p>'+
+              '<div class="options">'+
+                '<div class="option" data-answer="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>A)</strong> Change your profile picture.'+
+                '</div>'+
+                '<div class="option" data-answer="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>B)</strong> Post a warning on your social media feed.'+
+                '</div>'+
+                '<div class="option" data-answer="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>C)</strong> Enable Multi-Factor Authentication (MFA).'+
+                '</div>'+
+                '<div class="option" data-answer="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>D)</strong> Delete all your old messages and emails.'+
+                '</div>'+
+              '</div>'+
+              '<div class="feedback" style="display:none;margin-top:15px;padding:15px;border-radius:8px;"></div>'+
+            '</div>'+
+
+            '<div class="question-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+              '<div class="question-header" style="display:flex;align-items:center;gap:10px;margin-bottom:15px;">'+
+                '<div style="background:#e83e8c;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">7</div>'+
+                '<h5 style="margin:0;color:#e83e8c;">Authority Reporting</h5>'+
+              '</div>'+
+              '<p style="font-weight:600;margin-bottom:15px;">The module states that for serious incidents involving financial loss, you should report to the PNP Anti-Cybercrime Group. What important advice does it give about taking this step?</p>'+
+              '<div class="options">'+
+                '<div class="option" data-answer="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>A)</strong> You should only report amounts larger than ₱10,000.'+
+                '</div>'+
+                '<div class="option" data-answer="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>B)</strong> You must file the report within 24 hours or it won\'t be accepted.'+
+                '</div>'+
+                '<div class="option" data-answer="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>C)</strong> You should try to contact the scammer yourself first.'+
+                '</div>'+
+                '<div class="option" data-answer="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>D)</strong> It is best to do this with the guidance of an MMDC staff member from IT or Student Affairs.'+
+                '</div>'+
+              '</div>'+
+              '<div class="feedback" style="display:none;margin-top:15px;padding:15px;border-radius:8px;"></div>'+
+            '</div>'+
+
+            '<div class="question-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+              '<div class="question-header" style="display:flex;align-items:center;gap:10px;margin-bottom:15px;">'+
+                '<div style="background:#20c997;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">8</div>'+
+                '<h5 style="margin:0;color:#20c997;">Account Cleanup</h5>'+
+              '</div>'+
+              '<p style="font-weight:600;margin-bottom:15px;">After regaining access to a compromised account, the "Recovery Toolkit" advises you to review recent activity and:</p>'+
+              '<div class="options">'+
+                '<div class="option" data-answer="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>A)</strong> Block every person who has recently sent you a message.'+
+                '</div>'+
+                '<div class="option" data-answer="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>B)</strong> Change your username and display name.'+
+                '</div>'+
+                '<div class="option" data-answer="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>C)</strong> Remove any unfamiliar third-party apps or services that have access to your account.'+
+                '</div>'+
+                '<div class="option" data-answer="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>D)</strong> Delete the account and create a new one.'+
+                '</div>'+
+              '</div>'+
+              '<div class="feedback" style="display:none;margin-top:15px;padding:15px;border-radius:8px;"></div>'+
+            '</div>'+
+
+            '<div class="question-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+              '<div class="question-header" style="display:flex;align-items:center;gap:10px;margin-bottom:15px;">'+
+                '<div style="background:#6c757d;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">9</div>'+
+                '<h5 style="margin:0;color:#6c757d;">Containment Concept</h5>'+
+              '</div>'+
+              '<p style="font-weight:600;margin-bottom:15px;">What is the primary goal of "containment," or disconnecting your device from the internet, as the first step in responding to an attack?</p>'+
+              '<div class="options">'+
+                '<div class="option" data-answer="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>A)</strong> To save your mobile data or battery life.'+
+                '</div>'+
+                '<div class="option" data-answer="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>B)</strong> To stop the attack from getting worse by cutting off the scammer\'s access and preventing malware from spreading.'+
+                '</div>'+
+                '<div class="option" data-answer="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>C)</strong> To reset your device\'s network settings automatically.'+
+                '</div>'+
+                '<div class="option" data-answer="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>D)</strong> To make it easier to locate the source of the attack.'+
+                '</div>'+
+              '</div>'+
+              '<div class="feedback" style="display:none;margin-top:15px;padding:15px;border-radius:8px;"></div>'+
+            '</div>'+
+
+            '<div class="question-card" style="background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">'+
+              '<div class="question-header" style="display:flex;align-items:center;gap:10px;margin-bottom:15px;">'+
+                '<div style="background:#dc3545;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">10</div>'+
+                '<h5 style="margin:0;color:#dc3545;">Scenario Analysis</h5>'+
+              '</div>'+
+              '<p style="font-weight:600;margin-bottom:15px;">A friend tells you they received a threatening message on their school email. According to the MMDC Reporting Protocol, which office is best equipped to handle issues of harassment, threats, or cyberbullying?</p>'+
+              '<div class="options">'+
+                '<div class="option" data-answer="A" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>A)</strong> The MMDC IT Helpdesk'+
+                '</div>'+
+                '<div class="option" data-answer="B" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>B)</strong> Their specific course professor'+
+                '</div>'+
+                '<div class="option" data-answer="C" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>C)</strong> The Opisina ng Estudyante (Student Affairs Office)'+
+                '</div>'+
+                '<div class="option" data-answer="D" style="border:1px solid #dee2e6;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'+
+                  '<strong>D)</strong> The campus security guards'+
+                '</div>'+
+              '</div>'+
+              '<div class="feedback" style="display:none;margin-top:15px;padding:15px;border-radius:8px;"></div>'+
+            '</div>'+
+
+          '</div>'+
+
+          '<div id="m4FinalResults" class="final-results" style="display:none;background:linear-gradient(135deg,#d4edda 0%,#c3e6cb 100%);border:1px solid #c3e6cb;border-radius:12px;padding:25px;margin-top:20px;text-align:center;">'+
+            '<h4 style="color:#155724;margin:0 0 15px 0;">🎉 Incredible work!</h4>'+
+            '<p style="color:#155724;margin:0;font-size:1.1rem;line-height:1.6;">You have completed the final Knowledge Check and have mastered the essential skills of responding, reporting, and recovering from a cyber incident. You now have a complete toolkit to defend not only yourself but also the entire MMDC community.</p>'+
+            '<p style="color:#155724;margin:15px 0 0 0;font-size:1.1rem;line-height:1.6;">You have now finished all the learning modules. It\'s time to put all your knowledge to the test in the final simulation activities and officially earn your Cyber Defender badge!</p>'+
+          '</div>'+
+
+        '</div></div>';
+
+      setTimeout(initModule4KnowledgeCheckHandlers, 0);
+    } catch(e) { /* silent */ }
+  })();
+
+  // Handlers for Module 4 Knowledge Check
+  function initModule4KnowledgeCheckHandlers(){
+    try {
+      var correctAnswers = {
+        1: 'B', 2: 'C', 3: 'B', 4: 'A', 5: 'C',
+        6: 'C', 7: 'D', 8: 'C', 9: 'B', 10: 'C'
+      };
+
+      var feedbackMessages = {
+        1: {
+          correct: 'Correct! The first step is always containment. Disconnecting your device stops the immediate threat, just like the lesson "I-isolate Mo Muna ang Device Mo" explains.',
+          incorrect: 'Not quite. While those are important steps, the absolute first thing you must do is disconnect from the internet to contain the threat and prevent further damage.'
+        },
+        2: {
+          correct: 'That\'s it! "Digital Bayanihan" means your report helps protect everyone in the MMDC community, reflecting the Filipino spirit of collective action.',
+          incorrect: 'Incorrect. The core idea of Digital Bayanihan is community protection. Keeping silent or only reporting for personal gain goes against this principle.'
+        },
+        3: {
+          correct: 'Perfect! The "Recovery Toolkit" stresses that you must ONLY use official recovery links by going directly to the website. Links in emails or texts are often phishing attempts.',
+          incorrect: 'That\'s not safe. Scammers often send fake recovery links. The lesson makes it clear that you must always go to the official source yourself.'
+        },
+        4: {
+          correct: 'Exactly! Your device could be compromised, so using a different, "clean" device ensures the scammer can\'t capture your new password, too.',
+          incorrect: 'Incorrect. The lesson specifically advises using a secure, separate device to ensure the attacker doesn\'t have a backdoor to steal your new credentials.'
+        },
+        5: {
+          correct: 'Correct! The MMDC IT Helpdesk is the designated channel for all technical issues like phishing, malware, and compromised accounts.',
+          incorrect: 'Not for this issue. While other offices handle different problems, the IT Helpdesk is your first stop for technical security threats.'
+        },
+        6: {
+          correct: 'That\'s right! Enabling MFA is described as the single most effective security measure you can take. It\'s the best way to "lock down" your recovered account.',
+          incorrect: 'Incorrect. While cleaning up your account is good, enabling MFA provides a powerful, proactive layer of security that the other actions do not.'
+        },
+        7: {
+          correct: 'Correct. The lesson advises seeking guidance from MMDC staff (IT or Student Affairs) to ensure you follow the correct legal procedures when reporting to authorities.',
+          incorrect: 'Incorrect. The key advice given in the module is to navigate the formal reporting process with help from school staff to do it correctly and safely.'
+        },
+        8: {
+          correct: 'Excellent! Hackers often grant access to third-party apps to maintain a backdoor into your account. Removing them is a critical cleanup step.',
+          incorrect: 'Not the best option. The most important cleanup action is to find and remove any access points the hacker might have created, like third-party apps.'
+        },
+        9: {
+          correct: 'Yes! Containment is all about limiting the damage. Disconnecting stops data theft and malware communication in its tracks.',
+          incorrect: 'Not quite. The primary purpose of this immediate action is purely defensive—to stop the attack from progressing any further.'
+        },
+        10: {
+          correct: 'That\'s right. The reporting protocol clearly states that the Opisina ng Estudyante (Student Affairs Office) is the correct channel for handling harassment, threats, and cyberbullying.',
+          incorrect: 'Incorrect. While IT handles technical issues, the Student Affairs Office is specifically tasked with handling student welfare issues like threats and harassment.'
+        }
+      };
+
+      var answeredQuestions = new Set();
+      var correctCount = 0;
+
+      // Wire click events for all options
+      document.querySelectorAll('.module4-scope .question-card .option').forEach(function(option){
+        option.addEventListener('click', function(){
+          var questionCard = this.closest('.question-card');
+          var questionNumber = Array.from(document.querySelectorAll('.question-card')).indexOf(questionCard) + 1;
+          var selectedAnswer = this.getAttribute('data-answer');
+          var correctAnswer = correctAnswers[questionNumber];
+          var feedback = questionCard.querySelector('.feedback');
+          var options = questionCard.querySelectorAll('.option');
+
+          // Disable all options in this question
+          options.forEach(function(opt){
+            opt.style.pointerEvents = 'none';
+            opt.style.opacity = '0.6';
+          });
+
+          // Highlight selected option
+          this.style.backgroundColor = '#e3f2fd';
+          this.style.borderColor = '#2196f3';
+
+          // Show feedback
+          feedback.style.display = 'block';
+          if (selectedAnswer === correctAnswer) {
+            feedback.style.backgroundColor = '#d4edda';
+            feedback.style.borderColor = '#c3e6cb';
+            feedback.style.color = '#155724';
+            feedback.innerHTML = '<strong>✅ ' + feedbackMessages[questionNumber].correct + '</strong>';
+            if (!answeredQuestions.has(questionNumber)) {
+              correctCount++;
+              answeredQuestions.add(questionNumber);
+            }
+          } else {
+            feedback.style.backgroundColor = '#f8d7da';
+            feedback.style.borderColor = '#f5c6cb';
+            feedback.style.color = '#721c24';
+            feedback.innerHTML = '<strong>❌ ' + feedbackMessages[questionNumber].incorrect + '</strong>';
+            if (!answeredQuestions.has(questionNumber)) {
+              answeredQuestions.add(questionNumber);
+            }
+          }
+
+          // Check if all questions answered
+          if (answeredQuestions.size >= 10) {
+            var finalResults = document.getElementById('m4FinalResults');
+            if (finalResults) {
+              finalResults.style.display = 'block';
+              finalResults.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+          }
+        });
+      });
+    } catch(e) {
+      // fail silently to avoid breaking the page
+  }
+  }
+
+  // Override Module 4 Knowledge Check to match Module 3 approach (rules + Start button)
+  (function overrideModule4KnowledgeCheck(){
+    try {
+      var kcHeader = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+        .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'knowledge check'; });
+      var kcEl = null;
+      if (kcHeader) {
+        var kcItem = kcHeader.closest('.drawer-item');
+        if (kcItem) {
+          var oc = kcItem.getAttribute('onclick') || '';
+          var m = oc.match(/toggleDrawer\('([^']+)'\)/);
+          if (m && m[1]) kcEl = document.getElementById('content-' + m[1]);
+        }
+      }
+      if (!kcEl) kcEl = document.getElementById('content-knowledge-check');
+      if (!kcEl) return;
+
+      var wrap = kcEl.querySelector('.content-wrapper') || kcEl;
+      wrap.innerHTML = ''+
+        '<div class="module4-scope"><div class="accordion-content">'+
+          '<h3 class="mb-3">Knowledge Check — Module 4</h3>'+
+          '<div class="knowledge-check-rules" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px; border-radius: 12px; border-left: 5px solid #007bff;">'+
+            '<ul style="font-size: 1.05rem; line-height: 1.7; margin: 0; color: #333;">'+
+              '<li><strong>Unlimited attempts</strong></li>'+
+              '<li><strong>5 questions per attempt</strong></li>'+
+              '<li><strong>Passing score: 80%</strong></li>'+
+            '</ul>'+
+          '</div>'+
+          '<div style="text-align:center; margin-top: 16px;">'+
+            '<a href="/assessment/4" class="btn btn-primary btn-lg" style="padding: 12px 24px; font-weight: 600;"><i class="fas fa-play me-2"></i>Start Knowledge Check</a>'+
+          '</div>'+
+        '</div></div>';
+    } catch(e) { /* silent */ }
+  })();
+
+  // Module 4 → References (Drawer): compile APA 7 citations from Module 4 conclusions
+  (function initModule4References(){
+    try {
+      var refHeader = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+        .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'references'; });
+      var refEl = null;
+      if (refHeader) {
+        var refItem = refHeader.closest('.drawer-item');
+        if (refItem) {
+          var oc = refItem.getAttribute('onclick') || '';
+          var m = oc.match(/toggleDrawer\('([^']+)'\)/);
+          if (m && m[1]) refEl = document.getElementById('content-' + m[1]);
+        }
+      }
+      if (!refEl) refEl = document.getElementById('content-references');
+      if (!refEl) return;
+
+      var wrap = refEl.querySelector('.content-wrapper') || refEl;
+      // APA 7 references compiled from Module 4 conclusions
+      wrap.innerHTML = ''+
+        '<div class="module4-scope"><div class="accordion-content">'+
+          '<h3>References (APA 7th)</h3>'+
+          '<ul class="resource-list">'+
+            '<li>Proofpoint. (n.d.). <em>What to do after responding to a phishing email</em>. https://www.proofpoint.com/us/blog/email-and-cloud-threats/what-do-after-responding-phishing-email</li>'+
+            '<li>Bureau of Customs. (n.d.). <em>Online love scam</em>. https://customs.gov.ph/online-love-scam/</li>'+
+            '<li>Proofpoint. (n.d.). <em>How phishing reporting benefits email security</em>. https://www.proofpoint.com/us/blog/email-and-cloud-threats/how-phishing-reporting-benefits-email-security</li>'+
+            '<li>Daily Tribune. (2025, June 22). <em>Digital thumbprint program pushed amid ICT Month celebration</em>. https://tribune.net.ph/2025/06/22/digital-thumbprint-program-pushed-amid-ict-month-celebration</li>'+
+            '<li>National Cyber Security Centre. (n.d.). <em>Recovering a hacked account</em>. https://www.ncsc.gov.uk/guidance/recovering-a-hacked-account</li>'+
+            '<li>YouTube. (n.d.). <em>How to set up two‑factor authentication (2FA) on Facebook</em> [Video]. YouTube. https://youtu.be/sCLYhoKEqqk?feature=shared</li>'+
+            '<li>Respicio & Co. Law. (n.d.). <em>Scam money recovery for college students in the Philippines</em>. https://www.respicio.ph/commentaries/scam-money-recovery-for-college-student</li>'+
+          '</ul>'+
+        '</div></div>';
+    } catch(e) { /* silent */ }
+  })();
+
+});
+</script>

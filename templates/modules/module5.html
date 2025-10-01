@@ -1,0 +1,448 @@
+<script>
+// Module 5 content injector – mirrors prior modules' behavior
+document.addEventListener('DOMContentLoaded', function(){
+  try {
+    // Find Lesson 5.1 → 1. Next-Gen Threats
+    var header = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+      .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '1. next-gen threats'; });
+    var target = null;
+    if (header) {
+      var item = header.closest('.drawer-item');
+      if (item) {
+        var oc = item.getAttribute('onclick') || '';
+        var m = oc.match(/toggleDrawer\('([^']+)'\)/);
+        if (m && m[1]) target = document.getElementById('content-' + m[1]);
+      }
+    }
+    if (!target) target = document.getElementById('content-sub5-1');
+    if (!target) {
+      var drawers = document.querySelector('.content-drawers');
+      if (drawers) {
+        target = document.createElement('div');
+        target.className = 'drawer-subcontent';
+        target.id = 'content-sub5-1';
+        var cw = document.createElement('div');
+        cw.className = 'content-wrapper';
+        target.appendChild(cw);
+        drawers.appendChild(target);
+      }
+    }
+    if (!target) return;
+    var wrap = target.querySelector('.content-wrapper') || target;
+    wrap.innerHTML = ''+
+      '<div class="accordion-content">'+
+        '<h3>The Evolving Threat Landscape</h3>'+
+        '<p>Welcome to Module 5! You\'ve become an expert at spotting traditional scams. But just like technology, cybercriminals are constantly leveling up their tactics. This video will introduce you to the next generation of social engineering attacks, from AI-powered phishing to convincing deepfakes. Get ready to learn how to defend yourself from threats that go beyond the basics.</p>'+
+        '<div class="video-container"><div class="video-wrapper">'+
+          '<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:#f1f3f5;color:#6c757d;font-weight:600;">Video placeholder</div>'+
+        '</div><div class="video-caption">Module 5 Lesson 5.1 Part A — The Evolving Threat Landscape</div></div>'+
+      '</div>';
+
+    // Lesson 5.1 → 2. Advance Threats
+    var header2 = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+      .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '2. advance threats'; });
+    var target2 = null;
+    if (header2) {
+      var item2 = header2.closest('.drawer-item');
+      if (item2) {
+        var oc2 = item2.getAttribute('onclick') || '';
+        var m2 = oc2.match(/toggleDrawer\('([^']+)'\)/);
+        if (m2 && m2[1]) target2 = document.getElementById('content-' + m2[1]);
+      }
+    }
+    if (!target2) target2 = document.getElementById('content-sub5-2');
+    if (target2) {
+      var wrap2 = target2.querySelector('.content-wrapper') || target2;
+      wrap2.innerHTML = ''+
+        '<div class="accordion-content">'+
+          '<h3>The Next-Gen Scammer\'s Toolkit</h3>'+
+          '<p>Welcome back! In our last lesson, we introduced you to the concept of AI-powered cybercrime. This video will now take you deeper. We\'ll show you how next-gen scammers use new tools like deepfakes and QR code phishing to create attacks that go beyond the basics. Get ready to level up your defenses to stay one step ahead of the scam.</p>'+
+          '<div class="video-container"><div class="video-wrapper">'+
+            '<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:#f1f3f5;color:#6c757d;font-weight:600;">Video placeholder</div>'+
+          '</div><div class="video-caption">Module 5 Lesson 5.1 Part B — The Next-Gen Scammer\'s Toolkit</div></div>'+
+
+          '<h4>Advanced Threat Red Flags</h4>'+
+          '<p>You\'ve learned that cybercriminals are now using powerful new tools like AI to deceive. This infographic is your quick-reference guide to spotting next-generation scams. Keep it handy so you can be one step ahead of threats like deepfakes and quishing.</p>'+
+          '<div class="infographic-container">'+
+            '<img src="' + (window.location.origin + '/learning_assets/Documents/Lesson51.png') + '" alt="Advanced Threat Red Flags" />'+
+          '</div>'+
+        '</div>';
+    }
+
+    // Lesson 5.1 → 3. Lesson 5.1 Conclusion: The Lifelong Challenge
+    var header3 = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+      .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '3. lesson 5.1 conclusion: the lifelong challenge'; });
+    var target3 = null;
+    if (header3) {
+      var item3 = header3.closest('.drawer-item');
+      if (item3) {
+        var oc3 = item3.getAttribute('onclick') || '';
+        var m3 = oc3.match(/toggleDrawer\('([^']+)'\)/);
+        if (m3 && m3[1]) target3 = document.getElementById('content-' + m3[1]);
+      }
+    }
+    if (!target3) target3 = document.getElementById('content-sub5-3');
+    if (target3) {
+      var wrap3 = target3.querySelector('.content-wrapper') || target3;
+      wrap3.innerHTML = ''+
+        '<div class="accordion-content">'+
+          '<h3>Lesson 5.1 Conclusion: The Lifelong Challenge</h3>'+
+          '<p>Congratulations! You\'ve just completed our lesson on the evolving world of social engineering. You\'ve discovered that scams today aren\'t just shady emails with bad grammar—they\'re smart, fast, and incredibly convincing. From deepfake videos that mimic real people to AI-powered phishing that can write in perfect Filipino, you now know what\'s out there.</p>'+
+          '<p>But here\'s the most important takeaway: your vigilance is your best defense. The moment you stop learning is the moment you become vulnerable. You are now aware of how quickly threats can change, so you need to be prepared to adapt just as quickly.</p>'+
+          '<p>Now, it\'s time to build your own toolkit for continuous learning. In Lesson 5.2, you\'ll discover habits and find resources to help you stay one step ahead of the scam, not just for today, but for a lifetime.</p>'+
+
+          '<div class="resources-section">'+
+            '<h4>Resources & Next Steps</h4>'+
+            '<ul class="resource-list">'+
+              '<li><strong>Read More:</strong> For a detailed breakdown of deepfake scams, read the CNN article on the finance worker who paid out $25 million after a deepfake video call. '+
+                '<a class="resource-link" href="https://edition.cnn.com/2024/02/04/asia/deepfake-cfo-scam-hong-kong-intl-hnk" target="_blank" rel="noopener">Open CNN article</a></li>'+
+              '<li><strong>Watch Again:</strong> For a visual reminder of what these attacks look like, watch this short video on the "Psychology of social engineering". '+
+                '<a class="resource-link" href="https://www.youtube.com/watch?v=wAC0fN3z1Es" target="_blank" rel="noopener">Watch video</a></li>'+
+              '<li><strong>Local Context:</strong> For a look at how AI is being used in the Philippines, read the article "DICT, DOST warn public vs AI chatbots" from Philstar.com.</li>'+
+            '</ul>'+
+          '</div>'+
+        '</div>';
+    }
+
+    // Lesson 5.2 → 1. Staying Ahead
+    var header4 = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+      .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '1. staying ahead'; });
+    var target4 = null;
+    if (header4) {
+      var item4 = header4.closest('.drawer-item');
+      if (item4) {
+        var oc4 = item4.getAttribute('onclick') || '';
+        var m4 = oc4.match(/toggleDrawer\('([^']+)'\)/);
+        if (m4 && m4[1]) target4 = document.getElementById('content-' + m4[1]);
+      }
+    }
+    // Fallback predictable id for the first subtopic of Lesson 5.2
+    if (!target4) target4 = document.getElementById('content-sub5-4');
+    if (target4) {
+      var wrap4 = target4.querySelector('.content-wrapper') || target4;
+      wrap4.innerHTML = ''+
+        '<div class="accordion-content">'+
+          '<h3>The Digital News Habit</h3>'+
+          '<p>Welcome back! In our last lesson, you learned that cyber threats are evolving faster than ever. So how do you keep up? The secret isn\'t to be an expert in everything; it\'s to build a habit of continuous cybersecurity learning. This video will show you how to build that habit using trusted resources, so you can stay ahead of the scam for life.</p>'+
+          '<div class="video-container"><div class="video-wrapper">'+
+            '<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:#f1f3f5;color:#6c757d;font-weight:600;">Video placeholder</div>'+
+          '</div><div class="video-caption">Module 5 Lesson 5.2 Part A — The Digital News Habit</div></div>'+
+        '</div>';
+    }
+
+    // Lesson 5.2 → 2. Your Toolkit
+    var header5 = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+      .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '2. your toolkit'; });
+    var target5 = null;
+    if (header5) {
+      var item5 = header5.closest('.drawer-item');
+      if (item5) {
+        var oc5 = item5.getAttribute('onclick') || '';
+        var m5 = oc5.match(/toggleDrawer\('([^']+)'\)/);
+        if (m5 && m5[1]) target5 = document.getElementById('content-' + m5[1]);
+      }
+    }
+    // Fallback predictable id for second subtopic under Lesson 5.2
+    if (!target5) target5 = document.getElementById('content-sub5-5');
+    if (target5) {
+      var wrap5 = target5.querySelector('.content-wrapper') || target5;
+      wrap5.innerHTML = ''+
+        '<div class="accordion-content">'+
+          '<h3>Your Cybersecurity Learning Toolkit</h3>'+
+          '<p>Think of cybersecurity like hygiene. You don\'t brush your teeth once and expect them to stay clean forever—you do it daily. In the same way, practicing good online habits every day is your best defense against evolving threats.</p>'+
+
+          '<h4>Your Curated Resource List</h4>'+
+          '<p>Staying informed is easy once you know where to look. Here are some trusted resources to build your own toolkit:</p>'+
+          '<div class="resources-section">'+
+            '<h5 style="margin-top:0;">Cybersecurity News Outlets</h5>'+
+            '<ul class="resource-list">'+
+              '<li><strong>The Hacker News:</strong> Get the latest global cybersecurity news, breaches, and threats.</li>'+
+              '<li><strong>GMA, Rappler Tech Section & Philstar Tech Section:</strong> Read local news to see what scams and cybercrimes are happening in the Philippines.</li>'+
+            '</ul>'+
+            '<h5>Government & Official Resources</h5>'+
+            '<ul class="resource-list">'+
+              '<li><strong>National Privacy Commission (NPC):</strong> Official advisories and warnings about data breaches and online scams in the Philippines.</li>'+
+              '<li><strong>Cybercrime Investigation and Coordinating Center (CICC):</strong> Primary government body for cybercrime. Follow their advisories to stay updated on the latest threats.</li>'+
+            '</ul>'+
+          '</div>'+
+
+          '<h4>Habits to Build</h4>'+
+          '<ul>'+
+            '<li><strong>Schedule 15 minutes/week:</strong> Like checking the weather, set aside 15 minutes weekly to read one article or watch one explainer video about cybersecurity.</li>'+
+            '<li><strong>Practice daily hygiene:</strong> Log out of unused accounts and review privacy settings regularly.</li>'+
+          '</ul>'+
+        '</div>';
+    }
+
+    // Lesson 5.2 → 3. Lesson 5.2 Conclusion: The Habit of a Cyber Defender
+    var header6 = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+      .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '3. lesson 5.2 conclusion: the habit of a cyber defender'; });
+    var target6 = null;
+    if (header6) {
+      var item6 = header6.closest('.drawer-item');
+      if (item6) {
+        var oc6 = item6.getAttribute('onclick') || '';
+        var m6 = oc6.match(/toggleDrawer\('([^']+)'\)/);
+        if (m6 && m6[1]) target6 = document.getElementById('content-' + m6[1]);
+      }
+    }
+    if (!target6) target6 = document.getElementById('content-sub5-6');
+    if (target6) {
+      var wrap6 = target6.querySelector('.content-wrapper') || target6;
+      wrap6.innerHTML = ''+
+        '<div class="accordion-content">'+
+          '<h3>Lesson 5.2 Conclusion: The Habit of a Cyber Defender</h3>'+
+          '<p>Congratulations on completing this lesson! You\'ve learned that staying safe online isn\'t about knowing everything right now—it\'s about committing to a habit of continuous learning. Your new habits, like checking news from trusted sources and protecting your privacy settings, will keep you safe long after this program ends.</p>'+
+          '<p>Sa panahon ngayon, ang pinaka-makapangyarihang sandata ay kaalaman. At ang sikreto? Panatilihin itong sariwa. In today\'s world, the most powerful weapon is knowledge. And the secret? Keep it fresh.</p>'+
+          '<p>You\'ve built your Cyber Toolkit of resources and habits. Now, it\'s time to take on your most important role yet. In Lesson 5.3, we’ll explore what it truly means to be a Cyber Defender in your community, protecting not just yourself, but everyone around you.</p>'+
+
+          '<div class="resources-section">'+
+            '<h4>Resources & Next Steps</h4>'+
+            '<ul class="resource-list">'+
+              '<li><strong>Read More:</strong> For a deeper dive into the importance of continuous learning, check out the article "The Importance of Continuous Learning in Cybersecurity" from PSCI. '+
+                '<a class="resource-link" href="https://www.psci.com/the-importance-of-continuous-learning-in-cybersecurity/" target="_blank" rel="noopener">Open article</a></li>'+
+              '<li><strong>Local Context:</strong> For a local example of how cybersecurity is a community effort, read the article on the "PNP ACG, LTO team up to fight transport-related cybercrime." '+
+                '<a class="resource-link" href="https://newsinfo.inquirer.net/2097691/pnp-acg-lto-team-up-to-fight-transport-related-cybercrime" target="_blank" rel="noopener">Open article</a></li>'+
+              '<li><strong>Next Lesson:</strong> You will now move on to <strong>Lesson 5.3: Your Role as a Cyber Defender</strong>.</li>'+
+            '</ul>'+
+          '</div>'+
+        '</div>';
+    }
+
+    // Lesson 5.3 → 1. Digital Bayanihan
+    var header7 = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+      .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '1. digital bayanihan'; });
+    var target7 = null;
+    if (header7) {
+      var item7 = header7.closest('.drawer-item');
+      if (item7) {
+        var oc7 = item7.getAttribute('onclick') || '';
+        var m7 = oc7.match(/toggleDrawer\('([^']+)'\)/);
+        if (m7 && m7[1]) target7 = document.getElementById('content-' + m7[1]);
+      }
+    }
+    if (!target7) target7 = document.getElementById('content-sub5-7');
+    if (target7) {
+      var wrap7 = target7.querySelector('.content-wrapper') || target7;
+      wrap7.innerHTML = ''+
+        '<div class="accordion-content">'+
+          '<h3>Your Role as a Cyber Defender</h3>'+
+          '<p>Welcome to our final lesson! You\'ve learned everything from spotting scams to fortifying your accounts. But what\'s next? This video will challenge you to think beyond yourself and embrace a new role: that of a Cyber Defender. It\'s time to turn your personal knowledge into a collective defense for our entire MMDC community.</p>'+
+          '<div class="video-container"><div class="video-wrapper">'+
+            '<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:#f1f3f5;color:#6c757d;font-weight:600;">Video placeholder</div>'+
+          '</div><div class="video-caption">Module 5 Lesson 5.3 Part A — Your Role as a Cyber Defender</div></div>'+
+        '</div>';
+    }
+
+    // Lesson 5.3 → 2. The Defender Mindset
+    var header8 = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+      .find(function(h){ return (h.textContent || '').trim().toLowerCase() === '2. the defender mindset'; });
+    var target8 = null;
+    if (header8) {
+      var item8 = header8.closest('.drawer-item');
+      if (item8) {
+        var oc8 = item8.getAttribute('onclick') || '';
+        var m8 = oc8.match(/toggleDrawer\('([^']+)'\)/);
+        if (m8 && m8[1]) target8 = document.getElementById('content-' + m8[1]);
+      }
+    }
+    if (!target8) target8 = document.getElementById('content-sub5-8');
+    if (target8) {
+      var wrap8 = target8.querySelector('.content-wrapper') || target8;
+      wrap8.innerHTML = ''+
+        '<div class="accordion-content">'+
+          '<h3>The Cyber Defender Mindset</h3>'+
+          '<h4>Your Role as a Cyber Defender</h4>'+
+          '<p>Hello, future Cyber Defenders! In this lesson, we will bring everything you\'ve learned together and explore what it truly means to be a champion of security in your community.</p>'+
+          '<p>You have learned to spot scams, secure your accounts, and act quickly when a threat hits. But the most powerful defense isn\'t a lone effort—it’s a collective one. This video will show you how your personal habits create a "digital bayanihan" and how every student has a role to play in protecting our MMDC community.</p>'+
+          '<p>You are more than just a user. You are a defender.</p>'+
+          '<div class="video-container"><div class="video-wrapper">'+
+            '<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:#f1f3f5;color:#6c757d;font-weight:600;">Video placeholder</div>'+
+          '</div><div class="video-caption">Module 5 Lesson 5.3 Part B — The Cyber Defender Mindset</div></div>'+
+        '</div>';
+    }
+
+    // Lesson 5.3 → 3. Lesson 5.3 Conclusion: The Cyber Defender's Pledge
+    var header9 = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+      .find(function(h){ var t=(h.textContent||'').trim().toLowerCase(); return t === "3. lesson 5.3 conclusion: the cyber defender's pledge" || t === "lesson 5.3 conclusion: the cyber defender's pledge"; });
+    var target9 = null;
+    if (header9) {
+      var item9 = header9.closest('.drawer-item');
+      if (item9) {
+        var oc9 = item9.getAttribute('onclick') || '';
+        var m9 = oc9.match(/toggleDrawer\('([^']+)'\)/);
+        if (m9 && m9[1]) target9 = document.getElementById('content-' + m9[1]);
+      }
+    }
+    if (!target9) target9 = document.getElementById('content-sub5-9');
+    if (target9) {
+      var wrap9 = target9.querySelector('.content-wrapper') || target9;
+      wrap9.innerHTML = ''+
+        '<div class="accordion-content">'+
+          '<h3>Lesson 5.3 Conclusion: The Cyber Defender\'s Pledge</h3>'+
+          '<p>Congratulations! You have now completed our entire cybersecurity awareness program. It\'s time to reflect on your journey.</p>'+
+          '<p>Sa pagtatapos ng programang ito, tandaan: ang tunay na halaga ng kaalaman ay kung paano mo ito ginagamit. Mula sa pagiging estudyante ng cybersecurity, ikaw na ngayon ay isang Cyber Defender.</p>'+
+          '<p>You\'ve moved from being a student of cybersecurity to a genuine defender. You know the tactics, you have the skills to protect yourself, and you understand the importance of safeguarding your community.</p>'+
+
+          '<div class="resources-section">'+
+            '<h4>Resources & Next Steps</h4>'+
+            '<ul class="resource-list">'+
+              '<li><strong>Read More:</strong> For a deeper understanding of "Digital Bayanihan" in the local context, check out the article "Bayanihan 2.0: How Social Media Is Changing Filipino Volunteerism." '+
+                '<a class="resource-link" href="https://www.ditosapilipinas.com/national/lifestyle-features/article/08/07/2025/bayanihan-social-media-ph-volunteerism/1858" target="_blank" rel="noopener">Open article</a></li>'+
+              '<li><strong>Local Context:</strong> Learn about the National Privacy Commission\'s "Kabataang Digital" campaign promoting digital citizenship among Filipino youth. '+
+                '<a class="resource-link" href="https://privacy.gov.ph/kd/" target="_blank" rel="noopener">Open campaign</a></li>'+
+              '<li><strong>Your Final Challenge & Certification:</strong> You will now move on to the <strong>Final Quiz & Assessment</strong>. After you successfully complete it, you will earn your official certification, proving your readiness as a defender of the MMDC digital community.</li>'+
+            '</ul>'+
+          '</div>'+
+        '</div>';
+    }
+
+    // Module 5 → Knowledge Check (same approach/policy as Module 3/4)
+    try {
+      var kcHeader5 = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+        .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'knowledge check'; });
+      var kcEl5 = null;
+      if (kcHeader5) {
+        var kcItem5 = kcHeader5.closest('.drawer-item');
+        if (kcItem5) {
+          var ocK5 = kcItem5.getAttribute('onclick') || '';
+          var mK5 = ocK5.match(/toggleDrawer\('([^']+)'\)/);
+          if (mK5 && mK5[1]) kcEl5 = document.getElementById('content-' + mK5[1]);
+        }
+      }
+      if (!kcEl5) kcEl5 = document.getElementById('content-knowledge-check');
+      if (kcEl5) {
+        var kcWrap5 = kcEl5.querySelector('.content-wrapper') || kcEl5;
+        kcWrap5.innerHTML = ''+
+          '<div class="accordion-content">'+
+            '<h3 class="mb-3">Knowledge Check — Module 5</h3>'+
+            '<div class="knowledge-check-rules" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px; border-radius: 12px; border-left: 5px solid #007bff;">'+
+              '<ul style="font-size: 1.05rem; line-height: 1.7; margin: 0; color: #333;">'+
+                '<li><strong>Unlimited attempts</strong></li>'+
+                '<li><strong>5 questions per attempt</strong></li>'+
+                '<li><strong>Passing score: 80%</strong></li>'+
+              '</ul>'+
+            '</div>'+
+            '<div style="text-align:center; margin-top: 16px;">'+
+              '<a href="/assessment/5" class="btn btn-primary btn-lg" style="padding: 12px 24px; font-weight: 600;"><i class="fas fa-play me-2"></i>Start Knowledge Check</a>'+
+            '</div>'+
+          '</div>';
+      }
+    } catch(e) { /* silent */ }
+
+    // Module 5 → References (APA 7th), compiled from Module 5 conclusions
+    try {
+      var refH5 = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+        .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'references'; });
+      var refEl5 = null;
+      if (refH5) {
+        var refItem5 = refH5.closest('.drawer-item');
+        if (refItem5) {
+          var ocRef5 = refItem5.getAttribute('onclick') || '';
+          var mRef5 = ocRef5.match(/toggleDrawer\('([^']+)'\)/);
+          if (mRef5 && mRef5[1]) refEl5 = document.getElementById('content-' + mRef5[1]);
+        }
+      }
+      if (!refEl5) refEl5 = document.getElementById('content-references');
+      if (refEl5) {
+        var rWrap5 = refEl5.querySelector('.content-wrapper') || refEl5;
+        rWrap5.innerHTML = ''+
+          '<div class="accordion-content">'+
+            '<h3>References (APA 7th)</h3>'+
+            '<ul class="resource-list">'+
+              '<li>CNN. (2024, February 4). <em>Deepfake CFO scam in Hong Kong</em>. https://edition.cnn.com/2024/02/04/asia/deepfake-cfo-scam-hong-kong-intl-hnk</li>'+
+              '<li>YouTube. (n.d.). <em>Psychology of social engineering</em> [Video]. YouTube. https://www.youtube.com/watch?v=wAC0fN3z1Es</li>'+
+              '<li>PSCI. (n.d.). <em>The importance of continuous learning in cybersecurity</em>. https://www.psci.com/the-importance-of-continuous-learning-in-cybersecurity/</li>'+
+              '<li>Philippine Daily Inquirer. (n.d.). <em>PNP ACG, LTO team up to fight transport-related cybercrime</em>. https://newsinfo.inquirer.net/2097691/pnp-acg-lto-team-up-to-fight-transport-related-cybercrime</li>'+
+              '<li>Dito sa Pilipinas. (2025, August 7). <em>Bayanihan 2.0: How social media is changing Filipino volunteerism</em>. https://www.ditosapilipinas.com/national/lifestyle-features/article/08/07/2025/bayanihan-social-media-ph-volunteerism/1858</li>'+
+              '<li>National Privacy Commission. (n.d.). <em>Kabataang Digital</em>. https://privacy.gov.ph/kd/</li>'+
+            '</ul>'+
+          '</div>';
+      }
+    } catch(e) { /* silent */ }
+
+    // Module 5 → Reflection (Drawer) with submission
+    var headerRefl5 = Array.from(document.querySelectorAll('.drawer-item .drawer-title h5'))
+      .find(function(h){ return (h.textContent || '').trim().toLowerCase() === 'reflection'; });
+    var refl5El = null;
+    if (headerRefl5) {
+      var itemR = headerRefl5.closest('.drawer-item');
+      if (itemR) {
+        var ocR = itemR.getAttribute('onclick') || '';
+        var mR = ocR.match(/toggleDrawer\('([^']+)'\)/);
+        if (mR && mR[1]) {
+          refl5El = document.getElementById('content-' + mR[1]);
+        }
+      }
+    }
+    if (!refl5El) refl5El = document.getElementById('content-reflection');
+    if (refl5El) {
+      var r5Wrap = refl5El.querySelector('.content-wrapper') || refl5El;
+      r5Wrap.innerHTML = ''+
+        '<div class="module5-scope"><div class="accordion-content">'+
+          '<h3>Module 5 Reflection: My Role, My Impact</h3>'+
+          '<div class="reflection-intro" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); padding: 25px; border-radius: 12px; border-left: 5px solid #007bff; margin-bottom: 25px;">'+
+            '<p style="font-size: 1.05rem; line-height: 1.6; margin: 0; color: #0d47a1;">Welcome to your final reflection! Over the past five weeks, you\'ve gone from learning the basics of cybersecurity to understanding the most advanced threats out there. Now, it\'s time to reflect on your journey and your role as a Cyber Defender.</p>'+
+          '</div>'+
+
+          '<div class="reflection-prompts" style="background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 5px solid #28a745; margin-bottom: 25px;">'+
+            '<h4 style="color: #28a745; margin-bottom: 16px;">Reflection Prompts</h4>'+
+            '<p style="margin-bottom: 12px;">Choose one or two of the questions below to answer in 4–5 sentences. You can answer in English or Taglish—what matters is your honesty and clarity.</p>'+
+            '<ol style="margin:0; padding-left: 1.2rem;">'+
+              '<li style="margin-bottom:8px;">What was the most surprising thing you learned about new or evolving cyber threats?</li>'+
+              '<li style="margin-bottom:8px;">How has your mindset about online safety changed after this module?</li>'+
+              '<li style="margin-bottom:8px;">What specific action will you take to protect others (friends, family, classmates)?</li>'+
+              '<li style="margin-bottom:0;">Why do you think it\'s important for students like you to take part in "digital bayanihan"?</li>'+
+            '</ol>'+
+          '</div>'+
+
+          '<div class="resources-section" style="margin-top: 1rem;">'+
+            '<h4>Your Reflection</h4>'+
+            '<p class="mb-2">Your responses will help us understand the impact of this program. Thank you for your honesty and participation.</p>'+
+            '<textarea id="m5ReflectionText" class="form-control" rows="5" placeholder="Type your reflection here..."></textarea>'+
+            '<div class="d-flex justify-content-end" style="margin-top: 0.75rem;">'+
+              '<button id="m5ReflectionSubmit" class="btn btn-primary">Submit Reflection</button>'+
+            '</div>'+
+            '<div id="m5ReflectionStatus" class="mt-2 text-muted" style="min-height: 1.25rem;"></div>'+
+          '</div>'+
+        '</div></div>';
+
+      // Hook up submission for Module 5 reflection
+      var btn5 = document.getElementById('m5ReflectionSubmit');
+      if (btn5) {
+        btn5.addEventListener('click', function(){
+          var txt = document.getElementById('m5ReflectionText');
+          var status = document.getElementById('m5ReflectionStatus');
+          var payload = { module_id: 5, reflection_text: (txt && txt.value || '').trim() };
+          if (!payload.reflection_text) {
+            status.textContent = 'Please enter your reflection before submitting.';
+            status.className = 'mt-2 text-danger';
+            return;
+          }
+          status.textContent = 'Submitting...';
+          status.className = 'mt-2 text-muted';
+          fetch('/submit_reflection', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          }).then(function(r){ return r.json(); }).then(function(res){
+            if (res && res.success) {
+              status.textContent = 'Reflection submitted successfully!';
+              status.className = 'mt-2 text-success';
+              if (txt) txt.value = '';
+            } else {
+              status.textContent = (res && res.error) || 'Submission failed.';
+              status.className = 'mt-2 text-danger';
+            }
+          }).catch(function(){
+            status.textContent = 'Network error. Please try again.';
+            status.className = 'mt-2 text-danger';
+          });
+        });
+      }
+    }
+  } catch(e) { /* silent */ }
+});
+</script>
+
+
