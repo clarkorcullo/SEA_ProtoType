@@ -80,7 +80,7 @@ class Config:
     # Admin Configuration
     DEFAULT_ADMIN_USERNAME = 'administrator'
     DEFAULT_ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'admin@mmdc.edu.ph')
-    DEFAULT_ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'Admin123!@#2025')
+    DEFAULT_ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'ChangeMeInProduction123!')
     
     # Logging Configuration
     LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
@@ -92,7 +92,7 @@ class Config:
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
     
     # Email Configuration (for password reset)
-    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
+    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.example.com')
     MAIL_PORT = int(os.environ.get('MAIL_PORT', 587))
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', 'true').lower() == 'true'
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')

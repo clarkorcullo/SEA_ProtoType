@@ -177,9 +177,14 @@ class DatabasePersistence:
     
     def ensure_admin_user(self, username: str = 'administrator', 
                          email: str = 'admin@mmdc.edu.ph',
-                         password: str = 'Admin123!@#2025') -> Dict[str, Any]:
+                         password: str = None) -> Dict[str, Any]:
         """Ensure admin user exists with correct credentials"""
         try:
+            # Use environment variable for password if not provided
+            if password is None:
+                import os
+                password = os.environ.get('ADMIN_PASSWORD', 'ChangeMeInProduction123!')
+            
             # If we can't access SQLite directly (e.g., PostgreSQL), use Flask app context
             if not self.db_path:
                 return self._ensure_admin_user_via_flask(username, email, password)

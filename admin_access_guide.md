@@ -8,7 +8,7 @@
 
 ### **👤 Admin Credentials**
 - **Username:** `administrator`
-- **Password:** `Admin123!@#2025`
+- **Password:** Set via `ADMIN_PASSWORD` environment variable
 
 ## 🚀 **HOW TO ACCESS ADMIN DASHBOARD**
 
@@ -18,7 +18,7 @@
 2. **Login Page** will appear (redirected from admin URL)
 3. **Enter Credentials:**
    - Username: `administrator`
-   - Password: `Admin123!@#2025`
+   - Password: Set via `ADMIN_PASSWORD` environment variable
 4. **Click Login** - You'll be redirected to the admin dashboard
 
 ### **Admin Dashboard Features:**
@@ -54,7 +54,7 @@ The admin dashboard is fully responsive and works on:
 
 ### **If Login Fails:**
 1. **Check URL** - Make sure you're using the correct deployed URL
-2. **Check Credentials** - Username: `administrator`, Password: `Admin123!@#2025`
+2. **Check Credentials** - Username: `administrator`, Password: Set via `ADMIN_PASSWORD` environment variable
 3. **Clear Browser Cache** - Try refreshing or clearing cache
 4. **Try Different Browser** - Test with Chrome, Firefox, or Safari
 

@@ -94,7 +94,7 @@ Set these in Render Dashboard → Your Service → Environment:
 FLASK_ENV=production
 SECRET_KEY=your-super-secret-key-here-make-it-long-and-random
 RENDER=true
-DATABASE_URL=postgresql://username:password@host:port/database
+DATABASE_URL=postgresql://[username]:[password]@[host]:[port]/[database]
 ```
 
 #### **Admin Configuration**

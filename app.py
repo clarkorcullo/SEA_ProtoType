@@ -328,7 +328,7 @@ def create_default_data():
                 admin_data = {
                     'username': app.config.get('DEFAULT_ADMIN_USERNAME', 'administrator'),
                     'email': app.config.get('DEFAULT_ADMIN_EMAIL', 'admin@mmdc.edu.ph'),
-                    'password': app.config.get('DEFAULT_ADMIN_PASSWORD', 'Admin123!@#2025'),
+                    'password': app.config.get('DEFAULT_ADMIN_PASSWORD'),
                     'full_name': 'System Administrator',
                     'specialization': 'Information Technology',
                     'year_level': '4th Year'
@@ -353,7 +353,7 @@ def create_default_data():
                 admin_user.year_level = '4th Year'
                 
                 # Set password from environment or default
-                desired_pw = os.environ.get('ADMIN_PASSWORD', app.config.get('DEFAULT_ADMIN_PASSWORD', 'Admin123!@#2025'))
+                desired_pw = os.environ.get('ADMIN_PASSWORD', app.config.get('DEFAULT_ADMIN_PASSWORD'))
                 admin_user.set_password(desired_pw)
                 admin_user.save()
                 logger.info("[SUCCESS] Admin user credentials updated (administrator)")
@@ -3201,15 +3201,15 @@ def create_admin():
                 admin_user.full_name = 'System Administrator'
                 admin_user.specialization = 'Information Technology'
                 admin_user.year_level = '4th Year'
-                admin_user.set_password('Admin123!@#2025')
+                admin_user.set_password(os.environ.get('ADMIN_PASSWORD', 'ChangeMeInProduction123!'))
                 admin_user.save()
-                return f"✅ Admin user updated successfully<br>Username: administrator<br>Password: Admin123!@#2025<br>Email: admin@mmdc.edu.ph"
+                return f"✅ Admin user updated successfully<br>Username: administrator<br>Password: [Set via ADMIN_PASSWORD environment variable]<br>Email: admin@mmdc.edu.ph"
             else:
                 # Create new admin user
                 admin_data = {
                     'username': 'administrator',
                     'email': 'admin@mmdc.edu.ph',
-                    'password': 'Admin123!@#2025',
+                    'password': os.environ.get('ADMIN_PASSWORD', 'ChangeMeInProduction123!'),
                     'full_name': 'System Administrator',
                     'specialization': 'Information Technology',
                     'year_level': '4th Year'
@@ -3217,7 +3217,7 @@ def create_admin():
                 
                 user = user_service.create_user(admin_data)
                 if user:
-                    return f"✅ Admin user created successfully<br>Username: administrator<br>Password: Admin123!@#2025<br>Email: admin@mmdc.edu.ph"
+                    return f"✅ Admin user created successfully<br>Username: administrator<br>Password: [Set via ADMIN_PASSWORD environment variable]<br>Email: admin@mmdc.edu.ph"
                 else:
                     return f"❌ Failed to create admin user"
                 
@@ -3241,9 +3241,9 @@ def create_admin_direct():
                 admin_user.full_name = 'System Administrator'
                 admin_user.specialization = 'Information Technology'
                 admin_user.year_level = '4th Year'
-                admin_user.set_password('Admin123!@#2025')
+                admin_user.set_password(os.environ.get('ADMIN_PASSWORD', 'ChangeMeInProduction123!'))
                 db.session.commit()
-                return f"✅ Admin user updated successfully (Direct Method)<br>Username: administrator<br>Password: Admin123!@#2025<br>Email: admin@mmdc.edu.ph"
+                return f"✅ Admin user updated successfully (Direct Method)<br>Username: administrator<br>Password: [Set via ADMIN_PASSWORD environment variable]<br>Email: admin@mmdc.edu.ph"
             else:
                 # Create new admin user directly
                 from werkzeug.security import generate_password_hash
@@ -3251,7 +3251,7 @@ def create_admin_direct():
                 admin_user = User(
                     username='administrator',
                     email='admin@mmdc.edu.ph',
-                    password_hash=generate_password_hash('Admin123!@#2025'),
+                    password_hash=generate_password_hash(os.environ.get('ADMIN_PASSWORD', 'ChangeMeInProduction123!')),
                     full_name='System Administrator',
                     specialization='Information Technology',
                     year_level='4th Year'
@@ -3259,7 +3259,7 @@ def create_admin_direct():
                 
                 db.session.add(admin_user)
                 db.session.commit()
-                return f"✅ Admin user created successfully (Direct Method)<br>Username: administrator<br>Password: Admin123!@#2025<br>Email: admin@mmdc.edu.ph"
+                return f"✅ Admin user created successfully (Direct Method)<br>Username: administrator<br>Password: [Set via ADMIN_PASSWORD environment variable]<br>Email: admin@mmdc.edu.ph"
                 
     except Exception as e:
         return f"❌ Direct Method Error: {str(e)}"
