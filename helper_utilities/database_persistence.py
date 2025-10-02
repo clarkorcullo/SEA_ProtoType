@@ -183,7 +183,9 @@ class DatabasePersistence:
             # Use environment variable for password if not provided
             if password is None:
                 import os
-                password = os.environ.get('ADMIN_PASSWORD', 'ChangeMeInProduction123!')
+                password = os.environ.get('ADMIN_PASSWORD')
+                if not password:
+                    return {'success': False, 'error': 'ADMIN_PASSWORD environment variable not set'}
             
             # If we can't access SQLite directly (e.g., PostgreSQL), use Flask app context
             if not self.db_path:

@@ -3201,15 +3201,22 @@ def create_admin():
                 admin_user.full_name = 'System Administrator'
                 admin_user.specialization = 'Information Technology'
                 admin_user.year_level = '4th Year'
-                admin_user.set_password(os.environ.get('ADMIN_PASSWORD', 'ChangeMeInProduction123!'))
+                admin_password = os.environ.get('ADMIN_PASSWORD')
+                if not admin_password:
+                    return f"❌ ADMIN_PASSWORD environment variable not set. Please set it before creating admin user."
+                admin_user.set_password(admin_password)
                 admin_user.save()
                 return f"✅ Admin user updated successfully<br>Username: administrator<br>Password: [Set via ADMIN_PASSWORD environment variable]<br>Email: admin@mmdc.edu.ph"
             else:
                 # Create new admin user
+                admin_password = os.environ.get('ADMIN_PASSWORD')
+                if not admin_password:
+                    return f"❌ ADMIN_PASSWORD environment variable not set. Please set it before creating admin user."
+                
                 admin_data = {
                     'username': 'administrator',
                     'email': 'admin@mmdc.edu.ph',
-                    'password': os.environ.get('ADMIN_PASSWORD', 'ChangeMeInProduction123!'),
+                    'password': admin_password,
                     'full_name': 'System Administrator',
                     'specialization': 'Information Technology',
                     'year_level': '4th Year'
@@ -3241,17 +3248,24 @@ def create_admin_direct():
                 admin_user.full_name = 'System Administrator'
                 admin_user.specialization = 'Information Technology'
                 admin_user.year_level = '4th Year'
-                admin_user.set_password(os.environ.get('ADMIN_PASSWORD', 'ChangeMeInProduction123!'))
+                admin_password = os.environ.get('ADMIN_PASSWORD')
+                if not admin_password:
+                    return f"❌ ADMIN_PASSWORD environment variable not set. Please set it before creating admin user."
+                admin_user.set_password(admin_password)
                 db.session.commit()
                 return f"✅ Admin user updated successfully (Direct Method)<br>Username: administrator<br>Password: [Set via ADMIN_PASSWORD environment variable]<br>Email: admin@mmdc.edu.ph"
             else:
                 # Create new admin user directly
                 from werkzeug.security import generate_password_hash
                 
+                admin_password = os.environ.get('ADMIN_PASSWORD')
+                if not admin_password:
+                    return f"❌ ADMIN_PASSWORD environment variable not set. Please set it before creating admin user."
+                
                 admin_user = User(
                     username='administrator',
                     email='admin@mmdc.edu.ph',
-                    password_hash=generate_password_hash(os.environ.get('ADMIN_PASSWORD', 'ChangeMeInProduction123!')),
+                    password_hash=generate_password_hash(admin_password),
                     full_name='System Administrator',
                     specialization='Information Technology',
                     year_level='4th Year'

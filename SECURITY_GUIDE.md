@@ -14,10 +14,10 @@ This document outlines the security vulnerabilities identified by GitGuardian an
 
 ### 1. Admin Password Security
 - **Before**: Hardcoded `Admin123!@#2025` in `app.py`, `config.py`, and documentation
-- **After**: Uses `ADMIN_PASSWORD` environment variable with secure fallback
+- **After**: Uses `ADMIN_PASSWORD` environment variable (required, no fallback)
 - **Files Modified**: 
   - `app.py` - All admin creation routes now use environment variables
-  - `config.py` - Default password changed to `ChangeMeInProduction123!`
+  - `config.py` - Removed hardcoded password, requires environment variable
   - `admin_access_guide.md` - Removed hardcoded password references
 
 ### 2. SMTP Configuration Security
@@ -61,7 +61,7 @@ MAIL_PASSWORD=your-app-password
 ```
 
 ### Secure Defaults
-- Admin password fallback: `ChangeMeInProduction123!` (forces change in production)
+- Admin password: **REQUIRED** environment variable (no fallback for security)
 - SMTP server fallback: `smtp.example.com` (generic, non-functional)
 - All documentation uses placeholder values
 

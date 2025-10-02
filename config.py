@@ -80,7 +80,7 @@ class Config:
     # Admin Configuration
     DEFAULT_ADMIN_USERNAME = 'administrator'
     DEFAULT_ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'admin@mmdc.edu.ph')
-    DEFAULT_ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'ChangeMeInProduction123!')
+    DEFAULT_ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD')
     
     # Logging Configuration
     LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
