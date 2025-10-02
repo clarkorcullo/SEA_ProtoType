@@ -31,6 +31,15 @@ class User(UserMixin, BaseModel, TimestampMixin):
     total_score = db.Column(db.Integer, default=0)
     simulations_completed = db.Column(db.Integer, default=0)
     
+    # Security attributes
+    failed_login_attempts = db.Column(db.Integer, default=0)
+    account_locked_until = db.Column(db.DateTime, nullable=True)
+    last_login_ip = db.Column(db.String(45), nullable=True)
+    last_login_time = db.Column(db.DateTime, nullable=True)
+    password_changed_at = db.Column(db.DateTime, default=datetime.utcnow)
+    two_factor_enabled = db.Column(db.Boolean, default=False)
+    two_factor_secret = db.Column(db.String(32), nullable=True)
+    
     # Relationships
     progress = db.relationship('UserProgress', backref='user', lazy='dynamic', cascade='all, delete-orphan')
     assessment_results = db.relationship('AssessmentResult', backref='user', lazy='dynamic', cascade='all, delete-orphan')
@@ -72,6 +81,53 @@ class User(UserMixin, BaseModel, TimestampMixin):
     def is_admin(self) -> bool:
         """Check if user is an administrator"""
         return self.username == 'administrator'
+    
+    def is_account_locked(self) -> bool:
+        """Check if account is currently locked"""
+        if self.account_locked_until:
+            return datetime.utcnow() < self.account_locked_until
+        return False
+    
+    def lock_account(self, duration_minutes=15):
+        """Lock account for specified duration"""
+        self.account_locked_until = datetime.utcnow() + timedelta(minutes=duration_minutes)
+        self.failed_login_attempts = 0
+        self.save()
+    
+    def unlock_account(self):
+        """Unlock account"""
+        self.account_locked_until = None
+        self.failed_login_attempts = 0
+        self.save()
+    
+    def record_failed_login(self):
+        """Record a failed login attempt"""
+        self.failed_login_attempts += 1
+        
+        # Lock account after 5 failed attempts
+        if self.failed_login_attempts >= 5:
+            self.lock_account(30)  # Lock for 30 minutes
+        else:
+            self.save()
+    
+    def record_successful_login(self, ip_address=None):
+        """Record a successful login"""
+        self.failed_login_attempts = 0
+        self.last_login_ip = ip_address
+        self.last_login_time = datetime.utcnow()
+        self.save()
+    
+    def is_password_expired(self, max_age_days=90) -> bool:
+        """Check if password has expired"""
+        if self.password_changed_at:
+            return datetime.utcnow() > self.password_changed_at + timedelta(days=max_age_days)
+        return True
+    
+    def update_password(self, new_password):
+        """Update password with security tracking"""
+        self.set_password(new_password)
+        self.password_changed_at = datetime.utcnow()
+        self.save()
     
     def set_password(self, password: str) -> bool:
         """Set user password with validation"""

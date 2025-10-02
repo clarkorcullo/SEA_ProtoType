@@ -62,7 +62,35 @@ class Config:
     PASSWORD_REQUIRE_UPPERCASE = True
     PASSWORD_REQUIRE_LOWERCASE = True
     PASSWORD_REQUIRE_NUMBERS = True
-    PASSWORD_REQUIRE_SPECIAL = False
+    PASSWORD_REQUIRE_SPECIAL = True  # Enable special characters requirement
+    PASSWORD_EXPIRY_DAYS = 90  # Password expires after 90 days
+    
+    # Account Security
+    MAX_LOGIN_ATTEMPTS = 5
+    ACCOUNT_LOCKOUT_DURATION = 30  # minutes
+    SESSION_TIMEOUT_HOURS = 24
+    
+    # Rate Limiting
+    RATE_LIMIT_REQUESTS = 100  # requests per hour
+    RATE_LIMIT_WINDOW = 3600  # 1 hour in seconds
+    
+    # CSRF Protection
+    WTF_CSRF_ENABLED = True
+    WTF_CSRF_TIME_LIMIT = 3600  # 1 hour
+    
+    # File Upload Security
+    MAX_FILE_SIZE = 2 * 1024 * 1024  # 2MB
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+    UPLOAD_FOLDER = 'static/profile_pictures'
+    
+    # Security Headers
+    SECURITY_HEADERS = {
+        'X-Content-Type-Options': 'nosniff',
+        'X-Frame-Options': 'SAMEORIGIN',
+        'X-XSS-Protection': '1; mode=block',
+        'Referrer-Policy': 'strict-origin-when-cross-origin',
+        'Permissions-Policy': 'geolocation=(), microphone=(), camera=()'
+    }
     
     # Assessment Configuration
     KNOWLEDGE_CHECK_PASSING_SCORE = 80  # Percentage

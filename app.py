@@ -49,6 +49,13 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from werkzeug.middleware.proxy_fix import ProxyFix
 from sqlalchemy import text
 
+# Security imports
+from security_middleware import (
+    security, rate_limit, brute_force_protection, require_csrf, 
+    input_validation, generate_secure_filename, validate_file_upload,
+    log_security_event
+)
+
 # Local application imports
 from data_models.base_models import db
 from data_models import (
@@ -275,6 +282,9 @@ with app.app_context():
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+# Initialize Security Middleware
+security.init_app(app)
 
 # Initialize business services
 user_service = UserService()
@@ -1159,16 +1169,18 @@ def register():
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
+@rate_limit(max_requests=5, window=300)  # 5 attempts per 5 minutes
+@brute_force_protection(max_attempts=5, lockout_duration=900)  # 15 minute lockout
 def login():
     """
-    User login route - handles user authentication.
+    User login route - handles user authentication with enhanced security.
     
     Features:
-    - Secure password verification
-    - Session management
-    - Login attempt logging
-    - Redirect to dashboard on success
-    - Automatic database initialization
+    - Rate limiting and brute force protection
+    - Account lockout after failed attempts
+    - IP tracking and logging
+    - Password expiration checks
+    - Secure session management
     
     Methods:
         GET: Display login form
@@ -1189,22 +1201,50 @@ def login():
     
     if request.method == 'POST':
         try:
-            username = request.form['username']
-            password = request.form['password']
+            username = request.form.get('username', '').strip()
+            password = request.form.get('password', '')
+            client_ip = request.remote_addr
             
+            # Input validation
+            if not username or not password:
+                flash('Username and password are required.', 'error')
+                return render_template('login.html')
+            
+            # Check for account lockout
+            user = User.get_by_username(username)
+            if user and user.is_account_locked():
+                flash('Account is temporarily locked due to multiple failed login attempts. Please try again later.', 'error')
+                logger.warning(f"Login attempt on locked account: {username} from {client_ip}")
+                return render_template('login.html')
+            
+            # Authenticate user
             user = user_service.authenticate_user(username, password)
             if user:
+                # Check password expiration
+                if user.is_password_expired():
+                    flash('Your password has expired. Please reset your password.', 'warning')
+                    return redirect(url_for('forgot_password'))
+                
+                # Record successful login
+                user.record_successful_login(client_ip)
                 login_user(user)
+                
+                # Log security event
+                logger.info(f"SECURITY: Successful login - User: {username}, IP: {client_ip}")
+                
                 flash('Login successful!', 'success')
-                logger.info(f"User {username} logged in successfully")
                 return redirect(url_for('dashboard'))
             else:
+                # Record failed login attempt
+                if user:
+                    user.record_failed_login()
+                    logger.warning(f"SECURITY: Failed login attempt - User: {username}, IP: {client_ip}")
+                
                 flash('Invalid username or password.', 'error')
-                logger.warning(f"Login failed for user {username}: Invalid credentials")
                 
         except Exception as e:
-            flash(f'Login error: {e}', 'error')
-            logger.error(f"Login failed: {e}")
+            logger.error(f"SECURITY: Login error - {e}, IP: {request.remote_addr}")
+            flash('Login error occurred. Please try again.', 'error')
     
     return render_template('login.html')
 
@@ -2373,21 +2413,82 @@ def submit_simulation():
 # 10.7 PROGRESS AND ANALYTICS ROUTES
 # =============================================================================
 
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 @login_required
+@require_csrf
+@input_validation(max_length=1000)
 def profile():
     """
-    User profile route - displays and manages user profile information.
+    User profile route - displays and manages user profile information with enhanced security.
     
     Features:
-    - Profile information display
-    - Edit capabilities
-    - Progress overview
-    - Achievement tracking
+    - Secure profile picture upload with validation
+    - Input sanitization and validation
+    - CSRF protection
+    - File type and size validation
+    - Path traversal prevention
     
     Returns:
         str: Rendered profile template
     """
+    if request.method == 'POST':
+        try:
+            # Handle profile picture upload with security validation
+            if 'profile_picture' in request.files:
+                file = request.files['profile_picture']
+                if file and file.filename:
+                    # Security validation
+                    is_valid, error_msg = validate_file_upload(
+                        file, 
+                        allowed_extensions=['.png', '.jpg', '.jpeg', '.gif'],
+                        max_size=2 * 1024 * 1024  # 2MB max
+                    )
+                    
+                    if not is_valid:
+                        flash(f'File upload error: {error_msg}', 'error')
+                        return redirect(url_for('profile'))
+                    
+                    # Generate secure filename to prevent path traversal
+                    secure_filename = generate_secure_filename(file.filename)
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename)
+                    
+                    # Ensure upload directory exists
+                    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+                    
+                    # Save file
+                    file.save(file_path)
+                    
+                    # Update user profile
+                    current_user.profile_picture = secure_filename
+                    current_user.save()
+                    
+                    # Log security event
+                    logger.info(f"SECURITY: Profile picture uploaded - User: {current_user.username}, File: {secure_filename}")
+                    
+                    flash('Profile picture updated successfully!', 'success')
+                    return redirect(url_for('profile'))
+            
+            # Handle profile information update with input sanitization
+            profile_data = {
+                'full_name': request.form.get('full_name', '').strip()[:100],  # Limit length
+                'email': request.form.get('email', '').strip()[:120],
+                'specialization': request.form.get('specialization', '').strip()[:50],
+                'year_level': request.form.get('year_level', '').strip()[:20],
+                'birthday': request.form.get('birthday'),
+                'address': request.form.get('address', '').strip()[:200]
+            }
+            
+            # Validate and update profile
+            if user_service.update_user_profile(current_user.id, profile_data):
+                logger.info(f"SECURITY: Profile updated - User: {current_user.username}")
+                flash('Profile updated successfully!', 'success')
+            else:
+                flash('Failed to update profile. Please check your information.', 'error')
+                
+        except Exception as e:
+            logger.error(f"SECURITY: Profile update error - {e}, User: {current_user.username}")
+            flash('Profile update error occurred. Please try again.', 'error')
+    
     try:
         return render_template('profile.html', user=current_user)
     except Exception as e:
