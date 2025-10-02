@@ -29,7 +29,7 @@ RENDER=true
 
 #### **Database Persistence (CRITICAL)**
 ```
-DATABASE_URL=postgresql://username:password@host:port/database
+DATABASE_URL=postgresql://[username]:[password]@[host]:[port]/[database]
 ```
 **Important:** Add a PostgreSQL database to your Render service for data persistence!
 
@@ -42,7 +42,7 @@ LOG_LEVEL=INFO
 
 #### **Email Configuration (if using password reset)**
 ```
-MAIL_SERVER=smtp.gmail.com
+MAIL_SERVER=smtp.example.com
 MAIL_PORT=587
 MAIL_USE_TLS=true
 MAIL_USERNAME=your-email@gmail.com
@@ -62,7 +62,7 @@ MAIL_PASSWORD=your-app-password
 2. **Get Database URL:**
    - After creation, go to your database service
    - Copy the "External Database URL"
-   - Format: `postgresql://username:password@host:port/database`
+   - Format: `postgresql://[username]:[password]@[host]:[port]/[database]`
 
 3. **Set Environment Variable:**
    - Go to your web service settings

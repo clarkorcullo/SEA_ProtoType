@@ -62,7 +62,35 @@ class Config:
     PASSWORD_REQUIRE_UPPERCASE = True
     PASSWORD_REQUIRE_LOWERCASE = True
     PASSWORD_REQUIRE_NUMBERS = True
-    PASSWORD_REQUIRE_SPECIAL = False
+    PASSWORD_REQUIRE_SPECIAL = True  # Enable special characters requirement
+    PASSWORD_EXPIRY_DAYS = 90  # Password expires after 90 days
+    
+    # Account Security
+    MAX_LOGIN_ATTEMPTS = 5
+    ACCOUNT_LOCKOUT_DURATION = 30  # minutes
+    SESSION_TIMEOUT_HOURS = 24
+    
+    # Rate Limiting
+    RATE_LIMIT_REQUESTS = 100  # requests per hour
+    RATE_LIMIT_WINDOW = 3600  # 1 hour in seconds
+    
+    # CSRF Protection
+    WTF_CSRF_ENABLED = True
+    WTF_CSRF_TIME_LIMIT = 3600  # 1 hour
+    
+    # File Upload Security
+    MAX_FILE_SIZE = 2 * 1024 * 1024  # 2MB
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+    UPLOAD_FOLDER = 'static/profile_pictures'
+    
+    # Security Headers
+    SECURITY_HEADERS = {
+        'X-Content-Type-Options': 'nosniff',
+        'X-Frame-Options': 'SAMEORIGIN',
+        'X-XSS-Protection': '1; mode=block',
+        'Referrer-Policy': 'strict-origin-when-cross-origin',
+        'Permissions-Policy': 'geolocation=(), microphone=(), camera=()'
+    }
     
     # Assessment Configuration
     KNOWLEDGE_CHECK_PASSING_SCORE = 80  # Percentage
@@ -80,7 +108,7 @@ class Config:
     # Admin Configuration
     DEFAULT_ADMIN_USERNAME = 'administrator'
     DEFAULT_ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'admin@mmdc.edu.ph')
-    DEFAULT_ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'Admin123!@#2025')
+    DEFAULT_ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD')
     
     # Logging Configuration
     LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
@@ -92,7 +120,7 @@ class Config:
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
     
     # Email Configuration (for password reset)
-    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
+    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.example.com')
     MAIL_PORT = int(os.environ.get('MAIL_PORT', 587))
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', 'true').lower() == 'true'
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
