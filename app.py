@@ -1084,6 +1084,42 @@ def index():
         # Don't redirect to login on error, just show the page
         return render_template('index.html')
 
+
+@app.route('/debug')
+def debug_info():
+    """
+    Debug endpoint to help troubleshoot deployment issues.
+    
+    Returns:
+        dict: Debug information
+    """
+    try:
+        # Test basic imports
+        import_status = "ok"
+    except Exception as e:
+        import_status = f"error: {str(e)}"
+    
+    try:
+        # Test database models
+        user_count = User.query.count()
+        module_count = Module.query.count()
+        db_models = "ok"
+    except Exception as e:
+        user_count = 0
+        module_count = 0
+        db_models = f"error: {str(e)}"
+    
+    return jsonify({
+        'imports': import_status,
+        'database_models': db_models,
+        'user_count': user_count,
+        'module_count': module_count,
+        'config_debug': app.config.get('DEBUG'),
+        'config_secret_key': 'set' if app.config.get('SECRET_KEY') else 'not_set',
+        'flask_env': os.environ.get('FLASK_ENV'),
+        'render_env': os.environ.get('RENDER')
+    })
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     """
